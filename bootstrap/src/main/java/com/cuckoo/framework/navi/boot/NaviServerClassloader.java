@@ -1,0 +1,22 @@
+package com.cuckoo.framework.navi.boot;
+
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+
+/**
+ * 服务类加载器
+ *
+ */
+public class NaviServerClassloader extends NaviJarClassLoader {
+
+    public NaviServerClassloader() throws FileNotFoundException,
+        MalformedURLException {
+        super(NaviProps.NAVI_LIBS);
+        loadJarFiles();
+    }
+
+    public NaviServerClassloader(ClassLoader parent) throws MalformedURLException, FileNotFoundException {
+        super(parent, NaviProps.NAVI_LIBS);
+        loadJarFiles();
+    }
+}
