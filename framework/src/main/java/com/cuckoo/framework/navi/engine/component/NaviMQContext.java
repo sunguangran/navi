@@ -1,5 +1,10 @@
 package com.cuckoo.framework.navi.engine.component;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class NaviMQContext {
 
     /**
@@ -27,18 +32,10 @@ public class NaviMQContext {
      */
     private MessageQueueType mqType = MessageQueueType.REDIS;
 
-    public int getConsumeRate() {
-        return consumeRate;
-    }
-
     public void setConsumeRate(int consumeRate) {
         if (consumeRate > 0) {
             this.consumeRate = consumeRate;
         }
-    }
-
-    public int getBlockTime() {
-        return blockTime;
     }
 
     public void setBlockTime(int blockTime) {
@@ -61,22 +58,10 @@ public class NaviMQContext {
         return mqType;
     }
 
-    public int getThreadRate() {
-        return threadRate;
-    }
-
     public void setThreadRate(int threadRate) {
         if (threadRate > 0) {
             this.threadRate = threadRate;
         }
-    }
-
-    public void setExceptionSleepTime(int exceptionSleepTime) {
-        this.exceptionSleepTime = exceptionSleepTime;
-    }
-
-    public int getExceptionSleepTime() {
-        return exceptionSleepTime;
     }
 
     public enum MessageQueueType {

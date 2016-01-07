@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.api.NaviRequestPacket;
-import com.cuckoo.framework.navi.common.NaviBusinessException;
-import com.cuckoo.framework.navi.api.NaviResponsePacket;
+import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
+import com.cuckoo.framework.navi.server.api.NaviResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server;
 
 import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
+import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.bootstrap.ConnectionlessBootstrap;
 import org.jboss.netty.channel.ChannelPipelineFactory;

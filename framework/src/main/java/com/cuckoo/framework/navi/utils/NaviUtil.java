@@ -2,8 +2,8 @@ package com.cuckoo.framework.navi.utils;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
 import com.cuckoo.framework.navi.serviceobj.INaviColumnDto;
 import lombok.extern.slf4j.Slf4j;
@@ -143,7 +143,7 @@ public class NaviUtil {
     }
 
     public static NaviSystemException transferToNaviSysException(Exception e) {
-        NaviSystemException ee = new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+        NaviSystemException ee = new NaviSystemException(e.getMessage(), NaviError.SYSERROR.code(), e);
         ee.setStackTrace(e.getStackTrace());
         return ee;
     }

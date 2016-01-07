@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.api.INaviUDPResponseHandler;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
 

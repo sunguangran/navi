@@ -2,9 +2,9 @@ package com.cuckoo.framework.navi.engine.component;
 
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviMessageQueue;
+import com.cuckoo.framework.navi.engine.datasource.driver.AbstractNaviJedisDriver;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
-import com.cuckoo.framework.navi.engine.datasource.driver.AbstractNaviJedisDriver;
 import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Response;
@@ -35,10 +35,12 @@ public class NaviRedisMutiKeyMessageQueue implements INaviMessageQueue {
         if (StringUtils.isEmpty(key)) {
             key = setKey;
         }
+
         String listKey = service.sPop(key, String.class);
         if (StringUtils.isEmpty(listKey)) {
             return null;
         }
+
         T t = service.lPop(listKey, classNm);
         if (t != null) {
             Long size = service.lSize(listKey);
@@ -46,6 +48,7 @@ public class NaviRedisMutiKeyMessageQueue implements INaviMessageQueue {
                 spush(key, listKey);
             }
         }
+
         return t;
     }
 

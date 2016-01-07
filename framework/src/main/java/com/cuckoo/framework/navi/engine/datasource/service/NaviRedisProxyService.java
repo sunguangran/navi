@@ -1,12 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviRedisProxyDriver;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
         driver.close();
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR.code());
     }
 
     private <K> String object2String(K k) {

@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 
 /**
  * 面向列式存储DB的数据存储对象DTO，可支持灵活的列扩展
- *
  */
 public class NaviColumnExtDto implements INaviColumnDto {
     private byte[] rowkey;

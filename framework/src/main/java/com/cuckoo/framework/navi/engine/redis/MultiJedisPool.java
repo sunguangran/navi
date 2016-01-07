@@ -65,19 +65,18 @@ public class MultiJedisPool {
             try {
                 servers = getServers(jedis, masterName, readMaster);
             } catch (Exception e) {
-                log.error("Cannot connect to sentinel running @ " + hap + ". Trying next one.");
+                log.error("cannot connect to sentinel running @ " + hap + ". Trying next one.");
             }
         }
 
-        if (servers.size() == 0) {
+        if (servers == null || servers.size() == 0) {
             log.error("All sentinels down, can't find redis servers");
             throw new RuntimeException("All sentinels down, can't find redis servers");
         }
 
         for (String sentinel : sentinels) {
-            final HostAndPort hap = toHostAndPort(sentinel.split(":"));
-            MasterListener masterListener = new MasterListener(masterName,
-                hap.getHost(), hap.getPort(), readMaster);
+            HostAndPort hap = toHostAndPort(sentinel.split(":"));
+            MasterListener masterListener = new MasterListener(masterName, hap.getHost(), hap.getPort(), readMaster);
             masterListeners.add(masterListener);
             masterListener.start();
         }

@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.core.IUDPClientDataSource;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviUDPClientPoolConfig;
@@ -35,7 +35,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
             return handle;
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR.code(), e);
         }
 
     }
@@ -43,7 +43,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getDriverClass())) {
             throw new NaviSystemException("invalid driverClass!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR.code());
         }
         initConnPool();
     }

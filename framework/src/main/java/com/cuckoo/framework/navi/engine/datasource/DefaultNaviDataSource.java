@@ -1,12 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
-import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +43,10 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
             GenericObjectPool<INaviDriver> pool = pools.get(index);
             INaviDriver handle = pool.borrowObject();
             handle.setPool(pool);
-            
+
             return handle;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR.code(), e);
         }
     }
 
@@ -107,10 +107,10 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getOfflineConnectString()) || StringUtils.isBlank(getDeployConnectString())) {
             throw new NaviSystemException("invalid server address!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR.code());
         } else if (StringUtils.isBlank(driverClass)) {
             throw new NaviSystemException("invalid driverClass!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR.code());
         }
         initConnPool();
     }

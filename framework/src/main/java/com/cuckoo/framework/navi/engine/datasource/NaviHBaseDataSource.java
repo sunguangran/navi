@@ -45,7 +45,7 @@ public class NaviHBaseDataSource extends NaviLinearDataSource {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        JSONObject json = null;
+        JSONObject json;
         if (ServerConfigure.isDeployEnv()) {
             json = JSONObject.parseObject(this.deployConnectString);
         } else {

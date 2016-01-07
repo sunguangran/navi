@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.api.INaviResponseData;
-import com.cuckoo.framework.navi.api.NaviHttpRequest;
-import com.cuckoo.framework.navi.api.NaviHttpResponse;
-import com.cuckoo.framework.navi.common.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.server.api.INaviResponseData;
+import com.cuckoo.framework.navi.server.api.NaviHttpRequest;
+import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpRequest;

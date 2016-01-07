@@ -1,25 +1,28 @@
 package com.cuckoo.framework.navi.engine.component;
 
-import com.cuckoo.framework.navi.common.NaviUnSupportedOperationException;
+import com.cuckoo.framework.navi.common.exception.NaviUnSupportedOperationException;
 import com.cuckoo.framework.navi.engine.core.*;
 import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class MongoDataObjectCom implements IMongoDataObjectCom {
+
     private INaviCache cacheService;
     private INaviDB dbService;
     private int expire_time = 900;
 
-    public <T extends AbstractNaviDto> IDataObjectCom<T> getDataObjectCom(
-        Query query, String cacheKey, Class<T> dtoClass) {
+    public <T extends AbstractNaviDto> IDataObjectCom<T> getDataObjectCom(Query query, String cacheKey, Class<T> dtoClass) {
         return new DataObjectCom<T>(query, cacheKey, dtoClass);
     }
 
-    public <T extends AbstractNaviDto> IListDataObjectCom<T> getListDataObjectCom(
-        Query query, Class<T> dtoClass, String cacheKey) {
+    public <T extends AbstractNaviDto> IListDataObjectCom<T> getListDataObjectCom(Query query, Class<T> dtoClass, String cacheKey) {
         return new ListDataObjectCom<T>(query, dtoClass, cacheKey);
     }
 
@@ -182,27 +185,4 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         }
     }
 
-    public INaviCache getCacheService() {
-        return cacheService;
-    }
-
-    public void setCacheService(INaviCache cacheService) {
-        this.cacheService = cacheService;
-    }
-
-    public INaviDB getDbService() {
-        return dbService;
-    }
-
-    public void setDbService(INaviDB dbService) {
-        this.dbService = dbService;
-    }
-
-    public int getExpire_time() {
-        return expire_time;
-    }
-
-    public void setExpire_time(int expire_time) {
-        this.expire_time = expire_time;
-    }
 }

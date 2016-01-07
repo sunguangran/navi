@@ -1,15 +1,19 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NaviRuntimeException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Setter
+@Getter
 public abstract class AbstractNaviDriver implements INaviDriver {
 
     private ServerUrl server;
@@ -44,37 +48,11 @@ public abstract class AbstractNaviDriver implements INaviDriver {
             try {
                 pool.invalidateObject(this);
             } catch (Exception e) {
-                throw new NaviRuntimeException(
-                    "Could not return the resource to the pool",
-                    NAVIERROR.SYSERROR.code(), e);
+                throw new NaviRuntimeException(NaviError.SYSERROR.code(), "Could not return the resource to the pool", e);
             }
         } finally {
             close.set(true);
         }
-    }
-
-    public ServerUrl getServer() {
-        return server;
-    }
-
-    public void setServer(ServerUrl server) {
-        this.server = server;
-    }
-
-    public String getAuth() {
-        return auth;
-    }
-
-    public void setAuth(String auth) {
-        this.auth = auth;
-    }
-
-    public GenericObjectPool<INaviDriver> getPool() {
-        return pool;
-    }
-
-    public void setPool(GenericObjectPool<INaviDriver> pool) {
-        this.pool = pool;
     }
 
     public boolean isClose() {
@@ -93,16 +71,7 @@ public abstract class AbstractNaviDriver implements INaviDriver {
         this.broken.set(broken);
     }
 
-    public NaviPoolConfig getPoolConfig() {
-        return poolConfig;
-    }
-
-    public void setPoolConfig(NaviPoolConfig poolConfig) {
-        this.poolConfig = poolConfig;
-    }
-
     public void afterPropertiesSet() throws Exception {
-
     }
 
     public Object getDriver() {

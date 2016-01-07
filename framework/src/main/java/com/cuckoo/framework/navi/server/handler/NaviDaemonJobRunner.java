@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.module.INaviModuleContext;
-import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
+import com.cuckoo.framework.navi.server.module.INaviModuleContext;
+import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobLocator;
@@ -82,7 +82,6 @@ public class NaviDaemonJobRunner {
      * dependency injection. Typically overridden by
      * {@link #setSystemExiter(SystemExiter)}.
      *
-     * @param systemExitor
      */
     public static void presetSystemExiter(SystemExiter systemExiter) {
         NaviDaemonJobRunner.systemExiter = systemExiter;
@@ -102,7 +101,6 @@ public class NaviDaemonJobRunner {
     /**
      * Injection setter for the {@link SystemExiter}.
      *
-     * @param systemExitor
      */
     public void setSystemExiter(SystemExiter systemExiter) {
         NaviDaemonJobRunner.systemExiter = systemExiter;

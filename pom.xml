@@ -223,7 +223,7 @@
         <developer>
             <name>sunguangran</name>
             <url>https://github.com/sunguangran</url>
-            <email>sunguangran@youku.com</email>
+            <email>sgran@msn.cn</email>
             <timezone>8</timezone>
         </developer>
     </developers>
@@ -237,8 +237,8 @@
         <downloadSources>true</downloadSources>
 
         <!-- compiler settings properties -->
-        <java_source_version>1.7</java_source_version>
-        <java_target_version>1.7</java_target_version>
+        <java_source_version>1.8</java_source_version>
+        <java_target_version>1.8</java_target_version>
         <file_encoding>UTF-8</file_encoding>
     </properties>
 
@@ -271,12 +271,12 @@
         </repository>
 
         <!--<repository>-->
-            <!--<id>scribe-java-mvn-repo</id>-->
-            <!--<url>https://raw.github.com/fernandezpablo85/scribe-java/mvn-repo/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-                <!--<updatePolicy>always</updatePolicy>-->
-            <!--</snapshots>-->
+        <!--<id>scribe-java-mvn-repo</id>-->
+        <!--<url>https://raw.github.com/fernandezpablo85/scribe-java/mvn-repo/</url>-->
+        <!--<snapshots>-->
+        <!--<enabled>true</enabled>-->
+        <!--<updatePolicy>always</updatePolicy>-->
+        <!--</snapshots>-->
         <!--</repository>-->
 
         <repository>

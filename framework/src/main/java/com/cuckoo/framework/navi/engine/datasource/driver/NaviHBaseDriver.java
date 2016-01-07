@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -462,8 +462,9 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
 
     /**
      * 指定行key,列族名，列名获取最新的值
+     * <p>
+     * 行key
      *
-     *     行key
      * @param family
      *     列族名
      * @param qualifier

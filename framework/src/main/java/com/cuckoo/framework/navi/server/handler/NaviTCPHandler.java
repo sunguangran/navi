@@ -6,7 +6,6 @@ import org.jboss.netty.channel.group.ChannelGroup;
 
 /**
  * 仅仅处理通信层TCP协议请求
- *
  */
 @Slf4j
 public class NaviTCPHandler extends SimpleChannelUpstreamHandler {

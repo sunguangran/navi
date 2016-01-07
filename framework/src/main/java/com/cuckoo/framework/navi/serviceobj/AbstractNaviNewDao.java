@@ -2,9 +2,9 @@ package com.cuckoo.framework.navi.serviceobj;
 
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDB;
-import com.cuckoo.framework.navi.utils.NaviUtil;
 import com.cuckoo.framework.navi.engine.core.INaviZookeeper;
 import com.cuckoo.framework.navi.engine.core.IZookeeperEventHander;
+import com.cuckoo.framework.navi.utils.NaviUtil;
 import org.apache.zookeeper.WatchedEvent;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -121,7 +121,6 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements
     /**
      * 缓存一个对象
      *
-     * @param key
      * @param t
      */
     protected void set(T t) {

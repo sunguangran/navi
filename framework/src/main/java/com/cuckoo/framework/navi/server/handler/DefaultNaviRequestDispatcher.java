@@ -1,15 +1,15 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.api.ANaviAction;
-import com.cuckoo.framework.navi.api.NaviHttpRequest;
-import com.cuckoo.framework.navi.api.NaviHttpResponse;
 import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.RestApi;
-import com.cuckoo.framework.navi.module.INaviModuleContext;
-import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
+import com.cuckoo.framework.navi.server.api.ANaviAction;
+import com.cuckoo.framework.navi.server.api.NaviHttpRequest;
+import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
+import com.cuckoo.framework.navi.server.module.INaviModuleContext;
+import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 
 import java.util.*;
@@ -24,7 +24,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         //重定向
         uri = redirect(uri);
         if (uri == null || uri.length() == 0) {
-            throw new NaviSystemException("malformed URL!", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("malformed URL!", NaviError.SYSERROR.code());
         }
 
         if (uri.indexOf('?') > 0) {
@@ -33,9 +33,9 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
 
         String[] uriSplits = uri.split("/");
         if (uriSplits.length < 4) {
-            throw new NaviSystemException("malformed URL!", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("malformed URL!", NaviError.SYSERROR.code());
         } else if (!uriSplits[1].equals(ServerConfigure.get(NaviDefine.SERVER))) {
-            throw new NaviSystemException("invalid server name: " + uriSplits[1] + ".", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("invalid server name: " + uriSplits[1] + ".", NaviError.SYSERROR.code());
         }
 
         NaviHttpRequest naviReq = new NaviHttpRequest(request);
@@ -49,17 +49,17 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
     public void callApi(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
         INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance().getNaviModuleContext(request.getModuleNm());
         if (moduleCtx == null) {
-            throw new NaviSystemException("module " + request.getModuleNm() + " not found!", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("module " + request.getModuleNm() + " not found!", NaviError.SYSERROR.code());
         }
 
         RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(request.getUri());
         if (restApi == null) {
-            throw new NaviSystemException("'" + request.getUri() + "' not found!", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("'" + request.getUri() + "' not found!", NaviError.SYSERROR.code());
         }
 
-        ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(restApi.getModuleNm(), restApi.getClazz()));
+        ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(restApi.getModule(), restApi.getClazz()));
         if (bean == null) {
-            throw new NaviSystemException("'" + request.getUri() + "' not found!", NAVIERROR.SYSERROR.code());
+            throw new NaviSystemException("'" + request.getUri() + "' not found!", NaviError.SYSERROR.code());
         }
 
         bean.action(request, response, restApi.getMethod());

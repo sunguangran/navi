@@ -1,13 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviLog;
+import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
  * NaviCache工厂bean,用于将真实service包装成代理service
- *
  */
 public class NaviCacheFactoryBean implements FactoryBean<INaviCache> {
 

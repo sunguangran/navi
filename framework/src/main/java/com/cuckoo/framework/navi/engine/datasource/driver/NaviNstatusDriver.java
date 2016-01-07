@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.youku.java.navi.engine.nstatus.JavaNstatusExt;
 import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
+import com.youku.java.navi.engine.nstatus.JavaNstatusExt;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.BlockingQueue;

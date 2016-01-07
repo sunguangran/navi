@@ -2,8 +2,8 @@ package com.cuckoo.framework.navi.engine.datasource.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.IHiveClient;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviHiveClientDriver;
@@ -25,7 +25,7 @@ public class NaviHiveClientService extends AbstractNaviDataService implements IH
         }
         driver.close();
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR.code());
     }
 
     public JSONArray doQuery(String sql) throws HiveServerException, TException {

@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviMongoPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
@@ -62,7 +62,7 @@ public class NaviMongoDriver extends AbstractNaviDriver {
     public Mongo getMongo() {
         if (isClose()) {
             throw new NaviSystemException("the driver has been closed!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR.code());
         }
         return mongo;
     }
@@ -79,7 +79,6 @@ public class NaviMongoDriver extends AbstractNaviDriver {
     /**
      * 在热部署点，因为并发的问题，会出现该driver实例已被关闭而仍还有线程调用该实例连接
      * 数据库，导致连接泄露，所以开此线程，在driver关闭情况下仍在1min内重复关闭2次，已确保 连接确实均被关闭
-     *
      */
     class MongoIdleCleaner extends Thread {
         private int initCount = 0;

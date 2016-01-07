@@ -8,7 +8,6 @@ import java.util.NavigableMap;
 
 /**
  * 用于HbaseTemplate进行数据库操作时使用的Dto转换类
- *
  */
 public class NaviColumnExtDtoRowMapper {
     private boolean vflag;

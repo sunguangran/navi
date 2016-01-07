@@ -1,5 +1,6 @@
 package com.cuckoo.framework.navi.common;
 
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,7 @@ public class ServerAddress {
 
     private void validateHost(String host) throws NaviSystemException {
         if (!host.matches(hostRegex)) {
-            throw new NaviSystemException("host is invalid!", NAVIERROR.INVALID_HOST.code());
+            throw new NaviSystemException("host ip is invalid.", NaviError.INVALID_HOST.code());
         }
     }
 

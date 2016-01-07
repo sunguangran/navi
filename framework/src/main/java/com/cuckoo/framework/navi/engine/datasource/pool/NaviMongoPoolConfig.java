@@ -1,10 +1,13 @@
 package com.cuckoo.framework.navi.engine.datasource.pool;
 
 import com.mongodb.MongoOptions;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 
-public class NaviMongoPoolConfig extends NaviPoolConfig implements
-    InitializingBean {
+@Setter
+@Getter
+public class NaviMongoPoolConfig extends NaviPoolConfig implements InitializingBean {
 
     private MongoOptions options;
     private boolean autoConnectRetry = true;
@@ -75,45 +78,4 @@ public class NaviMongoPoolConfig extends NaviPoolConfig implements
         options.slaveOk = isSlaveOk();
         options.socketKeepAlive = isSocketKeepAlive();
     }
-
-    public boolean isAutoConnectRetry() {
-        return autoConnectRetry;
-    }
-
-    public void setAutoConnectRetry(boolean autoConnectRetry) {
-        this.autoConnectRetry = autoConnectRetry;
-    }
-
-    public int getMaxAutoConnectRetryTime() {
-        return maxAutoConnectRetryTime;
-    }
-
-    public void setMaxAutoConnectRetryTime(int maxAutoConnectRetryTime) {
-        this.maxAutoConnectRetryTime = maxAutoConnectRetryTime;
-    }
-
-    public boolean isSafe() {
-        return safe;
-    }
-
-    public void setSafe(boolean safe) {
-        this.safe = safe;
-    }
-
-    public boolean isSlaveOk() {
-        return slaveOk;
-    }
-
-    public void setSlaveOk(boolean slaveOk) {
-        this.slaveOk = slaveOk;
-    }
-
-    public boolean isSocketKeepAlive() {
-        return socketKeepAlive;
-    }
-
-    public void setSocketKeepAlive(boolean socketKeepAlive) {
-        this.socketKeepAlive = socketKeepAlive;
-    }
-
 }

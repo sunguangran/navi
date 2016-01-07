@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.IZookeeperEventHander;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.KeeperException.ConnectionLossException;
@@ -46,7 +46,7 @@ public class NaviZooKeeperDriver extends AbstractNaviDriver {
             }
         } catch (InterruptedException e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR.code(), e);
         }
     }
 
@@ -62,7 +62,7 @@ public class NaviZooKeeperDriver extends AbstractNaviDriver {
             }
         } catch (InterruptedException e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR.code(), e);
         }
         zooKeeper = new ZooKeeper(getServer().getUrl(), getPoolConfig()
             .getConnectTimeout(), watcher);

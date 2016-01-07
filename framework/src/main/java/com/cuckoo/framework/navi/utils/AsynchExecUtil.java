@@ -7,7 +7,6 @@ import java.util.concurrent.Future;
 
 /**
  * 异步执行程序工具
- *
  */
 public class AsynchExecUtil {
 
@@ -20,6 +19,5 @@ public class AsynchExecUtil {
     public static <T> Future<T> execute(Callable<T> caller) {
         return executor.submit(caller);
     }
-
 
 }

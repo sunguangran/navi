@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.lang.reflect.Method;
 
 /**
- * @author sgran<sunguangran@youku.com>
+ * @author sgran<sgran@msn.cn>
  * @since 2015/12/21
  */
 @Setter
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 public class RestApi {
 
     private String uri;
-    private String moduleNm;
+    private String module;
     private Class clazz;
     private Method method;
 

@@ -7,7 +7,7 @@ import org.apache.thrift.TException;
 
 public interface IHiveClient {
 
-    public interface IResultCallback {
+    interface IResultCallback {
         void handleResult(JSONArray array);
     }
 

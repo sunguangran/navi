@@ -1,8 +1,9 @@
 package com.cuckoo.framework.navi.common;
 
-public enum NAVIERROR {
+public enum NaviError {
 
     SYSERROR(-500),
+
     INVALID_HOST(-90),
     BUSI_NO_DATA(-91),
     BUSI_PARAM_ERROR(-92);
@@ -10,12 +11,12 @@ public enum NAVIERROR {
     private int code;
     private String desc;
 
-    private NAVIERROR(int code, String desc) {
+    NaviError(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    private NAVIERROR(int code) {
+    NaviError(int code) {
         this(code, "system error!");
     }
 

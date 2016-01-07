@@ -1,7 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.pool;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+@Setter
+@Getter
 public class NaviPoolConfig extends GenericObjectPoolConfig {
 
     /**
@@ -21,30 +25,6 @@ public class NaviPoolConfig extends GenericObjectPoolConfig {
 
     public NaviPoolConfig() {
         setMaxWait(100);
-    }
-
-    public int getSocketTimeout() {
-        return socketTimeout;
-    }
-
-    public void setSocketTimeout(int socketTimeout) {
-        this.socketTimeout = socketTimeout;
-    }
-
-    public int getMaxBlockingThread() {
-        return maxBlockingThread;
-    }
-
-    public void setMaxBlockingThread(int maxBlockingThread) {
-        this.maxBlockingThread = maxBlockingThread;
-    }
-
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
     }
 
     public int getMaxActive() {

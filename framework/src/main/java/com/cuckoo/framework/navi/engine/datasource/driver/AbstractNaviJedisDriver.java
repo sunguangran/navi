@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisListCommands.Position;

@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHttpPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Http Client驱动，连接池可配置两种模式，NaviHttpPoolConfig和NaviHttpBasicConfig
- *
  */
 @Slf4j
 public class NaviHttpClientDriver extends AbstractNaviDriver {

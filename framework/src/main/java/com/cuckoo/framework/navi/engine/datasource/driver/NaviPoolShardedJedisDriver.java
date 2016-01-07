@@ -1,12 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NaviSystemException;
-import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.ShardJedisPoolConfig;
 import com.cuckoo.framework.navi.engine.redis.AbstractPoolBinaryShardedJedis;
 import com.cuckoo.framework.navi.engine.redis.PoolBinaryShardedJedis;
 import com.cuckoo.framework.navi.engine.redis.PoolJedisShardInfo;
+import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 import redis.clients.jedis.JedisShardInfo;
 
 import java.util.ArrayList;

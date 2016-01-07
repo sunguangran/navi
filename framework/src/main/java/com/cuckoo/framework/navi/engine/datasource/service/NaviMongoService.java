@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDB;
 import com.mongodb.WriteResult;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -30,7 +30,7 @@ public class NaviMongoService extends AbstractNaviDataService implements INaviDB
         super.afterPropertiesSet();
         if (databaseNm == null) {
             throw new NaviSystemException("dataSource or databaseNm is null",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR.code());
         }
         mongoTempt = new NaviMongoTemplateFactory(dataSource)
             .getMongoTemplate(databaseNm);

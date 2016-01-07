@@ -1,12 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviShardJedisDriver;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
 import org.springframework.data.redis.connection.RedisZSetCommands.Tuple;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Transaction;
@@ -27,7 +27,7 @@ public class NaviShardedJedisService extends AbstractNaviDataService implements
         }
         driver.close();
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR.code());
     }
 
     private <K> byte[] object2Bytes(K k) {

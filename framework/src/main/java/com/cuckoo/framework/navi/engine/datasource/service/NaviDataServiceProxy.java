@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviLog;
+import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import java.net.UnknownHostException;
 
 /**
  * DataService的动态代理类
- *
  */
 @Slf4j
 public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandler {

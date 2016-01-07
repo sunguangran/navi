@@ -3,8 +3,8 @@ package com.cuckoo.demo.actions;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.api.NaviJsonResponseData;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.server.api.NaviJsonResponseData;
 import com.cuckoo.framework.navi.utils.NaviUtil;
 
 import java.util.HashMap;

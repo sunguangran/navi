@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 /**
  * 符合传统业务习惯的列式Dto类
- *
  */
 public abstract class NaviBaseColumnDto extends AbstractNaviDto implements INaviColumnDto {
 

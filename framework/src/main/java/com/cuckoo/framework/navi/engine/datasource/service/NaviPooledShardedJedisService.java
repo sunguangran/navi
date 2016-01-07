@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.driver.AbstractNaviPoolJedisDriver;
@@ -25,7 +25,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService
         }
 
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR.code());
     }
 
     private <K> byte[] object2Bytes(K k) {

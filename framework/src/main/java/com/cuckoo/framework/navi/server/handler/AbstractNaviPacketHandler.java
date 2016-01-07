@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.api.NaviRequestPacket;
 import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.common.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
+import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;

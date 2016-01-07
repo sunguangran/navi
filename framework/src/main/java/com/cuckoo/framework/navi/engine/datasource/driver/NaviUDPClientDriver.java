@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.NaviRuntimeException;
+import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
+import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
+import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
 import com.cuckoo.framework.navi.utils.NaviUtil;
-import com.cuckoo.framework.navi.api.INaviUDPResponseHandler;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
@@ -103,9 +103,7 @@ public class NaviUDPClientDriver implements INaviDriver {
             try {
                 pool.invalidateObject(this);
             } catch (Exception e) {
-                throw new NaviRuntimeException(
-                    "Could not return the resource to the pool",
-                    NAVIERROR.SYSERROR.code(), e);
+                throw new NaviRuntimeException(NaviError.SYSERROR.code(), "Could not return the resource to the pool", e);
             }
         } finally {
             close.set(true);
