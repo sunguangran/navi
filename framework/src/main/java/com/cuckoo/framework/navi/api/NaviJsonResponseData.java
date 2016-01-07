@@ -1,15 +1,15 @@
 package com.cuckoo.framework.navi.api;
 
-import com.cuckoo.framework.navi.utils.NaviUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.common.NAVIERROR;
 import com.cuckoo.framework.navi.common.NaviBusinessException;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
+import com.cuckoo.framework.navi.utils.NaviUtil;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -25,34 +25,6 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
     }
 
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-//		StringBuilder sb = new StringBuilder("{");
-//		String str = data.toString();
-//		if (StringUtils.isNotBlank(str)) {
-//			sb.append("\"").append(dataFieldNm).append("\":");
-//			if(str.indexOf("{")>=0 || str.indexOf("[")>=0){
-//				sb.append(str);
-//			}else{
-//				sb.append("\"").append(str).append("\"");
-//			}
-//			sb.append(",");
-//		}
-//		if (page > 0) {
-//			sb.append("\"page\":" + page + ",");
-//		}
-//		if (pageLength > 0) {
-//			sb.append("\"page_length\":" + pageLength + ",");
-//		}
-//		if (total > 0) {
-//			sb.append("\"total\":" + total + ",");
-//		}
-//		return sb.append("\"cost\":").append(cost * 0.001f).append(",")
-//				.append("\"e\":").append("{\"provider\":\"")
-//				.append(ServerConfigure.getServer()).append("\",")
-//				.append("\"desc\":")
-//				.append(StringUtils.isNotBlank(desc) ? desc : "\"\"")
-//				.append(",\"code\":").append(code).append("}}").toString();
-
-
         JSONObject re = new JSONObject();
         re.put(dataFieldNm, data != null ? data : "");
         if (page > 0) {
@@ -108,7 +80,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
             }
             for (Object data : list) {
                 if (data instanceof AbstractNaviDto) {
-                    datas.put(NaviUtil.toJSONObject((AbstractNaviDto) data));
+                    datas.add(NaviUtil.toJSONObject((AbstractNaviDto) data));
                 }
             }
 
@@ -138,7 +110,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
             AbstractNaviDto[] dtos = (AbstractNaviDto[]) data;
             JSONArray datas = new JSONArray();
             for (AbstractNaviDto dto : dtos) {
-                datas.put(NaviUtil.toJSONObject(dto));
+                datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
         } catch (SecurityException e) {

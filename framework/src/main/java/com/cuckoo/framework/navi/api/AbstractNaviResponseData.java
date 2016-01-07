@@ -1,13 +1,13 @@
 package com.cuckoo.framework.navi.api;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.common.NaviBusinessException;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Collection;
 

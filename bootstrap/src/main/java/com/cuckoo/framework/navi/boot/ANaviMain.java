@@ -21,14 +21,14 @@ public abstract class ANaviMain {
                 System.setProperty("NAVI_HOME", System.getenv("NAVI_HOME"));
             }
 
-            // 初始化Logback
+            // 初始化logback日志配置
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
             JoranConfigurator configurator = new JoranConfigurator();
             configurator.setContext(lc);
             lc.reset();
 
-            if (NaviProps.NAVI_HOME != null) {
-                configurator.doConfigure(NaviProps.NAVI_LOGBACK_PATH);
+            if (NaviDefine.NAVI_HOME != null) {
+                configurator.doConfigure(NaviDefine.NAVI_LOGBACK_PATH);
             } else {
                 configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
             }
@@ -72,7 +72,7 @@ public abstract class ANaviMain {
     public abstract String getStartClass(Properties serverConfig);
 
     /**
-     * 获得配置地址
+     * 获得服务配置文件地址
      */
     public abstract String getConfPath();
 
@@ -80,12 +80,7 @@ public abstract class ANaviMain {
      * 构建启动配置对象
      */
     public Properties parseServerConfig(String[] args) {
-        if (NaviProps.NAVI_HOME == null) {
-            log.error("NAVI_HOME not defined");
-            return null;
-        } else {
-            return parseConfig(getConfPath());
-        }
+        return parseConfig(getConfPath());
     }
 
     protected void doMain(Properties serverConfig) throws Exception {

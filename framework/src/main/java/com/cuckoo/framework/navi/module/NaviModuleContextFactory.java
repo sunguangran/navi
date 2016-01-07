@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.module;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.RestApi;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +88,7 @@ public class NaviModuleContextFactory {
                 }
 
                 for (File module : modules) {
-                    if (module.isFile() || module.getName().startsWith(NaviProps.PREFIX_NAVI_BATCH)) {
+                    if (module.isFile() || module.getName().startsWith(NaviDefine.PREFIX_NAVI_BATCH)) {
                         continue;
                     }
 

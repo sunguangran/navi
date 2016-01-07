@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.server.handler.BadPacketRequestListener;
 import com.cuckoo.framework.navi.server.handler.NaviExecutionHandler;
 import com.cuckoo.framework.navi.server.handler.NaviPacketBusiListener;
@@ -49,10 +49,10 @@ public class NaviNettyTCPServer extends ANaviTCPServer {
         if (null != delimiter) {
             return delimiter;
         }
-        String packetDelimiter = NaviProps.DEFAULT_PACKET_DELIMITER;
+        String packetDelimiter = NaviDefine.DEFAULT_PACKET_DELIMITER;
         byte[] delimiterBytes = packetDelimiter.getBytes();
-        if (ServerConfigure.containsKey(NaviProps.PACKET_DELIMITER)) {
-            packetDelimiter = ServerConfigure.get(NaviProps.PACKET_DELIMITER);
+        if (ServerConfigure.containsKey(NaviDefine.PACKET_DELIMITER)) {
+            packetDelimiter = ServerConfigure.get(NaviDefine.PACKET_DELIMITER);
             delimiterBytes = packetDelimiter.getBytes();
             if (null != packetDelimiter && packetDelimiter.contains("\\")) {
                 delimiterBytes = new byte[]{Byte.parseByte(packetDelimiter.replace("\\", ""))};
@@ -63,9 +63,9 @@ public class NaviNettyTCPServer extends ANaviTCPServer {
     }
 
     public int getMaxPacketSize() {
-        int maxSize = NaviProps.DEFAULT_MAX_TCP_PACKET_SIZE;
-        if (ServerConfigure.containsKey(NaviProps.TCP_MAX_PACKET_SIZE)) {
-            maxSize = Integer.parseInt(ServerConfigure.get(NaviProps.TCP_MAX_PACKET_SIZE));
+        int maxSize = NaviDefine.DEFAULT_MAX_TCP_PACKET_SIZE;
+        if (ServerConfigure.containsKey(NaviDefine.TCP_MAX_PACKET_SIZE)) {
+            maxSize = Integer.parseInt(ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE));
         }
         return maxSize;
     }

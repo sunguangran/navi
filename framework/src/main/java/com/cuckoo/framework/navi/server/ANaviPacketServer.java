@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.bootstrap.ConnectionlessBootstrap;
@@ -58,10 +58,10 @@ public abstract class ANaviPacketServer extends ANaviServer {
             }
         } catch (RuntimeException e) {
             log.error("the server starting is fail!" + e.getMessage());
-            return FAIL;
+            return FAILED;
         } catch (Exception e) {
             log.error("the server starting is fail!" + e.getMessage());
-            return FAIL;
+            return FAILED;
         }
 
         return SUCCESS;
@@ -79,31 +79,31 @@ public abstract class ANaviPacketServer extends ANaviServer {
     }
 
     private void configBootstrap(ConnectionlessBootstrap bootstrap) {
-        if (ServerConfigure.containsKey(NaviProps.BACKLOG)) {
-            bootstrap.setOption(NaviProps.BACKLOG,
-                ServerConfigure.get(NaviProps.BACKLOG));
+        if (ServerConfigure.containsKey(NaviDefine.BACKLOG)) {
+            bootstrap.setOption(NaviDefine.BACKLOG,
+                ServerConfigure.get(NaviDefine.BACKLOG));
         }
 
-        if (ServerConfigure.containsKey(NaviProps.REUSEADDRESS)) {
-            bootstrap.setOption(NaviProps.REUSEADDRESS, Boolean
+        if (ServerConfigure.containsKey(NaviDefine.REUSEADDRESS)) {
+            bootstrap.setOption(NaviDefine.REUSEADDRESS, Boolean
                 .valueOf(ServerConfigure
-                    .get(NaviProps.REUSEADDRESS)));
+                    .get(NaviDefine.REUSEADDRESS)));
         }
 
-        if (ServerConfigure.containsKey(NaviProps.CHILD_KEEPALIVE)) {
+        if (ServerConfigure.containsKey(NaviDefine.CHILD_KEEPALIVE)) {
             bootstrap
                 .setOption(
-                    NaviProps.CHILD_KEEPALIVE,
+                    NaviDefine.CHILD_KEEPALIVE,
                     Boolean.valueOf(ServerConfigure
-                        .get(NaviProps.CHILD_KEEPALIVE)));
+                        .get(NaviDefine.CHILD_KEEPALIVE)));
         }
 
-        if (ServerConfigure.containsKey(NaviProps.CHILD_TCPNODELAY)) {
+        if (ServerConfigure.containsKey(NaviDefine.CHILD_TCPNODELAY)) {
             bootstrap
                 .setOption(
-                    NaviProps.CHILD_TCPNODELAY,
+                    NaviDefine.CHILD_TCPNODELAY,
                     Boolean.valueOf(ServerConfigure
-                        .get(NaviProps.CHILD_TCPNODELAY)));
+                        .get(NaviDefine.CHILD_TCPNODELAY)));
         }
         if (ServerConfigure.containsKey(ServerConfigure.CHILD_SENDBUFFERSIZE)) {
             bootstrap
@@ -147,7 +147,7 @@ public abstract class ANaviPacketServer extends ANaviServer {
     protected int getChildChannelIdleTime() {
         try {
             return Integer.valueOf(ServerConfigure
-                .get(NaviProps.CHILD_CHANNEL_IDLTIME));
+                .get(NaviDefine.CHILD_CHANNEL_IDLTIME));
         } catch (Exception e) {
             return 0;
         }

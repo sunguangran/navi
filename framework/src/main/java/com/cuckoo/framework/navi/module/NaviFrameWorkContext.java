@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.module;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.boot.NaviServerClassloader;
 
 public class NaviFrameWorkContext implements INaviModuleContext {
@@ -9,7 +9,7 @@ public class NaviFrameWorkContext implements INaviModuleContext {
     private NaviClassPathXmlApplicationContext cxt;
 
     public NaviFrameWorkContext(String file) {
-        confPath = NaviProps.NAVI_HOME + "/conf/" + file + ".xml";
+        confPath = NaviDefine.NAVI_HOME + "/conf/" + file + ".xml";
     }
 
     public Object getBean(String name) throws Exception {

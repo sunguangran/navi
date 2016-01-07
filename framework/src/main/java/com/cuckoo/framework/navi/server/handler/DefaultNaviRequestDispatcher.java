@@ -3,7 +3,7 @@ package com.cuckoo.framework.navi.server.handler;
 import com.cuckoo.framework.navi.api.ANaviAction;
 import com.cuckoo.framework.navi.api.NaviHttpRequest;
 import com.cuckoo.framework.navi.api.NaviHttpResponse;
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.NAVIERROR;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.common.RestApi;
@@ -34,7 +34,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         String[] uriSplits = uri.split("/");
         if (uriSplits.length < 4) {
             throw new NaviSystemException("malformed URL!", NAVIERROR.SYSERROR.code());
-        } else if (!uriSplits[1].equals(ServerConfigure.get(NaviProps.SERVER))) {
+        } else if (!uriSplits[1].equals(ServerConfigure.get(NaviDefine.SERVER))) {
             throw new NaviSystemException("invalid server name: " + uriSplits[1] + ".", NAVIERROR.SYSERROR.code());
         }
 
@@ -69,7 +69,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         if (null == redirectList) {
             redirectList = new ArrayList<>();
             redirectMap = new HashMap<>();
-            String redirect = ServerConfigure.get(NaviProps.REDIRECT_STR);
+            String redirect = ServerConfigure.get(NaviDefine.REDIRECT_STR);
             if (null != redirect) {
                 String[] elements = redirect.split(",");
                 for (String ele : elements) {

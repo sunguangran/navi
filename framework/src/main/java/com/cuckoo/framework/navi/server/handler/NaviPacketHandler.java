@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.server.handler;
 
 import com.cuckoo.framework.navi.api.NaviRequestPacket;
 import com.cuckoo.framework.navi.api.NaviResponsePacket;
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffers;
@@ -34,7 +34,7 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
                 break;
             }
         }
-        if (NaviProps.TCP.equals(getProtocol())) {
+        if (NaviDefine.TCP.equals(getProtocol())) {
             //有链接的，如果连接断开，先尝试连接3次
             if (null != channel && !channel.isConnected()) {
                 int i = 0;
@@ -66,7 +66,7 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
         if (null != protocol) {
             return protocol;
         } else {
-            protocol = ServerConfigure.get(NaviProps.PROTOCOL);
+            protocol = ServerConfigure.get(NaviDefine.PROTOCOL);
             return protocol;
         }
     }

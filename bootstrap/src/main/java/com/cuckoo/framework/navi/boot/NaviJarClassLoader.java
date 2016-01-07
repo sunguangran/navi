@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * navi default classloader
+ */
 public class NaviJarClassLoader extends URLClassLoader {
 
     private String libsPath = null;

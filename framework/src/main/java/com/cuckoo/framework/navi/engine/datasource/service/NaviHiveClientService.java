@@ -1,17 +1,17 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.IHiveClient;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviHiveClientDriver;
-import com.cuckoo.framework.navi.common.NAVIERROR;
-import com.cuckoo.framework.navi.common.NaviSystemException;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.Schema;
 import org.apache.hadoop.hive.service.HiveClient;
 import org.apache.hadoop.hive.service.HiveServerException;
 import org.apache.thrift.TException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class NaviHiveClientService extends AbstractNaviDataService implements IH
                     FieldSchema field = fields.get(i);
                     obj.put(field.getName(), fieldVals[i]);
                 }
-                array.put(obj);
+                array.add(obj);
             }
         }
         return array;

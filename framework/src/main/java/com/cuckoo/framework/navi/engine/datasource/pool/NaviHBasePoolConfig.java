@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.engine.datasource.pool;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -30,7 +30,7 @@ public class NaviHBasePoolConfig extends NaviPoolConfig {
             if (config == null) {
                 config = HBaseConfiguration.create();
             }
-            JSONObject json = new JSONObject(connectString);
+            JSONObject json = JSONObject.parseObject(connectString);
             for (Object key : json.keySet()) {
                 if (keyMap.containsKey((String) key)) {
                     String name = keyMap.get((String) key);

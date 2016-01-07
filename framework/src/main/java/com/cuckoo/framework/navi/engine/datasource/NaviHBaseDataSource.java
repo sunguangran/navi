@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import org.apache.hadoop.conf.Configuration;
-import org.json.JSONObject;
 
 public class NaviHBaseDataSource extends NaviLinearDataSource {
     private String offlineConnectString;
@@ -47,9 +47,9 @@ public class NaviHBaseDataSource extends NaviLinearDataSource {
     public void afterPropertiesSet() throws Exception {
         JSONObject json = null;
         if (ServerConfigure.isDeployEnv()) {
-            json = new JSONObject(this.deployConnectString);
+            json = JSONObject.parseObject(this.deployConnectString);
         } else {
-            json = new JSONObject(this.offlineConnectString);
+            json = JSONObject.parseObject(this.offlineConnectString);
         }
         NaviPoolConfig poolConfig = new NaviHBasePoolConfig(json.toString());
         this.setConfig(poolConfig);

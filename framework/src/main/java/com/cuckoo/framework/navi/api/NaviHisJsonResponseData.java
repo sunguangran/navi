@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.api;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NaviHisJsonResponseData extends NaviJsonResponseData {
 
@@ -12,10 +12,11 @@ public class NaviHisJsonResponseData extends NaviJsonResponseData {
 
     @Override
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-        return new JSONObject()
-            .put("errno", code)
-            .put("errText", StringUtils.isEmpty(desc) ? "OK" : desc)
-            .put("data", data)
-            .toString();
+        JSONObject json = new JSONObject();
+        json.put("errno", code);
+        json.put("errText", StringUtils.isEmpty(desc) ? "OK" : desc);
+        json.put("data", data);
+
+        return json.toJSONString();
     }
 }

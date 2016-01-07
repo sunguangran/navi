@@ -1,13 +1,13 @@
 package com.cuckoo.framework.navi.api;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.NAVIERROR;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.utils.NaviUtil;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,16 +59,16 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
     }
 
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-        provider = ServerConfigure.get(NaviProps.SERVER);
+        provider = ServerConfigure.get(NaviDefine.SERVER);
         if (null == provider || "".equals(provider)) {
             provider = "navi-server";
         }
         if (data instanceof JSONArray) {
             JSONArray array = (JSONArray) data;
-            for (int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.size(); i++) {
                 if (array.get(i) instanceof JSONObject) {
                     JSONObject json = array.getJSONObject(i);
-                    if (json.has("_id")) {
+                    if (json.containsKey("_id")) {
                         json.put("id", json.getLong("_id"));
                         json.remove("_id");
                     }
@@ -76,7 +76,7 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
             }
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
-            if (json.has("_id")) {
+            if (json.containsKey("_id")) {
                 json.put("id", json.getLong("_id"));
                 json.remove("_id");
             }
@@ -90,9 +90,14 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
                 json.put(key, filterMap.get(key));
             }
         }
-        json.put("e", new JSONObject().put("provider", provider).put("desc", desc).put("code", code));
+        JSONObject e = new JSONObject();
+        e.put("code", code);
+        e.put("desc", desc);
+        e.put("provider", provider);
 
-        return json.toString();
+        json.put("e", e);
+
+        return json.toJSONString();
     }
 
 }

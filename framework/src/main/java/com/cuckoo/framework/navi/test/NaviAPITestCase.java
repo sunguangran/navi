@@ -1,5 +1,7 @@
 package com.cuckoo.framework.navi.test;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import junit.framework.TestCase;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -9,8 +11,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.SchemeRegistryFactory;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,7 +39,7 @@ public class NaviAPITestCase extends TestCase {
         HttpPost post = new HttpPost(url);
         post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         String rs = getHttpClient().execute(post, getResponseHandler());
-        return new JSONObject(rs);
+        return JSONObject.parseObject(rs);
     }
 
     protected BasicResponseHandler getResponseHandler() {

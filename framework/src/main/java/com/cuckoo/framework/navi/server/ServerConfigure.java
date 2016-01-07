@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Properties;
 
-public final class ServerConfigure implements NaviProps {
+public final class ServerConfigure implements NaviDefine {
 
     private final static int DEFAULT_MODULE_LOAD_PERIOD = 30;// 30s
     private final static int DEFAULT_REQUEST_OUT = 0;// 0ms

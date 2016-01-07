@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
 import com.cuckoo.framework.navi.api.NaviRequestPacket;
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.NaviBusinessException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import lombok.extern.slf4j.Slf4j;
@@ -95,15 +95,15 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (maxPacketSize > 0) {
             return maxPacketSize;
         }
-        maxPacketSize = NaviProps.DEFAULT_MAX_TCP_PACKET_SIZE;
-        if (NaviProps.TCP.equals(ServerConfigure.get(NaviProps.PROTOCOL))) {
-            if (null != ServerConfigure.get(NaviProps.TCP_MAX_PACKET_SIZE)) {
-                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviProps.TCP_MAX_PACKET_SIZE));
+        maxPacketSize = NaviDefine.DEFAULT_MAX_TCP_PACKET_SIZE;
+        if (NaviDefine.TCP.equals(ServerConfigure.get(NaviDefine.PROTOCOL))) {
+            if (null != ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE)) {
+                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE));
             }
-        } else if (NaviProps.UDP.equals(ServerConfigure.get(NaviProps.PROTOCOL))) {
-            maxPacketSize = NaviProps.DEFAULT_MAX_UDP_PACKET_SIZE;
-            if (null != ServerConfigure.get(NaviProps.UDP_MAX_PACKET_SIZE)) {
-                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviProps.UDP_MAX_PACKET_SIZE));
+        } else if (NaviDefine.UDP.equals(ServerConfigure.get(NaviDefine.PROTOCOL))) {
+            maxPacketSize = NaviDefine.DEFAULT_MAX_UDP_PACKET_SIZE;
+            if (null != ServerConfigure.get(NaviDefine.UDP_MAX_PACKET_SIZE)) {
+                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviDefine.UDP_MAX_PACKET_SIZE));
             }
         }
         return maxPacketSize;
@@ -113,9 +113,9 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (null != content_delimiter) {
             return content_delimiter;
         }
-        content_delimiter = NaviProps.DEFAULT_CONTENT_DELIMITER;
-        if (null != ServerConfigure.get(NaviProps.CONTENT_DELIMITER)) {
-            content_delimiter = ServerConfigure.get(NaviProps.CONTENT_DELIMITER);
+        content_delimiter = NaviDefine.DEFAULT_CONTENT_DELIMITER;
+        if (null != ServerConfigure.get(NaviDefine.CONTENT_DELIMITER)) {
+            content_delimiter = ServerConfigure.get(NaviDefine.CONTENT_DELIMITER);
             if (null != content_delimiter && content_delimiter.contains("\\")) {
                 content_delimiter = new String(new byte[]{Byte.parseByte(content_delimiter.replace("\\", ""))});
             }
@@ -127,9 +127,9 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (null != header_delimiter) {
             return header_delimiter;
         }
-        header_delimiter = NaviProps.DEFAULT_HEADER_DELIMITER;
-        if (null != ServerConfigure.get(NaviProps.HEADER_DELIMITER)) {
-            header_delimiter = ServerConfigure.get(NaviProps.HEADER_DELIMITER);
+        header_delimiter = NaviDefine.DEFAULT_HEADER_DELIMITER;
+        if (null != ServerConfigure.get(NaviDefine.HEADER_DELIMITER)) {
+            header_delimiter = ServerConfigure.get(NaviDefine.HEADER_DELIMITER);
             if (null != header_delimiter && header_delimiter.contains("\\")) {
                 header_delimiter = new String(new byte[]{Byte.parseByte(header_delimiter.replace("\\", ""))});
             }

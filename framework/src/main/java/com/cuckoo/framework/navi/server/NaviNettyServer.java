@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.server.handler.*;
 import com.cuckoo.framework.navi.server.stats.NaviHttpServerStats;
 import com.cuckoo.framework.navi.server.stats.NaviHttpServerStatsHandler;
@@ -55,7 +55,7 @@ public class NaviNettyServer extends ANaviTCPServer {
                 pipeline.addLast("httpCodec", new NaviHttpServerCodec());
                 pipeline.addLast("GLOBAL_TRAFFIC_SHAPING", globalTcHandler);
 
-                String chunkSize = ServerConfigure.get(NaviProps.CHUNK_AGGR_SIZE);
+                String chunkSize = ServerConfigure.get(NaviDefine.CHUNK_AGGR_SIZE);
                 if (StringUtils.isNumeric(chunkSize)) {
                     pipeline.addLast("aggregator", new HttpChunkAggregator(Integer.valueOf(chunkSize)));
                 }

@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.server;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.data.ACL;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -69,7 +69,7 @@ public class NaviRegisterTask implements Runnable {
             }
             String node = hostpath.concat("/").concat(pid);
             if (zookeeper.exists(node, false) == null) {
-                zookeeper.create(node, buildNode(pid).toString().getBytes(), DEFAULT_ACL, CreateMode.EPHEMERAL);
+                zookeeper.create(node, buildNode(pid).toJSONString().getBytes(), DEFAULT_ACL, CreateMode.EPHEMERAL);
             }
         } catch (KeeperException | InterruptedException e) {
             log.error(e.getMessage());

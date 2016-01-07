@@ -11,12 +11,12 @@ public class NaviServerClassloader extends NaviJarClassLoader {
 
     public NaviServerClassloader() throws FileNotFoundException,
         MalformedURLException {
-        super(NaviProps.NAVI_LIBS);
+        super(NaviDefine.NAVI_LIBS);
         loadJarFiles();
     }
 
     public NaviServerClassloader(ClassLoader parent) throws MalformedURLException, FileNotFoundException {
-        super(parent, NaviProps.NAVI_LIBS);
+        super(parent, NaviDefine.NAVI_LIBS);
         loadJarFiles();
     }
 }

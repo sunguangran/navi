@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.boot;
 
-public interface NaviProps {
+public interface NaviDefine {
 
     String NAVI_HOME = System.getProperty("NAVI_HOME");
     String NAVI_MODULES = NAVI_HOME + "/modules/";
@@ -68,7 +68,6 @@ public interface NaviProps {
     String TCP_MAX_PACKET_SIZE = "tcp_max_packet_size";
 
     enum WORK_MODE {
-
         UNKNOWN, TEST, DEPLOY;
 
         public static WORK_MODE toEnum(String mode) {
@@ -93,18 +92,18 @@ public interface NaviProps {
     }
 
     enum WORK_PROTOCOL {
-
         HTTP, TCP, UDP;
 
         public static WORK_PROTOCOL toProtocol(String protocol) {
             if (protocol == null) {
                 return HTTP;
             }
-            for (WORK_PROTOCOL p : values()) {
-                if (p.toString().toLowerCase().equals(protocol)) {
-                    return p;
+            for (WORK_PROTOCOL proto : WORK_PROTOCOL.values()) {
+                if (proto.toString().toLowerCase().equals(protocol)) {
+                    return proto;
                 }
             }
+
             return HTTP;
         }
 

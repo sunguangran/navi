@@ -1,11 +1,11 @@
 package com.cuckoo.demo.actions;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.api.NaviJsonResponseData;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.utils.NaviUtil;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "mfp", this.desc, this.code);
+            return toJsonData("", "navi", this.desc, this.code);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -52,10 +52,10 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
         provider = "mfp";
         if (data instanceof JSONArray) {
             JSONArray array = (JSONArray) data;
-            for (int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.size(); i++) {
                 if (array.get(i) instanceof JSONObject) {
                     JSONObject json = array.getJSONObject(i);
-                    if (json.has("_id")) {
+                    if (json.containsKey("_id")) {
                         json.put("id", json.getLong("_id"));
                         json.remove("_id");
                     }
@@ -63,7 +63,7 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
             }
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
-            if (json.has("_id")) {
+            if (json.containsKey("_id")) {
                 json.put("id", json.getLong("_id"));
                 json.remove("_id");
             }
@@ -75,7 +75,12 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
                 json.put(key, filterMap.get(key));
             }
         }
-        json.put("e", new JSONObject().put("provider", provider).put("desc", desc).put("code", code));
+
+        JSONObject e = new JSONObject();
+        e.put("code", code);
+        e.put("desc", desc);
+        e.put("provider", provider);
+        json.put("e", e);
 
         return json.toString();
     }

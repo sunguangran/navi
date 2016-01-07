@@ -13,14 +13,19 @@
     <version>0.0.1-release</version>
 
     <dependencies>
-        <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-    </dependency>
+        <!-- APACHE COMMONS-LANG-->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
+
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- LOGBACK -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -34,11 +39,11 @@
             <artifactId>logback-access</artifactId>
         </dependency>
 
+        <!-- LOMBOK -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -61,7 +66,6 @@
         </plugins>
     </build>
 
-    <description>抽象TCP概念重构</description>
-
+    <description>navi framework bootstrap</description>
 
 </project>

@@ -1,5 +1,7 @@
 package com.cuckoo.framework.navi.utils;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.common.NAVIERROR;
 import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
@@ -8,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.bson.types.ObjectId;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.Iterator;
 
 @Slf4j
 public class NaviUtil {
@@ -30,7 +29,6 @@ public class NaviUtil {
      * 使用唯一索引且有数值的属性作为检索条件
      *
      * @return
-     * @throws JSONException
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws ClassNotFoundException
@@ -54,12 +52,9 @@ public class NaviUtil {
             if (!compIndex.unique()) {
                 continue;
             }
-            JSONObject fields = new JSONObject(compIndex.def());
+            JSONObject fields = JSONObject.parseObject(compIndex.def());
 
-            @SuppressWarnings("unchecked")
-            Iterator<String> it = fields.keys();
-            while (it.hasNext()) {
-                String fnm = it.next();
+            for (String fnm : fields.keySet()) {
                 Object conditionValue = dto.getValue(fnm);
                 if (conditionValue == null
                     || conditionValue.equals(initDto.getValue(fnm))) {

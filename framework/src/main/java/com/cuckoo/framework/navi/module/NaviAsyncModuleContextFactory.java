@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.module;
 
-import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,7 +64,7 @@ public class NaviAsyncModuleContextFactory {
         }
 
         for (File file : files) {
-            if (file.isFile() || file.getName().startsWith(NaviProps.PREFIX_NAVI_BATCH)) {
+            if (file.isFile() || file.getName().startsWith(NaviDefine.PREFIX_NAVI_BATCH)) {
                 continue;
             }
 

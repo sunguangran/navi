@@ -2,6 +2,9 @@ package com.cuckoo.framework.navi.boot;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * jvm 销毁回调钩子
+ */
 @Slf4j
 public class NaviShutdownHook extends Thread {
 
