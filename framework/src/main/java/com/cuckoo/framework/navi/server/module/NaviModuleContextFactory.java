@@ -52,11 +52,7 @@ public class NaviModuleContextFactory {
 
     public INaviModuleContext getNaviModuleContext(String module) throws Exception {
         if (!map.containsKey(module)) {
-            if (ServerConfigure.isDaemonEnv()) {
-                map.put(module, new NaviDaemonModuleContext(module).initModule());
-            } else {
-                throw new FileNotFoundException("module not found: " + module);
-            }
+            throw new FileNotFoundException("module not found: " + module);
         }
 
         return map.get(module);

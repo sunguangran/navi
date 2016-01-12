@@ -24,9 +24,9 @@ public class NaviModuleContext implements INaviModuleContext {
 
     public NaviModuleContext(String moduleNm) {
         this.moduleNm = moduleNm;
-        confPath = NaviModulesUtil.getModuleConfPath(moduleNm);
-        confDir = NaviModulesUtil.getModuleConfDir(moduleNm);
-        libsPath = NaviModulesUtil.getModuleLibsPath(moduleNm);
+        confPath = NaviModuleUtil.getModuleConfPath(moduleNm);
+        confDir = NaviModuleUtil.getModuleConfDir(moduleNm);
+        libsPath = NaviModuleUtil.getModuleLibsPath(moduleNm);
         confTimeMap = new HashMap<>();
     }
 

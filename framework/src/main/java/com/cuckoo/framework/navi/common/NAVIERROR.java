@@ -2,10 +2,12 @@ package com.cuckoo.framework.navi.common;
 
 public enum NaviError {
 
+    SUCCESS(0),
+
     SYSERROR(-500),
 
     INVALID_HOST(-90),
-    BUSI_NO_DATA(-91),
+    NO_DATA(-91),
     BUSI_PARAM_ERROR(-92);
 
     private int code;
@@ -24,7 +26,7 @@ public enum NaviError {
         return code;
     }
 
-    public String getDesc() {
+    public String desc() {
         return desc;
     }
 }

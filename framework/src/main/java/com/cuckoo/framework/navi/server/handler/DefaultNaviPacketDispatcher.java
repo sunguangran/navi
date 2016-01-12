@@ -11,20 +11,18 @@ import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
 public class DefaultNaviPacketDispatcher extends AbstractNaviPacketDispatcher {
 
     @Override
-    public void callApi(NaviRequestPacket packet, NaviResponsePacket response)
-        throws Exception {
+    public void callApi(NaviRequestPacket packet, NaviResponsePacket response) throws Exception {
 
-        INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance()
-            .getNaviModuleContext(packet.getRequestModule());
+        INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance().getNaviModuleContext(packet.getRequestModule());
         if (moduleCtx == null) {
-            throw new NaviSystemException("module " + packet.getRequestModule()
-                + " not found!", NaviError.SYSERROR.code());
+            throw new NaviSystemException("module " + packet.getRequestModule() + " not found!", NaviError.SYSERROR.code());
         }
+
         INaviPacketAction bean = (INaviPacketAction) moduleCtx.getBean(packet.getRequestApi());
         if (bean == null) {
-            throw new NaviSystemException("api " + packet.getRequestApi()
-                + " not found!", NaviError.SYSERROR.code());
+            throw new NaviSystemException("api " + packet.getRequestApi() + " not found!", NaviError.SYSERROR.code());
         }
+
         bean.action(packet, response);
     }
 

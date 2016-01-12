@@ -24,14 +24,14 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
             return (NaviRedisProxyDriver) driver;
         }
         driver.close();
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR.code());
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR.code());
     }
 
     private <K> String object2String(K k) {
         if (k instanceof String) {
             return (String) k;
         }
+
         return jsonSerializer.getJSONString(k);
     }
 
@@ -51,7 +51,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
     }
 
     private <V> List<V> strList2ObjList(List<String> list, Class<V> classNm) {
-        List<V> objList = new ArrayList<V>();
+        List<V> objList = new ArrayList<>();
         for (String str : list) {
             objList.add(string2Object(str, classNm));
         }
@@ -163,7 +163,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
     public <K, V> Long zBatchAdd(K key, Map<V, Double> map) {
         NaviRedisProxyDriver driver = getDriver();
         try {
-            List<String> vals = new LinkedList<String>();
+            List<String> vals = new LinkedList<>();
             for (V v : map.keySet()) {
                 vals.add(object2String(v));
                 vals.add(map.get(v).toString());
@@ -192,8 +192,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> Set<V> zRevRangeByScore(K key, double min, double max,
-                                          long limit, long skip, Class<V> classNm) {
+    public <K, V> Set<V> zRevRangeByScore(K key, double min, double max, long limit, long skip, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> strList = driver.zRevRangeByScore(object2String(key), min, max, limit, skip, false);
@@ -204,12 +203,11 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> Set<TypedTuple<V>> zRevRangeByScoreWithScore(K key, double min,
-                                                               double max, long limit, long skip, Class<V> classNm) {
+    public <K, V> Set<TypedTuple<V>> zRevRangeByScoreWithScore(K key, double min, double max, long limit, long skip, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> list = driver.zRevRangeByScore(object2String(key), min, max, limit, skip, true);
-            Set<TypedTuple<V>> set = new LinkedHashSet<TypedTuple<V>>();
+            Set<TypedTuple<V>> set = new LinkedHashSet<>();
             for (int i = 0; i < list.size(); i = i + 2) {
                 set.add(new DefaultTypedTuple<V>(string2Object(list.get(i + 1), classNm), Double.valueOf(list.get(i))));
             }
@@ -219,8 +217,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> Set<V> zRangeByScore(K key, double min, double max,
-                                       long limit, long skip, Class<V> classNm) {
+    public <K, V> Set<V> zRangeByScore(K key, double min, double max, long limit, long skip, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> strList = driver.zRangeByScore(object2String(key), min, max, limit, skip, false);
@@ -231,14 +228,13 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> Set<TypedTuple<V>> zRangeByScoreWithScore(K key, double min,
-                                                            double max, long limit, long skip, Class<V> classNm) {
+    public <K, V> Set<TypedTuple<V>> zRangeByScoreWithScore(K key, double min, double max, long limit, long skip, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> list = driver.zRangeByScore(object2String(key), min, max, limit, skip, true);
-            Set<TypedTuple<V>> set = new LinkedHashSet<TypedTuple<V>>();
+            Set<TypedTuple<V>> set = new LinkedHashSet<>();
             for (int i = 0; i < list.size(); i = i + 2) {
-                set.add(new DefaultTypedTuple<V>(string2Object(list.get(i + 1), classNm), Double.valueOf(list.get(i))));
+                set.add(new DefaultTypedTuple<>(string2Object(list.get(i + 1), classNm), Double.valueOf(list.get(i))));
             }
             return set;
         } finally {
@@ -280,7 +276,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> list = driver.zRange(object2String(key), start, end, true);
-            Set<TypedTuple<V>> set = new LinkedHashSet<TypedTuple<V>>();
+            Set<TypedTuple<V>> set = new LinkedHashSet<>();
             for (int i = 0; i < list.size(); i = i + 2) {
                 set.add(new DefaultTypedTuple<V>(string2Object(list.get(i + 1), classNm), Double.valueOf(list.get(i))));
             }
@@ -290,8 +286,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> Set<V> zReverseRange(K key, long start, long end,
-                                       Class<V> classNm) {
+    public <K, V> Set<V> zReverseRange(K key, long start, long end, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> strList = driver.zReverseRange(object2String(key), start, end, false);
@@ -306,7 +301,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> list = driver.zReverseRange(object2String(key), start, end, true);
-            Set<TypedTuple<V>> set = new LinkedHashSet<TypedTuple<V>>();
+            Set<TypedTuple<V>> set = new LinkedHashSet<>();
             for (int i = 0; i < list.size(); i = i + 2) {
                 set.add(new DefaultTypedTuple<V>(string2Object(list.get(i + 1), classNm), Double.valueOf(list.get(i))));
             }
@@ -398,8 +393,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
     }
 
-    public <K, V> List<V> lGetRange(K key, long start, long end,
-                                    Class<V> classNm) {
+    public <K, V> List<V> lGetRange(K key, long start, long end, Class<V> classNm) {
         NaviRedisProxyDriver driver = getDriver();
         try {
             List<String> result = driver.lGetRange(object2String(key), start, end);
@@ -517,7 +511,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
     public <K, V, F> boolean hMset(K key, Map<F, V> hash) {
         NaviRedisProxyDriver driver = getDriver();
         try {
-            Map<String, String> map = new LinkedHashMap<String, String>();
+            Map<String, String> map = new LinkedHashMap<>();
             for (F str : hash.keySet()) {
                 map.put(object2String(str), object2String(hash.get(str)));
             }
@@ -600,7 +594,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
             if (result == null || result.size() == 0) {
                 return null;
             }
-            Map<F, V> map = new LinkedHashMap<F, V>();
+            Map<F, V> map = new LinkedHashMap<>();
             for (String field : result.keySet()) {
                 map.put(string2Object(field, fieldClassNm), string2Object(result.get(field), valueClassNm));
             }
@@ -672,8 +666,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         throw new UnsupportedOperationException();
     }
 
-    public <K> Object eval(K key, String script, int keyCount,
-                           String... params) {
+    public <K> Object eval(K key, String script, int keyCount, String... params) {
         throw new UnsupportedOperationException();
     }
 

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class NaviComplexJsonResponseData extends NaviJsonResponseData {
 
     private Map<String, Object> filterMap;

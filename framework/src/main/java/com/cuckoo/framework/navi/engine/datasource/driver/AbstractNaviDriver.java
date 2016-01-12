@@ -27,8 +27,7 @@ public abstract class AbstractNaviDriver implements INaviDriver {
         this(server, auth, null);
     }
 
-    public AbstractNaviDriver(ServerUrl server, String auth,
-                              NaviPoolConfig poolConfig) {
+    public AbstractNaviDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         this.server = server;
         this.auth = auth;
         this.poolConfig = poolConfig;
@@ -48,7 +47,7 @@ public abstract class AbstractNaviDriver implements INaviDriver {
             try {
                 pool.invalidateObject(this);
             } catch (Exception e) {
-                throw new NaviRuntimeException(NaviError.SYSERROR.code(), "Could not return the resource to the pool", e);
+                throw new NaviRuntimeException(NaviError.SYSERROR.code(), "can not return the resource to the pool", e);
             }
         } finally {
             close.set(true);

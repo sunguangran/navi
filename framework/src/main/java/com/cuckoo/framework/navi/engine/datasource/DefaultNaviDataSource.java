@@ -106,12 +106,11 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
 
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getOfflineConnectString()) || StringUtils.isBlank(getDeployConnectString())) {
-            throw new NaviSystemException("invalid server address!",
-                NaviError.SYSERROR.code());
+            throw new NaviSystemException("invalid server address!", NaviError.SYSERROR.code());
         } else if (StringUtils.isBlank(driverClass)) {
-            throw new NaviSystemException("invalid driverClass!",
-                NaviError.SYSERROR.code());
+            throw new NaviSystemException("invalid driverClass!", NaviError.SYSERROR.code());
         }
+
         initConnPool();
     }
 
@@ -120,7 +119,6 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
     }
 
     private class NaviPoolableObjectFactory extends BasePooledObjectFactory<INaviDriver> {
-
         private Class<?> handleClass;
         private String auth;
         private ServerUrl server;

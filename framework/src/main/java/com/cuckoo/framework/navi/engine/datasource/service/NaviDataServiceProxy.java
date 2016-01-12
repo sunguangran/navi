@@ -35,9 +35,9 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
         Class<?>[] inters = realService.getClass().getInterfaces();
         //直接实现目标的接口的情况下使用java原生动态代理,否则使用cglib
         if (find(inters, inter)) {
-            this.proxyService = Proxy.newProxyInstance(realService.getClass()
-                    .getClassLoader(), realService.getClass().getInterfaces(),
-                this);
+            this.proxyService = Proxy.newProxyInstance(
+                realService.getClass().getClassLoader(), realService.getClass().getInterfaces(), this
+            );
         } else {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(this.realService.getClass());

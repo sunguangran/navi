@@ -23,27 +23,27 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
     public abstract void callApi(NaviHttpRequest request, NaviHttpResponse response) throws Exception;
 
     public void process(HttpRequest request, HttpResponse response) throws Exception {
-        long t = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis();
         try {
-            NaviHttpRequest naviRequest = packageNaviHttpRequest(request);
-            if (naviRequest != null) {
-                NaviHttpResponse naviResponse = (NaviHttpResponse) response;
-                callApi(naviRequest, naviResponse);
-                t = System.currentTimeMillis() - t;
-                INaviResponseData responseData = naviResponse.getResponseData();
-                responseData.setCost(t);
-                naviResponse.setContent(responseData.getResponseData());
-                naviResponse.headers().set(Names.CONTENT_TYPE, responseData.getResponseType());
+            NaviHttpRequest req = packageNaviHttpRequest(request);
+            if (req != null) {
+                NaviHttpResponse resp = (NaviHttpResponse) response;
+                callApi(req, resp);
+                INaviResponseData data = resp.getResponseData();
+                data.setCost(System.currentTimeMillis() - timestamp);
+                resp.setContent(data.getResponseData());
+                resp.headers().set(Names.CONTENT_TYPE, data.getResponseType());
             } else {
-                log.warn("Navi Request is null!");
+                log.warn("navi request is null.");
             }
         } catch (Exception e) {
             if (e instanceof NaviBusinessException) {
-                t = System.currentTimeMillis() - t;
-                NaviBusinessException ee = (NaviBusinessException) e;
-                ee.setCost(t);
-                response.setContent(ee.getResponseData());
-                response.headers().set(Names.CONTENT_TYPE, ee.getResponseType());
+                timestamp = System.currentTimeMillis() - timestamp;
+                NaviBusinessException alias = (NaviBusinessException) e;
+                alias.setCost(timestamp);
+
+                response.setContent(alias.getResponseData());
+                response.headers().set(Names.CONTENT_TYPE, alias.getResponseType());
                 return;
             }
 

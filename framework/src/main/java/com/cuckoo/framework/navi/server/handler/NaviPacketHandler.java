@@ -19,12 +19,11 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
     protected String protocol;
 
     public NaviPacketHandler() {
-        listeners = new ArrayList<INaviPacketListener>();
+        listeners = new ArrayList<>();
     }
 
     @Override
-    public void handle(NaviRequestPacket udpRequest, Channel channel)
-        throws Exception {
+    public void handle(NaviRequestPacket udpRequest, Channel channel) throws Exception {
         NaviResponsePacket response = new NaviResponsePacket();
         response.setRemoteAddress(udpRequest.getRemoteAddress());
         for (INaviPacketListener listener : listeners) {

@@ -14,8 +14,8 @@ public class NaviNstatusService extends AbstractNaviDataService implements INavi
         if (driver instanceof NaviNstatusDriver) {
             return (NaviNstatusDriver) driver;
         }
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR.code());
+        
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR.code());
     }
 
     public boolean report(MonitorReportObject obj) {

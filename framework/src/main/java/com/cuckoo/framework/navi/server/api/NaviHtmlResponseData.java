@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.server.api;
 
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 
-
+@SuppressWarnings("unused")
 public class NaviHtmlResponseData extends ANaviResponseData {
 
     public NaviHtmlResponseData(Object data) {

@@ -42,13 +42,13 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
             throw new NaviBusinessException("invalid packet", -200);
         }
         String[] headerMsg = header.split(header_delimiter);
-        if (null == headerMsg || !(headerMsg.length == 4 || headerMsg.length == 3)) {
+        if (!(headerMsg.length == 4 || headerMsg.length == 3)) {
             throw new NaviBusinessException("wrong header format,invalid packet", -200);
         }
         NaviRequestPacket packet = null;
         if (headerMsg.length == 4) {
             packet = new NaviRequestPacket(headerMsg[0], headerMsg[1], headerMsg[2], headerMsg[3], content);
-        } else if (headerMsg.length == 3) {
+        } else {
             packet = new NaviRequestPacket(headerMsg[0], headerMsg[1], headerMsg[2], null, content);
         }
         packet.setRemoteAddress(e.getRemoteAddress());

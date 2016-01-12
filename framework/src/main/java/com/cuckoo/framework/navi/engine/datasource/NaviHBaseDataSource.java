@@ -51,8 +51,10 @@ public class NaviHBaseDataSource extends NaviLinearDataSource {
         } else {
             json = JSONObject.parseObject(this.offlineConnectString);
         }
+
         NaviPoolConfig poolConfig = new NaviHBasePoolConfig(json.toString());
         this.setConfig(poolConfig);
+        
         super.initConnPool();
     }
 }

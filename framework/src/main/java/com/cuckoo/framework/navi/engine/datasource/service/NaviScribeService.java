@@ -34,7 +34,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
     public boolean batchAppend(List<BatchLogEntry> logs) {
         NaviScribeDriver driver = getScribeDriver();
         try {
-            List<LogEntry> list = new ArrayList<LogEntry>();
+            List<LogEntry> list = new ArrayList<>();
             for (BatchLogEntry entry : logs) {
                 if (this.level > entry.getLevel()) {
                     continue;

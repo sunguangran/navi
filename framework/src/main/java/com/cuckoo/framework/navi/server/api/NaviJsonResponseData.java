@@ -95,17 +95,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
             }
 
             return toJsonData(NaviError.SUCCESS.code(), "", "");
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (JSONException | SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
@@ -123,17 +113,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
                 datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | IllegalArgumentException | JSONException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
@@ -144,17 +124,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
             return toJsonData(
                 0, "", (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString()
             );
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | IllegalArgumentException | JSONException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }

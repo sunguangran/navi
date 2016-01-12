@@ -20,8 +20,8 @@ import java.util.Random;
  * 建议使用String,因为对象效率低，同时UDP报文大小有限制，使用对象可能超出限制。
  */
 @Slf4j
-public class NaviUDPClientService extends AbstractNaviDataService implements
-    INaviUDPClientService {
+public class NaviUDPClientService extends AbstractNaviDataService implements INaviUDPClientService {
+
     protected String offlineConnectString;
     protected String deployConnectString;
     protected String[] hosts;

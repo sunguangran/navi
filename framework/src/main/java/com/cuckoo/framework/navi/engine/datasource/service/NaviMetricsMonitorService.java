@@ -14,13 +14,12 @@ public class NaviMetricsMonitorService extends AbstractNaviDataService implement
         if (driver instanceof NaviMetricsMonitorDriver) {
             return (NaviMetricsMonitorDriver) driver;
         }
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR.code());
+
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR.code());
     }
 
     public boolean report(MonitorReportObject obj) {
         getDriver().report(obj);
         return true;
     }
-
 }

@@ -18,7 +18,7 @@ public class NaviModuleClassLoader extends NaviJarClassLoader {
 
     public NaviModuleClassLoader(ClassLoader parenter, String moduleNm)
         throws FileNotFoundException, MalformedURLException {
-        super(parenter, NaviModulesUtil.getModuleLibsPath(moduleNm));
+        super(parenter, NaviModuleUtil.getModuleLibsPath(moduleNm));
         this.moduleNm = moduleNm;
         loadJarFiles();
     }

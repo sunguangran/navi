@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.server.module;
 
 import com.cuckoo.framework.navi.server.ServerConfigure;
 
-public class NaviModulesUtil {
+public class NaviModuleUtil {
 
     public static String getModuleConfPath(String moduleNm) {
         return getModuleConfDir(moduleNm) + moduleNm + ".xml";

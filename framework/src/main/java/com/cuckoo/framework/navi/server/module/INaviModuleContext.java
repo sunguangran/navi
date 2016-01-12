@@ -13,7 +13,7 @@ public interface INaviModuleContext {
     String getBeanId(Class<?> clazz) throws Exception;
 
     /**
-     * 初始化module配置,推荐调用一次
+     * 初始化module配置
      *
      * @return
      * @throws Exception

@@ -16,8 +16,7 @@ public abstract class ANaviPacketAction implements INaviPacketAction {
     private List<NaviParameter> parameters;
     private INaviMonitorCollector collector;
 
-    public void action(NaviRequestPacket request, NaviResponsePacket response)
-        throws Exception {
+    public void action(NaviRequestPacket request, NaviResponsePacket response) throws Exception {
         long start = System.currentTimeMillis();
         // 前置操作
         preAction(request, response);
@@ -66,16 +65,17 @@ public abstract class ANaviPacketAction implements INaviPacketAction {
         if (interrupters == null) {
             return;
         }
+
         for (INaviPacketInterrupter interrupter : interrupters) {
             interrupter.preAction(packet, response, parameters);
         }
     }
 
-    protected void postAction(NaviRequestPacket packet, NaviResponsePacket response)
-        throws Exception {
+    protected void postAction(NaviRequestPacket packet, NaviResponsePacket response) throws Exception {
         if (interrupters == null) {
             return;
         }
+
         for (INaviPacketInterrupter interrupter : interrupters) {
             interrupter.postAction(packet, response);
         }
