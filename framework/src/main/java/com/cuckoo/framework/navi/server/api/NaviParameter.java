@@ -8,10 +8,10 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class NaviParamter {
+public class NaviParameter {
 
     private String name;
     private String type;
-    private boolean requiered;
+    private boolean required;
 
 }

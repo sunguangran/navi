@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface INaviInterrupter {
 
-    boolean preAction(NaviHttpRequest request, NaviHttpResponse response, List<NaviParamter> parameters) throws NaviBusinessException;
+    boolean preAction(NaviHttpRequest request, NaviHttpResponse response, List<NaviParameter> parameters) throws NaviBusinessException;
 
     boolean postAction(NaviHttpRequest request, NaviHttpResponse response) throws NaviBusinessException;
 

@@ -3,6 +3,7 @@ package com.cuckoo.framework.navi.server.api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
@@ -16,6 +17,15 @@ import java.util.Collection;
 
 public class NaviJsonResponseData extends ANaviResponseData {
 
+    protected static String provider = null;
+
+    static {
+        provider = ServerConfigure.get(NaviDefine.SERVER);
+        if (StringUtils.isEmpty(provider)) {
+            provider = "navi";
+        }
+    }
+
     public NaviJsonResponseData(Object data) {
         this(data, "data", 0, 0, 0);
     }
@@ -24,7 +34,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
         super(data, dataFieldNm, total, page, pageLength);
     }
 
-    protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
+    protected String toJsonData(int code, String desc, Object data) throws JSONException {
         JSONObject re = new JSONObject();
         re.put(dataKey, data != null ? data : "");
         if (page > 0) {
@@ -38,7 +48,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
         }
         re.put("cost", cost * 0.001f);
         JSONObject e = new JSONObject();
-        e.put("provider", ServerConfigure.getServer());
+        e.put("provider", provider);
         e.put("desc", StringUtils.isNotEmpty(desc) ? desc : "");
         e.put("code", code);
         re.put("e", e);
@@ -53,7 +63,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "", "\"no data!\"", NaviError.BUSI_NO_DATA.code());
+            return toJsonData(NaviError.NO_DATA.code(), "no data.", "");
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -63,7 +73,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     public String toResponseForBusinessException() throws NaviSystemException {
         try {
             NaviBusinessException ex = (NaviBusinessException) data;
-            return toJsonData("", ex.getProvider(), ex.toString(), ex.getCode());
+            return toJsonData(ex.getCode(), ex.toString(), "");
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -84,7 +94,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
                 }
             }
 
-            return toJsonData(datas, "", "", 0);
+            return toJsonData(NaviError.SUCCESS.code(), "", "");
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         } catch (SecurityException e) {
@@ -132,7 +142,8 @@ public class NaviJsonResponseData extends ANaviResponseData {
     public String toResponseForObject() throws NaviSystemException {
         try {
             return toJsonData(
-                (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString(), "", "", 0);
+                0, "", (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString()
+            );
         } catch (SecurityException e) {
             throw NaviUtil.transferToNaviSysException(e);
         } catch (IllegalArgumentException e) {
@@ -151,7 +162,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     protected String toResponseForJsonArray() {
         try {
-            return toJsonData(data, "", "", 0);
+            return toJsonData(NaviError.SUCCESS.code(), "", data);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -160,7 +171,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     protected String toResponseForJsonObject() throws NaviSystemException {
         try {
-            return toJsonData(data, "", "", 0);
+            return toJsonData(NaviError.SUCCESS.code(), "", data);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }

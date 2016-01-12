@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class ANaviPacketAction implements INaviPacketAction {
 
     private List<INaviPacketInterrupter> interrupters = null;
-    private List<NaviParamter> parameters;
+    private List<NaviParameter> parameters;
     private INaviMonitorCollector collector;
 
     public void action(NaviRequestPacket request, NaviResponsePacket response)

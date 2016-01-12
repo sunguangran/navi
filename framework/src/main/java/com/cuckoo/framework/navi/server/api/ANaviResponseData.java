@@ -18,12 +18,12 @@ import java.util.Collection;
 @Getter
 public abstract class ANaviResponseData implements INaviResponseData {
 
+    protected String dataKey;
     protected Object data;
     protected int page;
     protected int count;
     protected long cost;
     protected long total;
-    protected String dataKey;
 
     public ANaviResponseData(Object data) {
         this.data = data;

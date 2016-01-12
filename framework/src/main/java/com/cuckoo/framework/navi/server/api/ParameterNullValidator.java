@@ -7,12 +7,12 @@ import java.util.List;
 
 public class ParameterNullValidator implements INaviInterrupter {
 
-    public boolean preAction(NaviHttpRequest request, NaviHttpResponse response, List<NaviParamter> parameters) throws NaviBusinessException {
+    public boolean preAction(NaviHttpRequest request, NaviHttpResponse response, List<NaviParameter> parameters) throws NaviBusinessException {
         if (parameters == null) {
             return true;
         }
-        for (NaviParamter param : parameters) {
-            if (param.isRequiered() && request.isEmpty(param.getName())) {
+        for (NaviParameter param : parameters) {
+            if (param.isRequired() && request.isEmpty(param.getName())) {
                 throw new NaviBusinessException(param.getName() + " is required", NaviError.BUSI_PARAM_ERROR.code());
             }
         }

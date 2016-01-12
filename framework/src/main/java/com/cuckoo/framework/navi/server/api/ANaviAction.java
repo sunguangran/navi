@@ -24,7 +24,7 @@ import java.util.List;
 public abstract class ANaviAction implements InitializingBean {
 
     private List<INaviInterrupter> interrupters = null;
-    private List<NaviParamter> parameters;
+    private List<NaviParameter> parameters;
 
     private INaviMonitorCollector collector;
 
