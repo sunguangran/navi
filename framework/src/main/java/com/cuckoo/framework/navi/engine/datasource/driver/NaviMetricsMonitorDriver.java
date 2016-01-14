@@ -11,8 +11,7 @@ public class NaviMetricsMonitorDriver extends AbstractNaviDriver {
     private MetricRegistry metrics = new MetricRegistry();
     private JmxReporter reporter;
 
-    public NaviMetricsMonitorDriver(ServerUrl server, String auth,
-                                    NaviPoolConfig poolConfig) {
+    public NaviMetricsMonitorDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         reporter = JmxReporter.forRegistry(metrics).build();
         reporter.start();

@@ -92,10 +92,10 @@ public class NaviModuleContextFactory {
                         map.put(module.getName(), new NaviModuleContext(module.getName()).initModule());
                         log.info("module " + module.getName() + " has been loaded.");
                     } else {
-                        INaviModuleContext mdl = map.get(module.getName()).refresh();
-                        if (mdl != null) {
+                        INaviModuleContext context = map.get(module.getName()).refresh();
+                        if (context != null) {
                             // 未刷新则不用更新
-                            map.put(module.getName(), mdl);
+                            map.put(module.getName(), context);
                             log.info("module version of " + module.getName() + " has been updated successfully.");
                         }
                     }

@@ -8,11 +8,10 @@ import java.util.List;
 
 public interface INaviHttp extends IBaseDataService {
 
-    public String doGet(String uri) throws NaviSystemException;
+    String doGet(String uri) throws NaviSystemException;
 
-    public String doPost(String uri, List<BasicNameValuePair> params)
-        throws NaviSystemException;
+    String doPost(String uri, List<BasicNameValuePair> params) throws NaviSystemException;
 
-    public String execute(HttpUriRequest request) throws NaviSystemException;
+    String execute(HttpUriRequest request) throws NaviSystemException;
 
 }

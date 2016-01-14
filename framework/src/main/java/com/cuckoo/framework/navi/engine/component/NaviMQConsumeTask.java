@@ -37,7 +37,7 @@ public class NaviMQConsumeTask<T> implements Runnable, InitializingBean, Disposa
     public void run() {
         while (open.get()) {
             try {
-                List<T> list = new LinkedList<T>();
+                List<T> list = new LinkedList<>();
                 if (context.getConsumeRate() > 1) {
                     int size = queue.drainTo(queueKey, list, context.getConsumeRate(), strategy.getClassNM());
                     if (size <= 0) {

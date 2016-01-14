@@ -6,30 +6,30 @@ import com.cuckoo.framework.navi.boot.NaviServerClassloader;
 public class NaviFrameWorkContext implements INaviModuleContext {
 
     private String confPath;
-    private NaviClassPathXmlApplicationContext cxt;
+    private NaviClassPathXmlApplicationContext ctx;
 
     public NaviFrameWorkContext(String file) {
         confPath = NaviDefine.NAVI_HOME + "/conf/" + file + ".xml";
     }
 
     public Object getBean(String name) throws Exception {
-        return cxt.getBean(name);
+        return ctx.getBean(name);
     }
 
     public INaviModuleContext initModule() throws Exception {
-        cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-        cxt.refresh();
-        cxt.registerShutdownHook();
+        ctx = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+        ctx.refresh();
+        ctx.registerShutdownHook();
         return this;
     }
 
     public INaviModuleContext refresh() throws Exception {
-        NaviClassPathXmlApplicationContext ncxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-        ncxt.setClassLoader(new NaviServerClassloader());
-        ncxt.refresh();
-        ncxt.registerShutdownHook();
-        NaviClassPathXmlApplicationContext tcxt = cxt;
-        cxt = ncxt;
+        NaviClassPathXmlApplicationContext nctx = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+        nctx.setClassLoader(new NaviServerClassloader());
+        nctx.refresh();
+        nctx.registerShutdownHook();
+        NaviClassPathXmlApplicationContext tcxt = ctx;
+        ctx = nctx;
         tcxt.prepareClose();
         tcxt.setClassLoader(null);
         tcxt = null;
@@ -37,7 +37,7 @@ public class NaviFrameWorkContext implements INaviModuleContext {
     }
 
     public void close() throws Exception {
-        cxt.close();
+        ctx.close();
     }
 
     @Override
