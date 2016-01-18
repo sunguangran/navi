@@ -414,7 +414,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
     public List<T> getPage(Class<T> entityClass, byte[] startKey,
                            byte[] endKey, int page, int pageLength) {
         if (page < 1 || pageLength < 1) {
-            throw new NaviRuntimeException(NaviError.BUSI_PARAM_ERROR.code(), "page or pageLength must be bigger than 1");
+            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "page or pageLength must be bigger than 1");
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {
@@ -426,7 +426,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
         } else if (null != startKey) {
             scan = new Scan(startKey);
         } else if (null == startKey) {
-            throw new NaviRuntimeException(NaviError.BUSI_PARAM_ERROR.code(), "startKey can't be null");
+            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "startKey can't be null");
         }
         List<T> list = find(scan, entityClass);
         if (null != last) {
@@ -445,7 +445,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             } else {
                 int maxPage = list.size() % pageLength == 0 ? list.size()
                     / pageLength : list.size() / pageLength + 1;
-                throw new NaviRuntimeException(NaviError.BUSI_PARAM_ERROR.code(), "error page:" + page + ",max page:" + maxPage);
+                throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "error page:" + page + ",max page:" + maxPage);
             }
         }
         return null;
@@ -463,7 +463,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
      */
     public int count(Class<T> entityClass, byte[] startKey, byte[] endKey) {
         if (null == entityClass || null == startKey || null == endKey) {
-            throw new NaviRuntimeException(NaviError.BUSI_PARAM_ERROR.code(), "error param!");
+            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "error param!");
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {

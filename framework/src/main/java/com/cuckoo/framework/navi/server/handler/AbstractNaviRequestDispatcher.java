@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.server.api.INaviResponseData;
 import com.cuckoo.framework.navi.server.api.NaviHttpRequest;
 import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
@@ -37,9 +37,9 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
                 log.warn("navi request is null.");
             }
         } catch (Exception e) {
-            if (e instanceof NaviBusinessException) {
+            if (e instanceof NaviBusiException) {
                 timestamp = System.currentTimeMillis() - timestamp;
-                NaviBusinessException alias = (NaviBusinessException) e;
+                NaviBusiException alias = (NaviBusiException) e;
                 alias.setCost(timestamp);
 
                 response.setContent(alias.getResponseData());

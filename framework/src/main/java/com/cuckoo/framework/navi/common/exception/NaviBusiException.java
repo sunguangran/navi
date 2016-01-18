@@ -10,7 +10,7 @@ import org.jboss.netty.util.CharsetUtil;
 
 @Setter
 @Getter
-public class NaviBusinessException extends NaviRuntimeException implements INaviResponseData {
+public class NaviBusiException extends NaviRuntimeException implements INaviResponseData {
 
     private static final long serialVersionUID = -1118018339885279706L;
 
@@ -20,11 +20,11 @@ public class NaviBusinessException extends NaviRuntimeException implements INavi
     private int count;
     private Object data;
 
-    public NaviBusinessException(String desc, int code) {
+    public NaviBusiException(String desc, int code) {
         this(null, desc, code);
     }
 
-    public NaviBusinessException(String provider, String desc, int code) {
+    public NaviBusiException(String provider, String desc, int code) {
         super(code, desc);
         this.provider = provider;
     }

@@ -18,7 +18,7 @@ public class NaviModuleContextFactory {
 
     private final static NaviModuleContextFactory instance = new NaviModuleContextFactory();
 
-    private final static int DELAY = 0;// 0s延迟
+    private final static int DELAY = 0; // 0s延迟
 
     private Map<String, INaviModuleContext> map = new HashMap<>();
     private Map<String, RestApi> restMap = new HashMap<>();
@@ -62,6 +62,9 @@ public class NaviModuleContextFactory {
         return instance;
     }
 
+    /**
+     * 定期检查模块配置，热部署
+     */
     private class CheckModuleVersion implements Runnable {
 
         private ReentrantLock lock = new ReentrantLock();

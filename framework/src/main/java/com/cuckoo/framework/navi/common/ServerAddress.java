@@ -20,7 +20,7 @@ public class ServerAddress {
 
     private void validateHost(String host) throws NaviSystemException {
         if (!host.matches(hostRegex)) {
-            throw new NaviSystemException("host ip is invalid.", NaviError.INVALID_HOST.code());
+            throw new NaviSystemException("host ip is invalid.", NaviError.HOST_INVALID.code());
         }
     }
 

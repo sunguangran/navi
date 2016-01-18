@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.boot.NaviDefine;
 import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
@@ -72,7 +72,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     public String toResponseForBusinessException() throws NaviSystemException {
         try {
-            NaviBusinessException ex = (NaviBusinessException) data;
+            NaviBusiException ex = (NaviBusiException) data;
             return toJsonData(ex.getCode(), ex.toString(), "");
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);

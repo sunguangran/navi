@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.server.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +44,7 @@ public abstract class ANaviResponseData implements INaviResponseData {
     protected String toResponse() throws NaviSystemException {
         if (data == null) {
             return toResponseNull();
-        } else if (data instanceof NaviBusinessException) {
+        } else if (data instanceof NaviBusiException) {
             return toResponseForBusinessException();
         } else if (data instanceof Collection) {
             return toResponseForList();

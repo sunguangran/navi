@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
 import com.cuckoo.framework.navi.server.api.NaviResponsePacket;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public abstract class AbstractNaviPacketDispatcher implements
                 log.warn("udp request is null!");
             }
         } catch (Exception e) {
-            if (e instanceof NaviBusinessException) {
+            if (e instanceof NaviBusiException) {
                 response.setResponseString("handle error");
             }
             throw e;

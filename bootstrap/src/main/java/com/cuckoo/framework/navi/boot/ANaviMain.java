@@ -21,16 +21,14 @@ public abstract class ANaviMain {
                 System.setProperty("NAVI_HOME", System.getenv("NAVI_HOME"));
             }
 
-            // 初始化logback日志配置
-            LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+            // 初始化logback日志相关配置
+            LoggerContext logCtx = (LoggerContext) LoggerFactory.getILoggerFactory();
             JoranConfigurator configurator = new JoranConfigurator();
-            configurator.setContext(lc);
-            lc.reset();
+            configurator.setContext(logCtx);
+            logCtx.reset();
 
             if (NaviDefine.NAVI_HOME != null) {
                 configurator.doConfigure(NaviDefine.NAVI_LOGBACK_PATH);
-            } else {
-                configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,26 +36,28 @@ public abstract class ANaviMain {
     }
 
     /**
-     * 解析服务配置文件
+     * 解析框架服务配置文件
      */
-    protected Properties parseConfig(String confFile) {
+    protected Properties parseConfig(String cfgPath) {
         log.info("start parsing config file.");
 
         Properties props = new Properties();
         try {
-            File file = new File(confFile);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String str;
-            while ((str = br.readLine()) != null) {
-                if (str.startsWith("#") || str.length() == 0) {
+            File cfgFile = new File(cfgPath);
+            BufferedReader reader = new BufferedReader(new FileReader(cfgFile));
+            String tmp;
+            while ((tmp = reader.readLine()) != null) {
+                if (tmp.startsWith("#") || tmp.length() == 0) {
                     continue;
                 }
-                String[] pairs = str.split("=");
+
+                String[] pairs = tmp.split("=");
                 if (pairs.length > 1) {
                     props.put(pairs[0].trim(), pairs[1].trim());
                 }
             }
-            br.close();
+
+            reader.close();
         } catch (IOException e) {
             log.error("{}", e.getMessage());
         }

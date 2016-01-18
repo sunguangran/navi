@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
 import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.common.exception.NaviBusinessException;
+import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
 import lombok.extern.slf4j.Slf4j;
@@ -28,22 +28,22 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         byte[] recByte = buffer.array();
         maxPacketSize = getMaxPacketSize();
         if (null == recByte || recByte.length < 1 || recByte.length > maxPacketSize) {
-            throw new NaviBusinessException("invalid packet", -200);
+            throw new NaviBusiException("invalid packet", -200);
         }
         header_delimiter = getHeaderDelimiter();
         content_delimiter = getContentDelimiter();
         if (null == header_delimiter || null == content_delimiter) {
-            throw new NaviBusinessException("server delimiter can't be null", -200);
+            throw new NaviBusiException("server delimiter can't be null", -200);
         }
         String header = getHeader(recByte, content_delimiter);
         byte[] content = getContent(recByte, content_delimiter);
         if (null == header || header.length() < 1
             || null == content || content.length < 1) {
-            throw new NaviBusinessException("invalid packet", -200);
+            throw new NaviBusiException("invalid packet", -200);
         }
         String[] headerMsg = header.split(header_delimiter);
         if (!(headerMsg.length == 4 || headerMsg.length == 3)) {
-            throw new NaviBusinessException("wrong header format,invalid packet", -200);
+            throw new NaviBusiException("wrong header format,invalid packet", -200);
         }
         NaviRequestPacket packet = null;
         if (headerMsg.length == 4) {
