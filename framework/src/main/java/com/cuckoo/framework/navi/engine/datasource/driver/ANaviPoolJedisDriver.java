@@ -3,7 +3,7 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.engine.redis.AbstractPoolBinaryShardedJedis;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisListCommands.Position;
@@ -19,15 +19,15 @@ import java.util.*;
 
 import static redis.clients.jedis.Protocol.toByteArray;
 
-public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDriver {
+public abstract class ANaviPoolJedisDriver extends ANaviJedisDriver {
 
 
-    public AbstractNaviPoolJedisDriver(ServerUrl server, String auth) {
+    public ANaviPoolJedisDriver(ServerAddress server, String auth) {
         super(server, auth);
     }
 
-    public AbstractNaviPoolJedisDriver(ServerUrl server, String auth,
-                                       NaviPoolConfig poolConfig) {
+    public ANaviPoolJedisDriver(ServerAddress server, String auth,
+                                NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }
 

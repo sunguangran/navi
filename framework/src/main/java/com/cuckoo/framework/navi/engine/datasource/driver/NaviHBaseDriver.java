@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -15,17 +15,17 @@ import java.io.IOException;
 import java.util.*;
 
 @Slf4j
-public class NaviHBaseDriver extends AbstractNaviDriver {
+public class NaviHBaseDriver extends ANaviDriver {
     private HConnection connection;
     private HBaseAdmin admin;
     private NamespaceDescriptor nd;
 
-    public NaviHBaseDriver(ServerUrl server, String auth) {
+    public NaviHBaseDriver(ServerAddress server, String auth) {
         super(server, auth);
     }
 
     public NaviHBaseDriver(String url, String auth, NaviPoolConfig poolConfig) {
-        super(new ServerUrl(url), auth, poolConfig);
+        super(new ServerAddress(url), auth, poolConfig);
         if (poolConfig instanceof NaviHBasePoolConfig) {
             Configuration configuration = ((NaviHBasePoolConfig) poolConfig)
                 .getConfig();
@@ -38,8 +38,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
         }
     }
 
-    public NaviHBaseDriver(ServerUrl server, String auth,
-                           NaviPoolConfig poolConfig) {
+    public NaviHBaseDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         if (poolConfig instanceof NaviHBasePoolConfig) {
             Configuration configuration = ((NaviHBasePoolConfig) poolConfig)

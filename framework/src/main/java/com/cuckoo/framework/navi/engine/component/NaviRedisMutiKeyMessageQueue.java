@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.engine.component;
 
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviMessageQueue;
-import com.cuckoo.framework.navi.engine.datasource.driver.AbstractNaviJedisDriver;
+import com.cuckoo.framework.navi.engine.datasource.driver.ANaviJedisDriver;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
 import org.apache.commons.lang.StringUtils;
@@ -177,7 +177,7 @@ public class NaviRedisMutiKeyMessageQueue implements INaviMessageQueue {
     }
 
     private <T> T bspop(String key, long timeout, Class<T> classNm) {
-        AbstractNaviJedisDriver driver = (AbstractNaviJedisDriver) service.getDataSource().getHandle();
+        ANaviJedisDriver driver = (ANaviJedisDriver) service.getDataSource().getHandle();
         try {
             byte[] re = driver.bLPop((int) timeout, object2Bytes(key + ":help"));
             if (re != null) {

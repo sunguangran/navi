@@ -1,12 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 
 public class NaviMysqlDriver extends NaviJdbcDriver {
 
-    public NaviMysqlDriver(ServerUrl server, String auth,
-                           NaviPoolConfig poolConfig) {
+    public NaviMysqlDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }
 

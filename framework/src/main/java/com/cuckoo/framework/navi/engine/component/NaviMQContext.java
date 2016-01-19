@@ -30,7 +30,7 @@ public class NaviMQContext {
     /**
      * MQ实现类型，默认1，Redis实现
      */
-    private MessageQueueType mqType = MessageQueueType.REDIS;
+    private MQType mqType = MQType.REDIS;
 
     public void setConsumeRate(int consumeRate) {
         if (consumeRate > 0) {
@@ -45,8 +45,8 @@ public class NaviMQContext {
     }
 
     public void setMqType(int mqType) {
-        if (mqType >= 0 && mqType < MessageQueueType.values().length) {
-            this.mqType = MessageQueueType.values()[mqType];
+        if (mqType >= 0 && mqType < MQType.values().length) {
+            this.mqType = MQType.values()[mqType];
         }
     }
 
@@ -54,7 +54,7 @@ public class NaviMQContext {
         return mqType.ordinal();
     }
 
-    public MessageQueueType getMqEnumType() {
+    public MQType getMqEnumType() {
         return mqType;
     }
 
@@ -64,7 +64,7 @@ public class NaviMQContext {
         }
     }
 
-    public enum MessageQueueType {
+    public enum MQType {
         REDIS, MUTIREDIS, OLDMUTIREDIS, ZOOKEEPER
     }
 }

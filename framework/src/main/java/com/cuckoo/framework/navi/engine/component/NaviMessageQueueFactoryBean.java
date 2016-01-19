@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.engine.component;
 
-import com.cuckoo.framework.navi.engine.component.NaviMQContext.MessageQueueType;
+import com.cuckoo.framework.navi.engine.component.NaviMQContext.MQType;
 import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviMessageQueue;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class NaviMessageQueueFactoryBean implements FactoryBean<INaviMessageQueu
     private int mqType = 0;
 
     public INaviMessageQueue getObject() throws Exception {
-        return factory.createMQ(service, queueKey, MessageQueueType.values()[mqType]);
+        return factory.createMQ(service, queueKey, MQType.values()[mqType]);
     }
 
     public Class<?> getObjectType() {

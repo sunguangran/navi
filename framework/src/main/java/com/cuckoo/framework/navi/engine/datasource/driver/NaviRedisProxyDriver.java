@@ -4,7 +4,7 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.RedisProxyPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import com.youku.java.navi.engine.redis.CmdParam;
 import com.youku.java.navi.engine.redis.CmdParamFactory;
 import com.youku.java.navi.engine.redis.JavaRedisProxy;
@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
-public class NaviRedisProxyDriver extends AbstractNaviDriver {
+public class NaviRedisProxyDriver extends ANaviDriver {
 
     private JavaRedisProxy proxy;
 
@@ -24,7 +24,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
 
     private String serverGroup;
 
-    public NaviRedisProxyDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
+    public NaviRedisProxyDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.serverGroup = server.getUrl();
         String path = null;

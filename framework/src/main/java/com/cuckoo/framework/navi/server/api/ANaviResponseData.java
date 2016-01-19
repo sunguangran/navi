@@ -58,11 +58,9 @@ public abstract class ANaviResponseData implements INaviResponseData {
         return toResponseForObject();
     }
 
-    protected abstract String toResponseForJsonObject()
-        throws NaviSystemException;
+    protected abstract String toResponseForJsonObject() throws NaviSystemException;
 
-    protected abstract String toResponseForJsonArray()
-        throws NaviSystemException;
+    protected abstract String toResponseForJsonArray() throws NaviSystemException;
 
     @Override
     public String toString() {
@@ -86,8 +84,7 @@ public abstract class ANaviResponseData implements INaviResponseData {
      *
      * @return
      */
-    public abstract String toResponseForBusinessException()
-        throws NaviSystemException;
+    public abstract String toResponseForBusinessException() throws NaviSystemException;
 
     /**
      * 处理动态数组返回

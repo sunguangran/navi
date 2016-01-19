@@ -1,11 +1,13 @@
 package com.cuckoo.framework.navi.serviceobj;
 
+import com.cuckoo.framework.navi.common.annotation.DtoInfo;
+
 import java.lang.reflect.Field;
 
 /**
  * 符合传统业务习惯的列式Dto类
  */
-public abstract class NaviBaseColumnDto extends AbstractNaviDto implements INaviColumnDto {
+public abstract class NaviBaseColumnBean extends AbstractNaviBean implements INaviColumnDto {
 
     private static final long serialVersionUID = 9052289710527464858L;
 
@@ -22,9 +24,7 @@ public abstract class NaviBaseColumnDto extends AbstractNaviDto implements INavi
             if (anatation != null) {
                 String cf = anatation.cf();
                 String column = anatation.column();
-                if (cf.equals("")) {
-                    continue;
-                } else {
+                if (!cf.equals("")) {
                     String fieldNm = field.getName();
                     if (column.equals("")) {
                         column = fieldNm;

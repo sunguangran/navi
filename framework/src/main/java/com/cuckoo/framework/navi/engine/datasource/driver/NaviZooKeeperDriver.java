@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.IZookeeperEventHander;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.KeeperException.ConnectionLossException;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
-public class NaviZooKeeperDriver extends AbstractNaviDriver {
+public class NaviZooKeeperDriver extends ANaviDriver {
 
     private ZooKeeper zooKeeper;
     private AtomicBoolean zooConn = new AtomicBoolean();
@@ -27,7 +27,7 @@ public class NaviZooKeeperDriver extends AbstractNaviDriver {
     private final CreateMode DEFAULT_CREATE_MODE = CreateMode.PERSISTENT;
     private List<IZookeeperEventHander> eventHandlers;
 
-    public NaviZooKeeperDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) throws IOException {
+    public NaviZooKeeperDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) throws IOException {
         super(server, auth, poolConfig);
         zooKeeper = new ZooKeeper(server.getUrl(), poolConfig.getConnectTimeout(), watcher);
         eventHandlers = new ArrayList<IZookeeperEventHander>();

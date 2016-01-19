@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 
 public class NaviHiveJdbcDriver extends NaviJdbcDriver {
 
-    public NaviHiveJdbcDriver(ServerUrl server, String auth,
+    public NaviHiveJdbcDriver(ServerAddress server, String auth,
                               NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }

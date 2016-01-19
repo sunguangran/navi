@@ -6,5 +6,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 public @interface TableInfo {
+
     String name() default "";
+    
 }

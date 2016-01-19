@@ -2,14 +2,14 @@ package com.cuckoo.framework.navi.engine.component;
 
 import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
-import com.cuckoo.framework.navi.engine.component.NaviMQContext.MessageQueueType;
+import com.cuckoo.framework.navi.engine.component.NaviMQContext.MQType;
 import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviMessageQueue;
 
 public class NaviMessageQueueFactory {
 
-    public INaviMessageQueue createMQ(IBaseDataService service, String queueKey, MessageQueueType mqType) {
+    public INaviMessageQueue createMQ(IBaseDataService service, String queueKey, MQType mqType) {
         switch (mqType) {
             case REDIS:
                 if (service instanceof INaviCache) {

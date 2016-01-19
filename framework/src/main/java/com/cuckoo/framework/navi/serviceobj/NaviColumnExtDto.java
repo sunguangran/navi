@@ -2,6 +2,7 @@ package com.cuckoo.framework.navi.serviceobj;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cuckoo.framework.navi.common.annotation.DtoInfo;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.lang.reflect.Field;
@@ -257,7 +258,7 @@ public class NaviColumnExtDto implements INaviColumnDto {
                         JSONArray array = this.getValue(cf, column);
                         Object value = (array.size() > 0) ? array.getJSONObject(0).get("value") : null;
                         if (null != value && !"".equals(value)) {
-                            ((NaviBaseColumnDto) obj).setValue(field.getName(), value);
+                            ((NaviBaseColumnBean) obj).setValue(field.getName(), value);
                         }
                     }
                 }

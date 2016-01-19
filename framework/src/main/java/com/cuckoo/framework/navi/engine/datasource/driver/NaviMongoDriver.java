@@ -4,7 +4,6 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviMongoPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
@@ -14,18 +13,18 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.UnknownHostException;
 
 @Slf4j
-public class NaviMongoDriver extends AbstractNaviDriver {
+public class NaviMongoDriver extends ANaviDriver {
 
     private final int SLEEPTIME = 60000;// 1min
     private final int MAX_CLEARCOUNT = 3;
     private Mongo mongo;
 
-    public NaviMongoDriver(ServerUrlUtil.ServerUrl server, String auth,
-                           NaviPoolConfig poolConfig) throws NumberFormatException,
+    public NaviMongoDriver(com.cuckoo.framework.navi.common.ServerAddress server, String auth, NaviPoolConfig poolConfig) throws NumberFormatException,
         MongoException, UnknownHostException {
         super(server, auth, poolConfig);
-        this.mongo = new Mongo(new ServerAddress(server.getHost(),
-            server.getPort()), getMongoOptions(poolConfig));
+        this.mongo = new Mongo(
+            new ServerAddress(server.getHost(), server.getPort()), getMongoOptions(poolConfig)
+        );
         startIdleConnCheck();
     }
 

@@ -8,7 +8,7 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
 import com.cuckoo.framework.navi.utils.NaviUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -89,8 +89,8 @@ public class NaviJsonResponseData extends ANaviResponseData {
                 return toResponseNull();
             }
             for (Object data : list) {
-                if (data instanceof AbstractNaviDto) {
-                    datas.add(NaviUtil.toJSONObject((AbstractNaviDto) data));
+                if (data instanceof AbstractNaviBean) {
+                    datas.add(NaviUtil.toJSONObject((AbstractNaviBean) data));
                 }
             }
 
@@ -103,13 +103,13 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     public String toResponseForArray() throws NaviSystemException {
 
-        if (data == null || !(data instanceof AbstractNaviDto[])) {
+        if (data == null || !(data instanceof AbstractNaviBean[])) {
             return toResponseNull();
         }
         try {
-            AbstractNaviDto[] dtos = (AbstractNaviDto[]) data;
+            AbstractNaviBean[] dtos = (AbstractNaviBean[]) data;
             JSONArray datas = new JSONArray();
-            for (AbstractNaviDto dto : dtos) {
+            for (AbstractNaviBean dto : dtos) {
                 datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
@@ -122,7 +122,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     public String toResponseForObject() throws NaviSystemException {
         try {
             return toJsonData(
-                0, "", (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString()
+                0, "", (data instanceof AbstractNaviBean) ? NaviUtil.toJSONObject((AbstractNaviBean) data) : data.toString()
             );
         } catch (SecurityException | IllegalArgumentException | JSONException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw NaviUtil.transferToNaviSysException(e);

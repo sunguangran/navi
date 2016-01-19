@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.common.NaviError;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -14,20 +14,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Setter
 @Getter
-public abstract class AbstractNaviDriver implements INaviDriver {
+public abstract class ANaviDriver implements INaviDriver {
 
-    private ServerUrl server;
+    private ServerAddress server;
     private String auth;
     private GenericObjectPool<INaviDriver> pool;
     private AtomicBoolean close = new AtomicBoolean();
     private AtomicBoolean broken = new AtomicBoolean();
     private NaviPoolConfig poolConfig;
 
-    public AbstractNaviDriver(ServerUrl server, String auth) {
+    public ANaviDriver(ServerAddress server, String auth) {
         this(server, auth, null);
     }
 
-    public AbstractNaviDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
+    public ANaviDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         this.server = server;
         this.auth = auth;
         this.poolConfig = poolConfig;
@@ -37,6 +37,7 @@ public abstract class AbstractNaviDriver implements INaviDriver {
         if (pool == null) {
             return;
         }
+
         try {
             if (broken.get()) {
                 pool.invalidateObject(this);

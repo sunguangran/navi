@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.engine.component;
 
 import com.cuckoo.framework.navi.common.exception.NaviUnSupportedOperationException;
 import com.cuckoo.framework.navi.engine.core.*;
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,15 +18,15 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
     private INaviDB dbService;
     private int expire_time = 900;
 
-    public <T extends AbstractNaviDto> IDataObjectCom<T> getDataObjectCom(Query query, String cacheKey, Class<T> dtoClass) {
+    public <T extends AbstractNaviBean> IDataObjectCom<T> getDataObjectCom(Query query, String cacheKey, Class<T> dtoClass) {
         return new DataObjectCom<T>(query, cacheKey, dtoClass);
     }
 
-    public <T extends AbstractNaviDto> IListDataObjectCom<T> getListDataObjectCom(Query query, Class<T> dtoClass, String cacheKey) {
+    public <T extends AbstractNaviBean> IListDataObjectCom<T> getListDataObjectCom(Query query, Class<T> dtoClass, String cacheKey) {
         return new ListDataObjectCom<T>(query, dtoClass, cacheKey);
     }
 
-    protected class DataObjectCom<T extends AbstractNaviDto> implements IDataObjectCom<T> {
+    protected class DataObjectCom<T extends AbstractNaviBean> implements IDataObjectCom<T> {
         protected Query query;
         protected Class<T> dtoClass;
         protected String cacheKey;
@@ -85,7 +85,7 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         }
     }
 
-    protected class ListDataObjectCom<T extends AbstractNaviDto> implements IListDataObjectCom<T> {
+    protected class ListDataObjectCom<T extends AbstractNaviBean> implements IListDataObjectCom<T> {
         protected Query query;
         protected Class<T> dtoClass;
         protected String cacheKey;

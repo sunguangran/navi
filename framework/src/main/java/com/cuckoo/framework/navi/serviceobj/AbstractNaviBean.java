@@ -1,6 +1,8 @@
 package com.cuckoo.framework.navi.serviceobj;
 
+import com.cuckoo.framework.navi.common.annotation.BeanPrefix;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -8,19 +10,16 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * navi下dto需继承该超类 该类提供辅助性工具
  */
-public abstract class AbstractNaviDto implements Cloneable, Serializable {
+public abstract class AbstractNaviBean implements Cloneable, Serializable {
 
-    private static final long serialVersionUID = -3983785947326217708L;
+    private static final long serialVersionUID = -806712930639356253L;
 
-    public AbstractNaviDto() {
-    }
-
-    public final void setValue(String fieldNm, Object value) throws InvocationTargetException, IllegalAccessException {
+    public final void setValue(String field, Object value) throws InvocationTargetException, IllegalAccessException {
         if (value == null) {
             return;
         }
 
-        BeanUtils.setProperty(this, fieldNm, value);
+        BeanUtils.setProperty(this, field, value);
     }
 
     public final Object getValue(String fieldNm) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
@@ -28,17 +27,19 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
     }
 
     /**
-     * 获取唯一标识对象的ID
+     * 获取对象唯一标识
      */
     public abstract String getOId();
 
     protected String getPrefix() {
+        BeanPrefix anatation = this.getClass().getAnnotation(BeanPrefix.class);
+
         String prefix = null;
-        DtoPrefix anatation = this.getClass().getAnnotation(DtoPrefix.class);
-        if (null != anatation) {
-            prefix = anatation.prefix();
+        if (anatation != null) {
+            prefix = anatation.value();
         }
-        if (null == prefix || "".equals(prefix)) {
+
+        if (StringUtils.isEmpty(prefix)) {
             prefix = this.getClass().getName();
         }
 

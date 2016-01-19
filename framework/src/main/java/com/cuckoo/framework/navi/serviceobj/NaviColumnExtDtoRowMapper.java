@@ -40,8 +40,8 @@ public class NaviColumnExtDtoRowMapper {
                         byte[] value = colvs.get(timestamp);
                         if (NaviColumnExtDto.class.equals(entityClass)) {
                             ((NaviColumnExtDto) dto).add(Bytes.toString(cfinfo), Bytes.toString(col), timestamp, getFieldVal(entityClass, Bytes.toString(col), value));//Bytes.toString(value)
-                        } else if (dto instanceof NaviBaseColumnDto) {
-                            ((NaviBaseColumnDto) dto).setValue(Bytes.toString(col), getFieldVal(entityClass, Bytes.toString(col), value));
+                        } else if (dto instanceof NaviBaseColumnBean) {
+                            ((NaviBaseColumnBean) dto).setValue(Bytes.toString(col), getFieldVal(entityClass, Bytes.toString(col), value));
                         }
                     }
                 }
@@ -55,9 +55,9 @@ public class NaviColumnExtDtoRowMapper {
                     if (NaviColumnExtDto.class.equals(entityClass)) {
                         //NaviColumnExtDto 类型，字段值直接转换为 String
                         ((NaviColumnExtDto) dto).add(Bytes.toString(cfinfo), Bytes.toString(col), null, Bytes.toString(value));
-                    } else if (dto instanceof NaviBaseColumnDto) {
-                        //NaviBaseColumnDto 根据字段类型设值
-                        ((NaviBaseColumnDto) dto).setValue(Bytes.toString(col), getFieldVal(entityClass, Bytes.toString(col), value));
+                    } else if (dto instanceof NaviBaseColumnBean) {
+                        //NaviBaseColumnBean 根据字段类型设值
+                        ((NaviBaseColumnBean) dto).setValue(Bytes.toString(col), getFieldVal(entityClass, Bytes.toString(col), value));
                     }
                 }
             }

@@ -6,7 +6,7 @@ import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.utils.ServerUrlUtil;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,25 +36,25 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         Class<?> handleClassNm = getContextClassLoader().loadClass(getDriverClass());
 
         if (!isSplitHosts()) {
-            ServerUrl serverAddr = new ServerUrl(
+            ServerAddress serverAddr = new ServerAddress(
                 (workMode == null && ServerConfigure.isDeployEnv()) || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString() : getOfflineConnectString()
             );
 
             INaviDriver naviDriver = (INaviDriver) BeanUtils.instantiateClass(
-                handleClassNm.getDeclaredConstructor(ServerUrl.class, String.class, NaviPoolConfig.class), serverAddr, getAuth(), this.poolConfig
+                handleClassNm.getDeclaredConstructor(ServerAddress.class, String.class, NaviPoolConfig.class), serverAddr, getAuth(), this.poolConfig
             );
 
             poolDrivers.add(naviDriver);
 
         } else {
-            List<ServerUrl> serverUrls = ServerUrlUtil.getServerUrl(
+            List<ServerAddress> serverUrls = ServerUrlUtil.getServerUrl(
                 (workMode == null && ServerConfigure.isDeployEnv()) || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString() : getOfflineConnectString()
             );
 
-            for (ServerUrl serverUrl : serverUrls) {
+            for (ServerAddress serverUrl : serverUrls) {
                 INaviDriver naviDriver = (INaviDriver) BeanUtils.instantiateClass(
                     handleClassNm.getDeclaredConstructor(
-                        ServerUrl.class, String.class, NaviPoolConfig.class
+                        ServerAddress.class, String.class, NaviPoolConfig.class
                     ), serverUrl, getAuth(), this.poolConfig
                 );
                 poolDrivers.add(naviDriver);

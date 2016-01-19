@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
+import com.cuckoo.framework.navi.common.ServerAddress;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
@@ -10,11 +10,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Slf4j
-public abstract class NaviJdbcDriver extends AbstractNaviDriver {
+public abstract class NaviJdbcDriver extends ANaviDriver {
 
     private Connection conn;
 
-    public NaviJdbcDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
+    public NaviJdbcDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         initConnection(server.getUrl(), auth, poolConfig);
     }

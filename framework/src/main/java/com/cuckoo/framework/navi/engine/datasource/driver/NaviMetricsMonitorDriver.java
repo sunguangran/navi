@@ -4,14 +4,14 @@ import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 
-public class NaviMetricsMonitorDriver extends AbstractNaviDriver {
+public class NaviMetricsMonitorDriver extends ANaviDriver {
 
     private MetricRegistry metrics = new MetricRegistry();
     private JmxReporter reporter;
 
-    public NaviMetricsMonitorDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) {
+    public NaviMetricsMonitorDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         reporter = JmxReporter.forRegistry(metrics).build();
         reporter.start();

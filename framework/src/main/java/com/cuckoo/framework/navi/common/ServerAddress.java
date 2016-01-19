@@ -8,20 +8,18 @@ import lombok.Setter;
 @Getter
 public class ServerAddress {
 
-    private static final String hostRegex = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
     private String host;
     private int port;
+    private String url;
 
-    public ServerAddress(String host, int port) throws NaviSystemException {
-        validateHost(host);
-        this.host = host;
-        this.port = port;
+    public ServerAddress(String url) {
+        this.url = url;
+
     }
 
-    private void validateHost(String host) throws NaviSystemException {
-        if (!host.matches(hostRegex)) {
-            throw new NaviSystemException("host ip is invalid.", NaviError.HOST_INVALID.code());
-        }
+    public ServerAddress(String host, int port) throws NaviSystemException {
+        this.host = host;
+        this.port = port;
     }
 
     @Override

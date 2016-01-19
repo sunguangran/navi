@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -18,11 +18,11 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 @Slf4j
-public class NaviScribeDriver extends AbstractNaviDriver {
+public class NaviScribeDriver extends ANaviDriver {
 
     private Client client;
 
-    public NaviScribeDriver(ServerUrl server, String auth, NaviPoolConfig poolConfig) throws TTransportException,
+    public NaviScribeDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) throws TTransportException,
         UnknownHostException, IOException {
         super(server, auth, poolConfig);
 

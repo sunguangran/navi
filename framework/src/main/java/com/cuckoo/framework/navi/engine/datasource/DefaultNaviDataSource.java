@@ -6,7 +6,7 @@ import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.utils.ServerUrlUtil;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +60,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
         Class<?> handleClassNm = getContextClassLoader().loadClass(driverClass);
 
         if (!splitHosts) {
-            ServerUrl serverAddr = new ServerUrl(
+            ServerAddress serverAddr = new ServerAddress(
                 ServerConfigure.isDeployEnv() ? getDeployConnectString() : getOfflineConnectString()
             );
 
@@ -70,11 +70,11 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
 
             pools.add(pool);
         } else {
-            List<ServerUrl> serverUrls = ServerUrlUtil.getServerUrl(
+            List<ServerAddress> serverUrls = ServerUrlUtil.getServerUrl(
                 ServerConfigure.isDeployEnv() ? getDeployConnectString() : getOfflineConnectString()
             );
 
-            for (ServerUrl serverUrl : serverUrls) {
+            for (ServerAddress serverUrl : serverUrls) {
                 GenericObjectPool<INaviDriver> pool = new GenericObjectPool<>(
                     new NaviPoolableObjectFactory(handleClassNm, serverUrl, auth), poolConfig
                 );
@@ -121,9 +121,9 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
     private class NaviPoolableObjectFactory extends BasePooledObjectFactory<INaviDriver> {
         private Class<?> handleClass;
         private String auth;
-        private ServerUrl server;
+        private ServerAddress server;
 
-        private NaviPoolableObjectFactory(Class<?> handleClass, ServerUrl server, String auth) {
+        private NaviPoolableObjectFactory(Class<?> handleClass, ServerAddress server, String auth) {
             this.handleClass = handleClass;
             this.auth = auth;
             this.server = server;
@@ -132,7 +132,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
         @Override
         public INaviDriver create() throws Exception {
             return (INaviDriver) BeanUtils.instantiateClass(
-                handleClass.getDeclaredConstructor(ServerUrl.class, String.class, NaviPoolConfig.class), this.server, this.auth, poolConfig
+                handleClass.getDeclaredConstructor(ServerAddress.class, String.class, NaviPoolConfig.class), this.server, this.auth, poolConfig
             );
         }
 

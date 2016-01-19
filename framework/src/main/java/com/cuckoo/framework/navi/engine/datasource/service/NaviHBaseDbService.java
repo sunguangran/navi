@@ -80,8 +80,8 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (t_obj instanceof NaviColumnExtDto) {
                 obj = (NaviColumnExtDto) t_obj;
             } else {
-                if (t_obj instanceof NaviBaseColumnDto) {
-                    obj = ((NaviBaseColumnDto) t_obj).toColumnExtDto();
+                if (t_obj instanceof NaviBaseColumnBean) {
+                    obj = ((NaviBaseColumnBean) t_obj).toColumnExtDto();
                 }
             }
             if (obj != null) {
@@ -157,8 +157,8 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (t_obj instanceof NaviColumnExtDto) {
                 obj = (NaviColumnExtDto) t_obj;
             } else {
-                if (t_obj instanceof NaviBaseColumnDto) {
-                    obj = ((NaviBaseColumnDto) t_obj).toColumnExtDto();
+                if (t_obj instanceof NaviBaseColumnBean) {
+                    obj = ((NaviBaseColumnBean) t_obj).toColumnExtDto();
                 }
             }
             if (obj != null) {

@@ -9,33 +9,29 @@ import com.cuckoo.framework.navi.engine.core.INaviZookeeper;
  *
  * @param <T>
  */
-public interface INaviDao<T extends AbstractNaviDto> {
+public interface INaviDao<T extends AbstractNaviBean> {
 
     /**
      * 获得Dao对应的Dto Class对象
      *
-     * @return
      */
-    public Class<T> getDtoClass();
+    Class<T> getDtoClass();
 
     /**
      * 设置数据库服务
      *
-     * @param dbService
      */
-    public void setDbService(INaviDB dbService);
+    void setDbService(INaviDB dbService);
 
     /**
      * 设置缓存服务
      *
-     * @param cacheService
      */
-    public void setCacheService(INaviCache cacheService);
+    void setCacheService(INaviCache cacheService);
 
     /**
      * 设置协同服务
      *
-     * @param csService
      */
-    public void setCsService(INaviZookeeper csService);
+    void setCsService(INaviZookeeper csService);
 }

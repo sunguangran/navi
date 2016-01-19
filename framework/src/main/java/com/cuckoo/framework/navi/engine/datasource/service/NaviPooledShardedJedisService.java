@@ -4,7 +4,7 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
-import com.cuckoo.framework.navi.engine.datasource.driver.AbstractNaviPoolJedisDriver;
+import com.cuckoo.framework.navi.engine.datasource.driver.ANaviPoolJedisDriver;
 import com.cuckoo.framework.navi.engine.redis.INaviMultiRedis;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
 import org.springframework.data.redis.connection.RedisZSetCommands.Tuple;
@@ -15,10 +15,10 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
 
-    public AbstractNaviPoolJedisDriver getDriver() {
+    public ANaviPoolJedisDriver getDriver() {
         INaviDriver driver = dataSource.getHandle();
-        if (driver instanceof AbstractNaviPoolJedisDriver) {
-            return (AbstractNaviPoolJedisDriver) driver;
+        if (driver instanceof ANaviPoolJedisDriver) {
+            return (ANaviPoolJedisDriver) driver;
         }
 
         throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR.code());
@@ -70,39 +70,39 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> V get(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] bytes = driver.get(object2Bytes(key));
         return bytes2Object(bytes, classNm);
     }
 
     public <K, V> List<V> MGet(Class<V> classNm, K... keys) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         List<byte[]> list = driver.mGet(objArray2BytesArray(keys));
         return bytesList2ObjList(list, classNm);
     }
 
     public <K> Long incr(K key, long delta) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.incrBy(object2Bytes(key), delta);
     }
 
     public <K> Long decr(K key, long delta) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.decrBy(object2Bytes(key), delta);
     }
 
     public <K> boolean exists(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.exists(object2Bytes(key));
     }
 
     public <K> Long delete(K... keys) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.del(objArray2BytesArray(keys));
     }
 
     public <K, V> Long zBatchAdd(K key, Map<V, Double> map) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         try {
             Map<byte[], Double> scoreMembers = new HashMap<byte[], Double>();
             for (V v : map.keySet()) {
@@ -115,18 +115,18 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> Long zadd(K key, V val, double score) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zAdd(object2Bytes(key), score, object2Bytes(val));
     }
 
     public <K, V> Double zscore(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zScore(object2Bytes(key), object2Bytes(val));
     }
 
     public <K, V> Set<V> zRevRangeByScore(K key, double min, double max,
                                           long limit, long skip, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> byteset = limit > 0 ?
             driver.zRevRangeByScore(object2Bytes(key), min, max, skip, limit) :
             driver.zRevRangeByScore(object2Bytes(key), min, max);
@@ -140,7 +140,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
 
     public <K, V> Set<TypedTuple<V>> zRevRangeByScoreWithScore(K key,
                                                                double min, double max, long limit, long skip, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<Tuple> set = limit > 0 ? driver.zRevRangeByScoreWithScores(
             object2Bytes(key), min, max, skip, limit) : driver
             .zRevRangeByScoreWithScores(object2Bytes(key), min, max);
@@ -154,7 +154,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
 
     public <K, V> Set<V> zRangeByScore(K key, double min, double max,
                                        long limit, long skip, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> byteset = limit > 0 ? driver.zRangeByScore(object2Bytes(key), min, max, skip, limit) : driver.zRangeByScore(object2Bytes(key), min, max);
         Set<V> set = new LinkedHashSet<>();
         for (byte[] bytes : byteset) {
@@ -165,7 +165,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> Set<TypedTuple<V>> zRangeByScoreWithScore(K key, double min, double max, long limit, long skip, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<Tuple> set = limit > 0 ? driver.zRangeByScoreWithScores(object2Bytes(key), min, max, skip, limit) : driver.zRangeByScoreWithScores(object2Bytes(key), min, max);
         Set<TypedTuple<V>> result = new LinkedHashSet<>();
         for (Tuple t : set) {
@@ -176,17 +176,17 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K> Long zCount(K key, double min, double max) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zCount(object2Bytes(key), min, max);
     }
 
     public <K> Long zSize(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zCard(object2Bytes(key));
     }
 
     public <K, V> Set<V> zRange(K key, long start, long end, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> byteset = driver.zRange(object2Bytes(key), start, end);
         Set<V> set = new LinkedHashSet<V>();
         for (byte[] bytes : byteset) {
@@ -196,7 +196,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> Set<TypedTuple<V>> zRangeWithScore(K key, long start, long end, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<Tuple> set = driver.zRangeWithScores(object2Bytes(key), start, end);
         Set<TypedTuple<V>> result = new LinkedHashSet<>();
         for (Tuple t : set) {
@@ -207,7 +207,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> Set<V> zReverseRange(K key, long start, long end, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> byteset = driver.zRevRange(object2Bytes(key), start, end);
         Set<V> set = new LinkedHashSet<V>();
         for (byte[] bytes : byteset) {
@@ -218,7 +218,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> Set<TypedTuple<V>> zReverseRangeWithScore(K key, long start, long end, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
 
         Set<Tuple> set = driver.zRevRangeWithScores(object2Bytes(key), start, end);
         Set<TypedTuple<V>> result = new LinkedHashSet<>();
@@ -229,100 +229,100 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> boolean zDelete(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zRem(object2Bytes(key), object2Bytes(val));
     }
 
     public <K> Long zRemRangeByRank(K key, long start, long end) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zRemRange(object2Bytes(key), start, end);
     }
 
     public <K> Long zRemRangeByScore(K key, double min, double max) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.zRemRangeByScore(object2Bytes(key), min, max);
     }
 
     public <K, V> Long lPush(K key, V... val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.lPush(object2Bytes(key), objArray2BytesArray(val));
     }
 
     public <K, V> V lPop(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.lPop(object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K, V> V blPop(K key, int timeout, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.bLPop(timeout, object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K, V> Long rPush(K key, V... val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.rPush(object2Bytes(key), objArray2BytesArray(val));
     }
 
     public <K, V> V rPop(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.rPop(object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K, V> V brPop(K key, int timeout, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.bRPop(timeout, object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K> Long lSize(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.lLen(object2Bytes(key));
     }
 
     public <K, V> List<V> lGetRange(K key, long start, long end,
                                     Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         List<byte[]> result = driver.lRange(object2Bytes(key), start, end);
         return bytesList2ObjList(result, classNm);
     }
 
     public <K> boolean lTrim(K key, long start, long end) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.lTrim(object2Bytes(key), start, end).equals("OK");
     }
 
     public <K, V> V lIndex(K key, long index, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.lIndex(object2Bytes(key), index);
         return bytes2Object(result, classNm);
     }
 
     public <K, V> Long sBatchAdd(K key, V... val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.sAdd(object2Bytes(key), objArray2BytesArray(val));
     }
 
     public <K, V> Long sAdd(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.sAdd(object2Bytes(key), object2Bytes(val));
     }
 
     public <K, V> Long sRem(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.sRem(object2Bytes(key), object2Bytes(val));
     }
 
     public <K, V> V sPop(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.sPop(object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K, V> Set<V> sMembers(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> result = driver.sMembers(object2Bytes(key));
         Set<V> set = new LinkedHashSet<V>();
         for (byte[] bytes : result) {
@@ -332,30 +332,30 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> V sRandMember(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.sRandMember(object2Bytes(key));
         return bytes2Object(result, classNm);
     }
 
     public <K, V> Long sSize(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.sCard(object2Bytes(key));
     }
 
     public <K, V> Boolean sismember(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.sIsMember(object2Bytes(key), object2Bytes(val));
     }
 
     public <K, V, F> List<V> hMget(K key, F[] fields, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         List<byte[]> result = driver.hMGet(object2Bytes(key),
             objArray2BytesArray(fields));
         return bytesList2ObjList(result, classNm);
     }
 
     public <K, V, F> boolean hMset(K key, Map<F, V> hash) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Map<byte[], byte[]> map = new LinkedHashMap<>();
         for (F bytes : hash.keySet()) {
             map.put(object2Bytes(bytes), object2Bytes(hash.get(bytes)));
@@ -364,33 +364,33 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V, F> Long hSet(K key, F field, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hSet(object2Bytes(key), object2Bytes(field), object2Bytes(val));
     }
 
     public <K, V, F> Long hSetNX(K key, F field, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hSetNX(object2Bytes(key), object2Bytes(field), object2Bytes(val));
     }
 
     public <K, V, F> V hGet(K key, F field, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         byte[] result = driver.hGet(object2Bytes(key), object2Bytes(field));
         return bytes2Object(result, classNm);
     }
 
     public <K, F> Long hDel(K key, F... fields) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hDel(object2Bytes(key), object2Bytes(fields[0]));
     }
 
     public <K> Long hLen(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hLen(object2Bytes(key));
     }
 
     public <K, F> Set<F> hKeys(K key, Class<F> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         Set<byte[]> result = driver.hKeys(object2Bytes(key));
         Set<F> set = new LinkedHashSet<F>();
         for (byte[] bytes : result) {
@@ -400,13 +400,13 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, V> List<V> hVals(K key, Class<V> classNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         List<byte[]> result = driver.hVals(object2Bytes(key));
         return bytesList2ObjList(result, classNm);
     }
 
     public <K, V, F> Map<F, V> hGetAll(K key, Class<F> fieldClassNm, Class<V> valueClassNm) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
 
         Map<byte[], byte[]> result = driver.hGetAll(object2Bytes(key));
         if (result == null || result.size() == 0) {
@@ -421,58 +421,58 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
     }
 
     public <K, F> boolean hExists(K key, F field) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hExists(object2Bytes(key), object2Bytes(field));
     }
 
     public <K, F> Long hIncrBy(K key, F field, long delta) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.hIncrBy(object2Bytes(key), object2Bytes(field), delta);
     }
 
     public <K, V> Long append(K key, V val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.append(object2Bytes(key), object2Bytes(val));
     }
 
     public <K> Long ttl(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.ttl(object2Bytes(key));
     }
 
     public <K> boolean setbit(K key, long offset, boolean val) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.setBit(object2Bytes(key), offset, val);
     }
 
     public <K> boolean getbit(K key, long offset) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.getBit(object2Bytes(key), offset);
     }
 
     public <K> INaviMultiRedis multi(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.multi(object2Bytes(key));
     }
 
     public <K> INaviMultiRedis openPipeline(K key) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.openPipeline(object2Bytes(key));
     }
 
     public <K> Object eval(K key, String script, int keyCount, String... params) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.eval(object2Bytes(key), object2Bytes(script), keyCount, objArray2BytesArray(params));
     }
 
     public <K> Object evalsha(K key, String sha, int keyCount, String... params) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         return driver.evalsha(object2Bytes(key), object2Bytes(sha), keyCount, objArray2BytesArray(params));
 
     }
 
     public <K> List<List<K>> groupKey(Class<K> classNm, K... keys) {
-        AbstractNaviPoolJedisDriver driver = getDriver();
+        ANaviPoolJedisDriver driver = getDriver();
         List<List<byte[]>> groups = driver.groupKeys(objArray2BytesArray(keys));
         List<List<K>> results = new LinkedList<>();
         for (List<byte[]> group : groups) {

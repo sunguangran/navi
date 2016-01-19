@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.engine.component;
 
-import com.cuckoo.framework.navi.engine.component.NaviMQContext.MessageQueueType;
+import com.cuckoo.framework.navi.engine.component.NaviMQContext.MQType;
 import com.cuckoo.framework.navi.engine.core.*;
 import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
 import lombok.Getter;
@@ -88,7 +88,7 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
         if (null != queue) {
             return queue;
         } else {
-            queue = new NaviMessageQueueFactory().createMQ(service, queueKey, MessageQueueType.values()[mqType]);
+            queue = new NaviMessageQueueFactory().createMQ(service, queueKey, MQType.values()[mqType]);
         }
         return queue;
     }

@@ -5,7 +5,7 @@ import com.cuckoo.framework.navi.engine.datasource.driver.NaviUDPClientDriver;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
 import com.cuckoo.framework.navi.utils.NaviUtil;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -165,9 +165,9 @@ public class NaviUDPClientService extends AbstractNaviDataService implements INa
         }
     }
 
-    public <T extends Serializable> void send(T msg, ServerUrl... hosts) {
+    public <T extends Serializable> void send(T msg, ServerAddress... hosts) {
         if (null != hosts) {
-            for (ServerUrl host : hosts) {
+            for (ServerAddress host : hosts) {
                 send(host.getHost(), host.getPort(), msg);
             }
         }

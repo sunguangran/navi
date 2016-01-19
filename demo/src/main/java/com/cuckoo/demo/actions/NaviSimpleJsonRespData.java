@@ -41,15 +41,15 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "navi", this.desc, this.code);
+            return toJsonData(this.code, this.desc, "");
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
 
     @Override
-    protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-        provider = "mfp";
+    protected String toJsonData(int code, String desc, Object data) throws JSONException {
+        String provider = "mfp";
         if (data instanceof JSONArray) {
             JSONArray array = (JSONArray) data;
             for (int i = 0; i < array.size(); i++) {

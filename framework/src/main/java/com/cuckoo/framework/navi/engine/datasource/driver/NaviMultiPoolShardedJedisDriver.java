@@ -6,18 +6,18 @@ import com.cuckoo.framework.navi.engine.datasource.pool.ShardJedisPoolConfig;
 import com.cuckoo.framework.navi.engine.redis.AbstractPoolBinaryShardedJedis;
 import com.cuckoo.framework.navi.engine.redis.MultiJedisPoolInfo;
 import com.cuckoo.framework.navi.engine.redis.MultiPoolBinaryShardedJedis;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
+import com.cuckoo.framework.navi.common.ServerAddress;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NaviMultiPoolShardedJedisDriver extends
-    AbstractNaviPoolJedisDriver {
+    ANaviPoolJedisDriver {
 
     private MultiPoolBinaryShardedJedis jedis;
     private ShardJedisPoolConfig poolConfig;
 
-    public NaviMultiPoolShardedJedisDriver(ServerUrl server, String auth,
+    public NaviMultiPoolShardedJedisDriver(ServerAddress server, String auth,
                                            NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.poolConfig = (ShardJedisPoolConfig) poolConfig;

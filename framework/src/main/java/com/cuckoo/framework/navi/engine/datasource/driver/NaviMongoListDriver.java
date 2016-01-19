@@ -4,7 +4,6 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviMongoPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil.ServerUrl;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
@@ -16,19 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class NaviMongoListDriver extends AbstractNaviDriver {
+public class NaviMongoListDriver extends ANaviDriver {
     private final int SLEEPTIME = 60000;// 1min
     private final int MAX_CLEARCOUNT = 3;
     private Mongo mongo;
 
-    public NaviMongoListDriver(ServerUrl server, String auth,
+    public NaviMongoListDriver(com.cuckoo.framework.navi.common.ServerAddress server, String auth,
                                NaviPoolConfig poolConfig) throws NumberFormatException,
         MongoException, UnknownHostException {
         super(server, auth, poolConfig);
         String masterUrl = null;
         if (server.getHost() != null && server.getPort() != 0)
             masterUrl = server.getHost() + ":" + server.getPort();
-        List<ServerAddress> addresslist = new ArrayList<ServerAddress>();
+        List<ServerAddress> addresslist = new ArrayList<>();
         // 找到master
         List<String> listHostPorts = new ArrayList<String>();
         String[] hostPorts = server.getUrl().split(",");
