@@ -5,7 +5,7 @@ import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviMetricsMonitorDriver;
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 
 public class NaviMetricsMonitorService extends AbstractNaviDataService implements INaviMonitorCollector {
 

@@ -1,4 +1,4 @@
-package com.cuckoo.framework.navi.serviceobj;
+package com.cuckoo.framework.navi.server.serviceobj;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;

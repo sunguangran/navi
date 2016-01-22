@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 
 public interface INaviMonitorCollector extends IBaseDataService {
 

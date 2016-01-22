@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.test;
 
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;

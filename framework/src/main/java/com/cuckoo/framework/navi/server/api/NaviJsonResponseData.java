@@ -8,7 +8,7 @@ import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviBusiException;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
 import com.cuckoo.framework.navi.utils.NaviUtil;
 import org.apache.commons.lang.StringUtils;
 

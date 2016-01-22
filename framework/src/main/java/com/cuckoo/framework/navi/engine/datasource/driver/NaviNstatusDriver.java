@@ -3,7 +3,7 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 import com.cuckoo.framework.navi.common.ServerAddress;
 import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 import com.youku.java.navi.engine.nstatus.JavaNstatusExt;
 import lombok.extern.slf4j.Slf4j;
 

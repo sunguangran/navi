@@ -7,7 +7,7 @@ import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
 import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.server.ServerConfigure;
 import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

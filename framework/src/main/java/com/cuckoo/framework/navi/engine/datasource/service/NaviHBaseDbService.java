@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cuckoo.framework.navi.common.NaviError;
 import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviHBaseDriver;
-import com.cuckoo.framework.navi.serviceobj.*;
+import com.cuckoo.framework.navi.server.serviceobj.*;
 import com.cuckoo.framework.navi.utils.NaviUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;

@@ -1,4 +1,4 @@
-package com.cuckoo.framework.navi.serviceobj;
+package com.cuckoo.framework.navi.server.serviceobj;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

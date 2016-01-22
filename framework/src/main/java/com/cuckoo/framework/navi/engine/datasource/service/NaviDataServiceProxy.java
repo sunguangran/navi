@@ -4,7 +4,7 @@ import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviLog;
 import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;

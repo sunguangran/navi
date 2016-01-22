@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
 import org.springframework.data.mongodb.core.query.Query;
 
 public interface IMongoDataObjectCom {

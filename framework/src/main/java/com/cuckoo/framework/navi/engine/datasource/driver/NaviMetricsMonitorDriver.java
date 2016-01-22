@@ -3,7 +3,7 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 import com.cuckoo.framework.navi.common.ServerAddress;
 
 public class NaviMetricsMonitorDriver extends ANaviDriver {

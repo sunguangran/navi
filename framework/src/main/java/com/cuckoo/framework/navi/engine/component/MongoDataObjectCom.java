@@ -2,7 +2,7 @@ package com.cuckoo.framework.navi.engine.component;
 
 import com.cuckoo.framework.navi.common.exception.NaviUnSupportedOperationException;
 import com.cuckoo.framework.navi.engine.core.*;
-import com.cuckoo.framework.navi.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Query;

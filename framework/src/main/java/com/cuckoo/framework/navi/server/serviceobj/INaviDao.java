@@ -1,4 +1,4 @@
-package com.cuckoo.framework.navi.serviceobj;
+package com.cuckoo.framework.navi.server.serviceobj;
 
 import com.cuckoo.framework.navi.engine.core.INaviCache;
 import com.cuckoo.framework.navi.engine.core.INaviDB;

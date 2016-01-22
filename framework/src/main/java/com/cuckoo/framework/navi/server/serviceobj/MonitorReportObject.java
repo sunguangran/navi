@@ -1,4 +1,4 @@
-package com.cuckoo.framework.navi.serviceobj;
+package com.cuckoo.framework.navi.server.serviceobj;
 
 import lombok.Getter;
 import lombok.Setter;

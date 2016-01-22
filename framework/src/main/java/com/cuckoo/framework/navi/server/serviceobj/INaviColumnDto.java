@@ -1,4 +1,4 @@
-package com.cuckoo.framework.navi.serviceobj;
+package com.cuckoo.framework.navi.server.serviceobj;
 
 public interface INaviColumnDto {
 
