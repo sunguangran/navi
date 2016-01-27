@@ -17,6 +17,8 @@ import java.rmi.UnknownHostException;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 实现TCP/IP服务
@@ -41,7 +43,17 @@ public abstract class ANaviTCPServer extends ANaviServer {
         log.info("start listening the port " + ServerConfigure.getPort() + ".");
 
         try {
-            ExecutorService executor = Executors.newCachedThreadPool();
+            ExecutorService executor = Executors.newCachedThreadPool(
+                new ThreadFactory() {
+                    private AtomicInteger threadIndex = new AtomicInteger(0);
+
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        return new Thread(r, String.format("netty boss(worker) selector_%d", this.threadIndex.incrementAndGet()));
+                    }
+                }
+            );
+
             NioServerSocketChannelFactory channelFactory = new NioServerSocketChannelFactory(executor, executor);
             ChannelPipelineFactory pipelineFactory = getPipelineFactory();
 
