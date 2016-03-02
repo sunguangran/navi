@@ -57,8 +57,8 @@ public interface NaviDefine {
     String DEFAULT_HEADER_DELIMITER = "\2";
     String DEFAULT_CONTENT_DELIMITER = "\3";
     String DEFAULT_PACKET_DELIMITER = "\4";
-    int DEFAULT_MAX_TCP_PACKET_SIZE = 1048576;
-    int DEFAULT_MAX_UDP_PACKET_SIZE = 2048;
+    int    DEFAULT_MAX_TCP_PACKET_SIZE = 1048576;
+    int    DEFAULT_MAX_UDP_PACKET_SIZE = 2048;
 
     String REDIRECT_STR = "redirect_str";
 

@@ -98,10 +98,10 @@ public abstract class ANaviTCPServer extends ANaviServer {
             }
         } catch (RuntimeException e) {
             log.error("server starting failed, " + e.getMessage());
-            return FAILED;
+            return FAIL;
         } catch (Exception e) {
             log.error("server starting failed, " + e.getMessage());
-            return FAILED;
+            return FAIL;
         }
 
         return SUCCESS;

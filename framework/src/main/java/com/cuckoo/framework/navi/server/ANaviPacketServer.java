@@ -56,10 +56,10 @@ public abstract class ANaviPacketServer extends ANaviServer {
             }
         } catch (RuntimeException e) {
             log.error("the server starting is fail!" + e.getMessage());
-            return FAILED;
+            return FAIL;
         } catch (Exception e) {
             log.error("the server starting is fail!" + e.getMessage());
-            return FAILED;
+            return FAIL;
         }
 
         return SUCCESS;
