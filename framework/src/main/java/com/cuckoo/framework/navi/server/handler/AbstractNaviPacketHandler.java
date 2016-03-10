@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.common.exception.NaviBusiException;
+import com.cuckoo.framework.navi.api.NaviRequestPacket;
+import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.common.NaviBusinessException;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;
@@ -28,27 +28,27 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         byte[] recByte = buffer.array();
         maxPacketSize = getMaxPacketSize();
         if (null == recByte || recByte.length < 1 || recByte.length > maxPacketSize) {
-            throw new NaviBusiException("invalid packet", -200);
+            throw new NaviBusinessException("invalid packet", -200);
         }
         header_delimiter = getHeaderDelimiter();
         content_delimiter = getContentDelimiter();
         if (null == header_delimiter || null == content_delimiter) {
-            throw new NaviBusiException("server delimiter can't be null", -200);
+            throw new NaviBusinessException("server delimiter can't be null", -200);
         }
         String header = getHeader(recByte, content_delimiter);
         byte[] content = getContent(recByte, content_delimiter);
         if (null == header || header.length() < 1
             || null == content || content.length < 1) {
-            throw new NaviBusiException("invalid packet", -200);
+            throw new NaviBusinessException("invalid packet", -200);
         }
         String[] headerMsg = header.split(header_delimiter);
-        if (!(headerMsg.length == 4 || headerMsg.length == 3)) {
-            throw new NaviBusiException("wrong header format,invalid packet", -200);
+        if (null == headerMsg || !(headerMsg.length == 4 || headerMsg.length == 3)) {
+            throw new NaviBusinessException("wrong header format,invalid packet", -200);
         }
         NaviRequestPacket packet = null;
         if (headerMsg.length == 4) {
             packet = new NaviRequestPacket(headerMsg[0], headerMsg[1], headerMsg[2], headerMsg[3], content);
-        } else {
+        } else if (headerMsg.length == 3) {
             packet = new NaviRequestPacket(headerMsg[0], headerMsg[1], headerMsg[2], null, content);
         }
         packet.setRemoteAddress(e.getRemoteAddress());
@@ -95,15 +95,15 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (maxPacketSize > 0) {
             return maxPacketSize;
         }
-        maxPacketSize = NaviDefine.DEFAULT_MAX_TCP_PACKET_SIZE;
-        if (NaviDefine.TCP.equals(ServerConfigure.get(NaviDefine.PROTOCOL))) {
-            if (null != ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE)) {
-                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE));
+        maxPacketSize = NaviProps.DEFAULT_MAX_TCP_PACKET_SIZE;
+        if (NaviProps.TCP.equals(ServerConfigure.get(NaviProps.PROTOCOL))) {
+            if (null != ServerConfigure.get(NaviProps.TCP_MAX_PACKET_SIZE)) {
+                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviProps.TCP_MAX_PACKET_SIZE));
             }
-        } else if (NaviDefine.UDP.equals(ServerConfigure.get(NaviDefine.PROTOCOL))) {
-            maxPacketSize = NaviDefine.DEFAULT_MAX_UDP_PACKET_SIZE;
-            if (null != ServerConfigure.get(NaviDefine.UDP_MAX_PACKET_SIZE)) {
-                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviDefine.UDP_MAX_PACKET_SIZE));
+        } else if (NaviProps.UDP.equals(ServerConfigure.get(NaviProps.PROTOCOL))) {
+            maxPacketSize = NaviProps.DEFAULT_MAX_UDP_PACKET_SIZE;
+            if (null != ServerConfigure.get(NaviProps.UDP_MAX_PACKET_SIZE)) {
+                maxPacketSize = Integer.parseInt(ServerConfigure.get(NaviProps.UDP_MAX_PACKET_SIZE));
             }
         }
         return maxPacketSize;
@@ -113,9 +113,9 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (null != content_delimiter) {
             return content_delimiter;
         }
-        content_delimiter = NaviDefine.DEFAULT_CONTENT_DELIMITER;
-        if (null != ServerConfigure.get(NaviDefine.CONTENT_DELIMITER)) {
-            content_delimiter = ServerConfigure.get(NaviDefine.CONTENT_DELIMITER);
+        content_delimiter = NaviProps.DEFAULT_CONTENT_DELIMITER;
+        if (null != ServerConfigure.get(NaviProps.CONTENT_DELIMITER)) {
+            content_delimiter = ServerConfigure.get(NaviProps.CONTENT_DELIMITER);
             if (null != content_delimiter && content_delimiter.contains("\\")) {
                 content_delimiter = new String(new byte[]{Byte.parseByte(content_delimiter.replace("\\", ""))});
             }
@@ -127,9 +127,9 @@ public abstract class AbstractNaviPacketHandler extends SimpleChannelUpstreamHan
         if (null != header_delimiter) {
             return header_delimiter;
         }
-        header_delimiter = NaviDefine.DEFAULT_HEADER_DELIMITER;
-        if (null != ServerConfigure.get(NaviDefine.HEADER_DELIMITER)) {
-            header_delimiter = ServerConfigure.get(NaviDefine.HEADER_DELIMITER);
+        header_delimiter = NaviProps.DEFAULT_HEADER_DELIMITER;
+        if (null != ServerConfigure.get(NaviProps.HEADER_DELIMITER)) {
+            header_delimiter = ServerConfigure.get(NaviProps.HEADER_DELIMITER);
             if (null != header_delimiter && header_delimiter.contains("\\")) {
                 header_delimiter = new String(new byte[]{Byte.parseByte(header_delimiter.replace("\\", ""))});
             }

@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.common.ServerAddress;
-import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
+import com.cuckoo.framework.navi.api.INaviUDPResponseHandler;
+import com.cuckoo.framework.navi.common.ServerUrlUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,7 +15,7 @@ public interface INaviUDPClientService {
 
     <T extends Serializable> void send(String host, int port, T msg);
 
-    <T extends Serializable> void send(T msg, ServerAddress... hosts);
+    <T extends Serializable> void send(T msg, ServerUrlUtil.ServerUrl... hosts);
 
     <T extends Serializable> Object sendAndReceive(String host, int port, T msg, Class<? extends Serializable> responseClass);
 

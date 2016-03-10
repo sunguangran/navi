@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.boot.NaviDefine;
+import com.cuckoo.framework.navi.api.NaviRequestPacket;
+import com.cuckoo.framework.navi.api.NaviResponsePacket;
+import com.cuckoo.framework.navi.boot.NaviProps;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
-import com.cuckoo.framework.navi.server.api.NaviResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
@@ -19,11 +19,12 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
     protected String protocol;
 
     public NaviPacketHandler() {
-        listeners = new ArrayList<>();
+        listeners = new ArrayList<INaviPacketListener>();
     }
 
     @Override
-    public void handle(NaviRequestPacket udpRequest, Channel channel) throws Exception {
+    public void handle(NaviRequestPacket udpRequest, Channel channel)
+        throws Exception {
         NaviResponsePacket response = new NaviResponsePacket();
         response.setRemoteAddress(udpRequest.getRemoteAddress());
         for (INaviPacketListener listener : listeners) {
@@ -33,7 +34,7 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
                 break;
             }
         }
-        if (NaviDefine.TCP.equals(getProtocol())) {
+        if (NaviProps.TCP.equals(getProtocol())) {
             //有链接的，如果连接断开，先尝试连接3次
             if (null != channel && !channel.isConnected()) {
                 int i = 0;
@@ -65,7 +66,7 @@ public class NaviPacketHandler extends AbstractNaviPacketHandler {
         if (null != protocol) {
             return protocol;
         } else {
-            protocol = ServerConfigure.get(NaviDefine.PROTOCOL);
+            protocol = ServerConfigure.get(NaviProps.PROTOCOL);
             return protocol;
         }
     }

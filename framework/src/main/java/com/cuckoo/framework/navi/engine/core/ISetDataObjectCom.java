@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
 
 import java.util.Set;
 
-public interface ISetDataObjectCom<T extends AbstractNaviBean> extends IDataObjectCom<T> {
+public interface ISetDataObjectCom<T extends AbstractNaviDto> extends IDataObjectCom<T> {
     int size();
 
     T randomMem();

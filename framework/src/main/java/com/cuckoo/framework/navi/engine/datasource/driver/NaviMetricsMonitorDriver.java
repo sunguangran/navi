@@ -2,16 +2,17 @@ package com.cuckoo.framework.navi.engine.datasource.driver;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
-import com.cuckoo.framework.navi.common.ServerAddress;
+import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
 
-public class NaviMetricsMonitorDriver extends ANaviDriver {
+public class NaviMetricsMonitorDriver extends AbstractNaviDriver {
 
     private MetricRegistry metrics = new MetricRegistry();
     private JmxReporter reporter;
 
-    public NaviMetricsMonitorDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
+    public NaviMetricsMonitorDriver(ServerUrl server, String auth,
+                                    NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         reporter = JmxReporter.forRegistry(metrics).build();
         reporter.start();

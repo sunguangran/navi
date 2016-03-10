@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
+import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviLog;
-import com.cuckoo.framework.navi.engine.core.INaviMonitorCollector;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -20,6 +20,7 @@ import java.net.UnknownHostException;
 
 /**
  * DataService的动态代理类
+ *
  */
 @Slf4j
 public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandler {
@@ -35,9 +36,9 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
         Class<?>[] inters = realService.getClass().getInterfaces();
         //直接实现目标的接口的情况下使用java原生动态代理,否则使用cglib
         if (find(inters, inter)) {
-            this.proxyService = Proxy.newProxyInstance(
-                realService.getClass().getClassLoader(), realService.getClass().getInterfaces(), this
-            );
+            this.proxyService = Proxy.newProxyInstance(realService.getClass()
+                    .getClassLoader(), realService.getClass().getInterfaces(),
+                this);
         } else {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(this.realService.getClass());

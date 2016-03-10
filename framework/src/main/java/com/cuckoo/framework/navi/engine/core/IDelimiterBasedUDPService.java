@@ -13,6 +13,5 @@ public interface IDelimiterBasedUDPService extends INaviUDPClientService {
      * @param packetDemlimiter
      * @return
      */
-    String parseUDPPacket(String service, String module, String api, String extra, String msg, String headerDelimiter, String msgDelimiter, String packetDemlimiter);
-
+    public String parseUDPPacket(String service, String module, String api, String extra, String msg, String headerDelimiter, String msgDelimiter, String packetDemlimiter);
 }

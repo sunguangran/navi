@@ -1,9 +1,7 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
+import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
 
 public interface INaviMonitorCollector extends IBaseDataService {
-
-    boolean report(MonitorReportObject obj);
-
+    public boolean report(MonitorReportObject obj);
 }

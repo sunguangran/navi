@@ -1,24 +1,24 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.core.INaviJdbc;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviJdbcDriver;
 
 import java.sql.*;
 
-@SuppressWarnings("unused")
-public class NaviJDBCService extends AbstractNaviDataService implements INaviJdbc {
+public class NaviJDBCService extends AbstractNaviDataService implements
+    INaviJdbc {
 
     protected NaviJdbcDriver getDriver() {
         INaviDriver driver = dataSource.getHandle();
         if (driver instanceof NaviJdbcDriver) {
             return (NaviJdbcDriver) driver;
         }
-
         driver.close();
-        throw new NaviSystemException("the driver is invalid", NaviError.SYSERROR.code());
+        throw new NaviSystemException("the driver is invalid!",
+            NAVIERROR.SYSERROR.code());
     }
 
     public ResultSet doQuery(String sql) throws SQLException {

@@ -1,14 +1,10 @@
 package com.cuckoo.framework.navi.engine.component;
 
-import com.cuckoo.framework.navi.engine.component.NaviMQContext.MQType;
-import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviMessageQueue;
-import lombok.Getter;
-import lombok.Setter;
+import com.cuckoo.framework.navi.engine.core.IBaseDataService;
+import com.cuckoo.framework.navi.engine.component.NaviMQContext.MessageQueueType;
 import org.springframework.beans.factory.FactoryBean;
 
-@Setter
-@Getter
 public class NaviMessageQueueFactoryBean implements FactoryBean<INaviMessageQueue> {
 
     private NaviMessageQueueFactory factory = new NaviMessageQueueFactory();
@@ -17,7 +13,7 @@ public class NaviMessageQueueFactoryBean implements FactoryBean<INaviMessageQueu
     private int mqType = 0;
 
     public INaviMessageQueue getObject() throws Exception {
-        return factory.createMQ(service, queueKey, MQType.values()[mqType]);
+        return factory.createMQ(service, queueKey, MessageQueueType.values()[mqType]);
     }
 
     public Class<?> getObjectType() {
@@ -28,4 +24,27 @@ public class NaviMessageQueueFactoryBean implements FactoryBean<INaviMessageQueu
         return true;
     }
 
+    public IBaseDataService getService() {
+        return service;
+    }
+
+    public void setService(IBaseDataService service) {
+        this.service = service;
+    }
+
+    public String getQueueKey() {
+        return queueKey;
+    }
+
+    public void setQueueKey(String queueKey) {
+        this.queueKey = queueKey;
+    }
+
+    public int getMqType() {
+        return mqType;
+    }
+
+    public void setMqType(int mqType) {
+        this.mqType = mqType;
+    }
 }

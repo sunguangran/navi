@@ -1,13 +1,13 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.alibaba.fastjson.JSONArray;
 import org.apache.hadoop.hive.service.HiveServerException;
 import org.apache.thrift.TException;
+import org.json.JSONArray;
 
 
 public interface IHiveClient {
 
-    interface IResultCallback {
+    public interface IResultCallback {
         void handleResult(JSONArray array);
     }
 

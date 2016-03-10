@@ -9,6 +9,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 
 /**
  * 处理HTTP协议的Handler
+ *
  */
 public abstract class AbstractNaviNettyHttpHandler extends NaviTCPHandler {
 
@@ -49,7 +50,6 @@ public abstract class AbstractNaviNettyHttpHandler extends NaviTCPHandler {
 
     private class NaviAttachment {
         Object obj;
-
         NaviAttachment(Object obj) {
             this.obj = obj;
         }

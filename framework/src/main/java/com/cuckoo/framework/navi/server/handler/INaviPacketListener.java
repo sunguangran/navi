@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.server.api.NaviRequestPacket;
-import com.cuckoo.framework.navi.server.api.NaviResponsePacket;
+import com.cuckoo.framework.navi.api.NaviRequestPacket;
+import com.cuckoo.framework.navi.api.NaviResponsePacket;
 
 public interface INaviPacketListener {
 

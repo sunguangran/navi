@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviZookeeper;
 import com.cuckoo.framework.navi.engine.core.IZookeeperEventHander;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviZooKeeperDriver;
 import com.cuckoo.framework.navi.utils.AlibabaJsonSerializer;
 import com.cuckoo.framework.navi.utils.NaviUtil;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.Watcher;
@@ -14,7 +14,8 @@ import org.springframework.data.redis.serializer.SerializationException;
 
 import java.util.List;
 
-public class NaviZookeeperService extends AbstractNaviDataService implements INaviZookeeper {
+public class NaviZookeeperService extends AbstractNaviDataService implements
+    INaviZookeeper {
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
 
@@ -137,32 +138,48 @@ public class NaviZookeeperService extends AbstractNaviDataService implements INa
 
     public <T> String createEphemeralSequentialPath(String path, T initData) {
         try {
-            return getZooKeeperDriver().create(path, jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-        } catch (KeeperException | InterruptedException e) {
+            return getZooKeeperDriver().create(path,
+                jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE,
+                CreateMode.EPHEMERAL_SEQUENTIAL);
+        } catch (KeeperException e) {
+            throw NaviUtil.transferToNaviSysException(e);
+        } catch (InterruptedException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
 
     public <T> String createPersistentPath(String path, T initData) {
         try {
-            return getZooKeeperDriver().create(path, jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        } catch (KeeperException | InterruptedException e) {
+            return getZooKeeperDriver().create(path,
+                jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE,
+                CreateMode.PERSISTENT);
+        } catch (KeeperException e) {
+            throw NaviUtil.transferToNaviSysException(e);
+        } catch (InterruptedException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
 
     public <T> String createPersistentSequentialPath(String path, T initData) {
         try {
-            return getZooKeeperDriver().create(path, jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
-        } catch (KeeperException | InterruptedException e) {
+            return getZooKeeperDriver().create(path,
+                jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE,
+                CreateMode.PERSISTENT_SEQUENTIAL);
+        } catch (KeeperException e) {
+            throw NaviUtil.transferToNaviSysException(e);
+        } catch (InterruptedException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
 
     public <T> String createEphemeralPath(String path, T initData) {
         try {
-            return getZooKeeperDriver().create(path, jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
-        } catch (KeeperException | InterruptedException e) {
+            return getZooKeeperDriver().create(path,
+                jsonSerializer.getJSONBytes(initData), Ids.OPEN_ACL_UNSAFE,
+                CreateMode.EPHEMERAL);
+        } catch (KeeperException e) {
+            throw NaviUtil.transferToNaviSysException(e);
+        } catch (InterruptedException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }

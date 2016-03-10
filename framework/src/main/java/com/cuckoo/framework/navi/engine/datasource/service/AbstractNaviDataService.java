@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.IBaseDataService;
 import com.cuckoo.framework.navi.engine.core.INaviDataSource;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 
 
 public abstract class AbstractNaviDataService implements IBaseDataService {
@@ -21,7 +21,7 @@ public abstract class AbstractNaviDataService implements IBaseDataService {
     public void afterPropertiesSet() throws Exception {
         if (dataSource == null) {
             throw new NaviSystemException("the dataSource is null!",
-                NaviError.SYSERROR.code());
+                NAVIERROR.SYSERROR.code());
         }
     }
 

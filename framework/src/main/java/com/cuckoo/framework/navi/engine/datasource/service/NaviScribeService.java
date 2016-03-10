@@ -1,11 +1,11 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
-import com.cuckoo.framework.navi.engine.core.INaviLog;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviScribeDriver;
+import com.cuckoo.framework.navi.engine.core.INaviLog;
 import com.cuckoo.framework.navi.server.ServerConfigure;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.utils.AsynchExecUtil;
 import org.apache.commons.lang.StringUtils;
 import scribe.thrift.LogEntry;
@@ -34,7 +34,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
     public boolean batchAppend(List<BatchLogEntry> logs) {
         NaviScribeDriver driver = getScribeDriver();
         try {
-            List<LogEntry> list = new ArrayList<>();
+            List<LogEntry> list = new ArrayList<LogEntry>();
             for (BatchLogEntry entry : logs) {
                 if (this.level > entry.getLevel()) {
                     continue;
@@ -45,7 +45,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return driver.sendLog(list);
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NaviError.SYSERROR.code(), e);
+                NAVIERROR.SYSERROR.code(), e);
         } finally {
             driver.close();
         }
@@ -120,7 +120,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return driver.sendLog(list);
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NaviError.SYSERROR.code(), e);
+                NAVIERROR.SYSERROR.code(), e);
         } finally {
             driver.close();
         }
@@ -167,7 +167,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return (NaviScribeDriver) driver;
         }
         throw new NaviSystemException("the log system driver is invalid!",
-            NaviError.SYSERROR.code());
+            NAVIERROR.SYSERROR.code());
     }
 
     private String getStackTrace(Throwable t) {

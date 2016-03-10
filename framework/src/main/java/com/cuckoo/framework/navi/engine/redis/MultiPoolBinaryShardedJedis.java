@@ -56,5 +56,5 @@ public class MultiPoolBinaryShardedJedis extends
         groups.addAll(map.values());
         return groups;
     }
-
+    
 }

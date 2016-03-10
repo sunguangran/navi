@@ -1,13 +1,25 @@
 package com.cuckoo.framework.navi.engine.datasource.pool;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
 public class NaviMetricConfig extends NaviPoolConfig {
 
     private long slowQuery = 200;
+
     private long bigQuery = 20000;
+
+    public void setSlowQuery(long slowQuery) {
+        this.slowQuery = slowQuery;
+    }
+
+    public long getSlowQuery() {
+        return slowQuery;
+    }
+
+    public void setBigQuery(long bigQuery) {
+        this.bigQuery = bigQuery;
+    }
+
+    public long getBigQuery() {
+        return bigQuery;
+    }
 
 }

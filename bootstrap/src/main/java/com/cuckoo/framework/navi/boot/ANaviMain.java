@@ -21,14 +21,16 @@ public abstract class ANaviMain {
                 System.setProperty("NAVI_HOME", System.getenv("NAVI_HOME"));
             }
 
-            // 初始化logback日志相关配置
-            LoggerContext logCtx = (LoggerContext) LoggerFactory.getILoggerFactory();
+            // 初始化Logback
+            LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
             JoranConfigurator configurator = new JoranConfigurator();
-            configurator.setContext(logCtx);
-            logCtx.reset();
+            configurator.setContext(lc);
+            lc.reset();
 
-            if (NaviDefine.NAVI_HOME != null) {
-                configurator.doConfigure(NaviDefine.NAVI_LOGBACK_PATH);
+            if (NaviProps.NAVI_HOME != null) {
+                configurator.doConfigure(NaviProps.NAVI_LOGBACK_PATH);
+            } else {
+                configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,28 +38,26 @@ public abstract class ANaviMain {
     }
 
     /**
-     * 解析框架服务配置文件
+     * 解析服务配置文件
      */
-    protected Properties parseConfig(String cfgPath) {
+    protected Properties parseConfig(String confFile) {
         log.info("start parsing config file.");
 
         Properties props = new Properties();
         try {
-            File cfgFile = new File(cfgPath);
-            BufferedReader reader = new BufferedReader(new FileReader(cfgFile));
-            String tmp;
-            while ((tmp = reader.readLine()) != null) {
-                if (tmp.startsWith("#") || tmp.length() == 0) {
+            File file = new File(confFile);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String str;
+            while ((str = br.readLine()) != null) {
+                if (str.startsWith("#") || str.length() == 0) {
                     continue;
                 }
-
-                String[] pairs = tmp.split("=");
+                String[] pairs = str.split("=");
                 if (pairs.length > 1) {
                     props.put(pairs[0].trim(), pairs[1].trim());
                 }
             }
-
-            reader.close();
+            br.close();
         } catch (IOException e) {
             log.error("{}", e.getMessage());
         }
@@ -72,7 +72,7 @@ public abstract class ANaviMain {
     public abstract String getStartClass(Properties serverConfig);
 
     /**
-     * 获得服务配置文件地址
+     * 获得配置地址
      */
     public abstract String getConfPath();
 
@@ -80,27 +80,22 @@ public abstract class ANaviMain {
      * 构建启动配置对象
      */
     public Properties parseServerConfig(String[] args) {
-        return parseConfig(getConfPath());
+        if (NaviProps.NAVI_HOME == null) {
+            log.error("NAVI_HOME not defined");
+            return null;
+        } else {
+            return parseConfig(getConfPath());
+        }
     }
 
     protected void doMain(Properties serverConfig) throws Exception {
         NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread().getContextClassLoader());
         Thread.currentThread().setContextClassLoader(loader);
 
-        final INaviServer server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
+        INaviServer server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
         int statCode = server.setupServer(serverConfig);
         if (statCode == INaviServer.SUCCESS) {
-            Runtime.getRuntime().addShutdownHook(
-                new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            log.info("navi server detected jvm shutdown, server will exit.");
-                            server.stopServer();
-                        }
-                    }
-                )
-            );
+            Runtime.getRuntime().addShutdownHook(new NaviShutdownHook(server));
         } else {
             System.exit(statCode);
         }

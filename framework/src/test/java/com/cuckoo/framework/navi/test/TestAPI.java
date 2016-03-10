@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.test;
 
+import com.cuckoo.framework.navi.api.ANaviAction;
+import com.cuckoo.framework.navi.api.NaviHttpRequest;
+import com.cuckoo.framework.navi.api.NaviHttpResponse;
 import com.cuckoo.framework.navi.engine.datasource.service.NaviHttpClientService;
-import com.cuckoo.framework.navi.server.api.ANaviAction;
-import com.cuckoo.framework.navi.server.api.NaviHttpRequest;
-import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;

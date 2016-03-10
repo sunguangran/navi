@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -15,17 +15,17 @@ import java.io.IOException;
 import java.util.*;
 
 @Slf4j
-public class NaviHBaseDriver extends ANaviDriver {
+public class NaviHBaseDriver extends AbstractNaviDriver {
     private HConnection connection;
     private HBaseAdmin admin;
     private NamespaceDescriptor nd;
 
-    public NaviHBaseDriver(ServerAddress server, String auth) {
+    public NaviHBaseDriver(ServerUrl server, String auth) {
         super(server, auth);
     }
 
     public NaviHBaseDriver(String url, String auth, NaviPoolConfig poolConfig) {
-        super(new ServerAddress(url), auth, poolConfig);
+        super(new ServerUrl(url), auth, poolConfig);
         if (poolConfig instanceof NaviHBasePoolConfig) {
             Configuration configuration = ((NaviHBasePoolConfig) poolConfig)
                 .getConfig();
@@ -38,7 +38,8 @@ public class NaviHBaseDriver extends ANaviDriver {
         }
     }
 
-    public NaviHBaseDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
+    public NaviHBaseDriver(ServerUrl server, String auth,
+                           NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         if (poolConfig instanceof NaviHBasePoolConfig) {
             Configuration configuration = ((NaviHBasePoolConfig) poolConfig)
@@ -461,9 +462,8 @@ public class NaviHBaseDriver extends ANaviDriver {
 
     /**
      * 指定行key,列族名，列名获取最新的值
-     * <p>
-     * 行key
      *
+     *     行key
      * @param family
      *     列族名
      * @param qualifier

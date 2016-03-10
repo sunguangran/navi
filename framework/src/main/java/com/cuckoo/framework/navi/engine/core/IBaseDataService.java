@@ -8,9 +8,8 @@ public interface IBaseDataService extends InitializingBean {
      * 设置数据源
      *
      * @param dataSource
-     *     数据源
      */
-    void setDataSource(INaviDataSource dataSource);
+    public void setDataSource(INaviDataSource dataSource);
 
-    INaviDataSource getDataSource();
+    public INaviDataSource getDataSource();
 }

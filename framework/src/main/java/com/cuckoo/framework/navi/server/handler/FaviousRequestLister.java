@@ -9,6 +9,7 @@ import org.jboss.netty.util.CharsetUtil;
 
 /**
  * 屏蔽浏览器网站logo请求
+ *
  */
 @Slf4j
 public class FaviousRequestLister implements INaviHttpRequestListener {

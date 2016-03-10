@@ -1,9 +1,9 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.common.exception.NaviBusiException;
-import com.cuckoo.framework.navi.server.api.INaviResponseData;
-import com.cuckoo.framework.navi.server.api.NaviHttpRequest;
-import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
+import com.cuckoo.framework.navi.api.INaviResponseData;
+import com.cuckoo.framework.navi.api.NaviHttpRequest;
+import com.cuckoo.framework.navi.api.NaviHttpResponse;
+import com.cuckoo.framework.navi.common.NaviBusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpRequest;
@@ -23,27 +23,27 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
     public abstract void callApi(NaviHttpRequest request, NaviHttpResponse response) throws Exception;
 
     public void process(HttpRequest request, HttpResponse response) throws Exception {
-        long timestamp = System.currentTimeMillis();
+        long t = System.currentTimeMillis();
         try {
-            NaviHttpRequest req = packageNaviHttpRequest(request);
-            if (req != null) {
-                NaviHttpResponse resp = (NaviHttpResponse) response;
-                callApi(req, resp);
-                INaviResponseData data = resp.getResponseData();
-                data.setCost(System.currentTimeMillis() - timestamp);
-                resp.setContent(data.getResponseData());
-                resp.headers().set(Names.CONTENT_TYPE, data.getResponseType());
+            NaviHttpRequest naviRequest = packageNaviHttpRequest(request);
+            if (naviRequest != null) {
+                NaviHttpResponse naviResponse = (NaviHttpResponse) response;
+                callApi(naviRequest, naviResponse);
+                t = System.currentTimeMillis() - t;
+                INaviResponseData responseData = naviResponse.getResponseData();
+                responseData.setCost(t);
+                naviResponse.setContent(responseData.getResponseData());
+                naviResponse.headers().set(Names.CONTENT_TYPE, responseData.getResponseType());
             } else {
-                log.warn("navi request is null.");
+                log.warn("Navi Request is null!");
             }
         } catch (Exception e) {
-            if (e instanceof NaviBusiException) {
-                timestamp = System.currentTimeMillis() - timestamp;
-                NaviBusiException alias = (NaviBusiException) e;
-                alias.setCost(timestamp);
-
-                response.setContent(alias.getResponseData());
-                response.headers().set(Names.CONTENT_TYPE, alias.getResponseType());
+            if (e instanceof NaviBusinessException) {
+                t = System.currentTimeMillis() - t;
+                NaviBusinessException ee = (NaviBusinessException) e;
+                ee.setCost(t);
+                response.setContent(ee.getResponseData());
+                response.headers().set(Names.CONTENT_TYPE, ee.getResponseType());
                 return;
             }
 

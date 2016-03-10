@@ -1,7 +1,5 @@
 package com.cuckoo.framework.navi.engine.datasource.pool;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
@@ -14,16 +12,47 @@ import org.springframework.beans.factory.InitializingBean;
 
 /**
  * 简单http client配置，每个Route保持一个链接
+ *
  */
 @Slf4j
-@Setter
-@Getter
-public class NaviHttpBasicConfig extends NaviPoolConfig implements InitializingBean {
-
+public class NaviHttpBasicConfig extends NaviPoolConfig implements
+    InitializingBean {
     private HttpParams params;
-    private static String charset;
-    private static String proxy;// 代理10.10.0.1:9999
-    private static String userAgent;
+    private static String charset = null;
+    private static String proxy = null;// 代理10.10.0.1:9999
+    private static String userAgent = null;
+
+    public HttpParams getParams() {
+        return params;
+    }
+
+    public void setParams(HttpParams params) {
+        this.params = params;
+    }
+
+    public static String getCharset() {
+        return charset;
+    }
+
+    public static void setCharset(String charset) {
+        NaviHttpBasicConfig.charset = charset;
+    }
+
+    public static String getProxy() {
+        return proxy;
+    }
+
+    public static void setProxy(String proxy) {
+        NaviHttpBasicConfig.proxy = proxy;
+    }
+
+    public static String getUserAgent() {
+        return userAgent;
+    }
+
+    public static void setUserAgent(String userAgent) {
+        NaviHttpBasicConfig.userAgent = userAgent;
+    }
 
     /**
      * Saves the default set of HttpParams in the provided parameter. These are:
@@ -38,24 +67,25 @@ public class NaviHttpBasicConfig extends NaviPoolConfig implements InitializingB
      */
     public void setDefaultHttpParams(HttpParams params) {
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-        if (charset == null) {
-            HttpProtocolParams.setContentCharset(params, HTTP.DEF_CONTENT_CHARSET.name());
-        } else {
+        if (charset == null)
+            HttpProtocolParams.setContentCharset(params,
+                HTTP.DEF_CONTENT_CHARSET.name());
+        else
             HttpProtocolParams.setContentCharset(params, charset);
-        }
-
         HttpConnectionParams.setTcpNoDelay(params, true);
         HttpConnectionParams.setSocketBufferSize(params, 8192);
 
         // determine the release version from packaged version info
-        final VersionInfo vi = VersionInfo.loadVersionInfo("org.apache.http.client", DefaultHttpClient.class.getClassLoader());
-        final String release = (vi != null) ? vi.getRelease() : VersionInfo.UNAVAILABLE;
-        if (userAgent == null) {
-            HttpProtocolParams.setUserAgent(params, "Navi-HttpClient/" + release + " (java 1.5, navi 2.x)");
-        } else {
-            HttpProtocolParams.setUserAgent(params, userAgent);
-        }
-        
+        final VersionInfo vi = VersionInfo.loadVersionInfo(
+            "org.apache.http.client",
+            DefaultHttpClient.class.getClassLoader());
+        final String release = (vi != null) ? vi.getRelease()
+            : VersionInfo.UNAVAILABLE;
+        if (getUserAgent() == null)
+            HttpProtocolParams.setUserAgent(params, "Navi-HttpClient/"
+                + release + " (java 1.5, navi 2.x)");
+        else
+            HttpProtocolParams.setUserAgent(params, getUserAgent());
         HttpConnectionParams.setConnectionTimeout(params, getConnectTimeout());
         HttpConnectionParams.setSoTimeout(params, getSocketTimeout());
     }

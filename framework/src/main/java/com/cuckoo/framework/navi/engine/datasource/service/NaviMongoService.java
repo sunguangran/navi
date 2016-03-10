@@ -1,10 +1,9 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDB;
 import com.mongodb.WriteResult;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
@@ -29,11 +28,12 @@ public class NaviMongoService extends AbstractNaviDataService implements INaviDB
 
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        if (StringUtils.isEmpty(databaseNm)) {
-            throw new NaviSystemException("db name is empty", NaviError.SYSERROR.code());
+        if (databaseNm == null) {
+            throw new NaviSystemException("dataSource or databaseNm is null",
+                NAVIERROR.SYSERROR.code());
         }
-
-        mongoTempt = new NaviMongoTemplateFactory(dataSource).getMongoTemplate(databaseNm);
+        mongoTempt = new NaviMongoTemplateFactory(dataSource)
+            .getMongoTemplate(databaseNm);
     }
 
     public <T> void insert(T t) {
@@ -100,7 +100,8 @@ public class NaviMongoService extends AbstractNaviDataService implements INaviDB
     }
 
     public <T> MongoPersistentProperty getIdProperties(Class<T> classNm) {
-        return mongoTempt.getConverter().getMappingContext().getPersistentEntity(classNm).getIdProperty();
+        return mongoTempt.getConverter().getMappingContext()
+            .getPersistentEntity(classNm).getIdProperty();
     }
 
     public <T> List<T> findAll(Class<T> entityClass) {

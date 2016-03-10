@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviDefine;
+import com.cuckoo.framework.navi.boot.NaviProps;
 import com.cuckoo.framework.navi.server.handler.BadPacketRequestListener;
 import com.cuckoo.framework.navi.server.handler.NaviExecutionHandler;
 import com.cuckoo.framework.navi.server.handler.NaviPacketBusiListener;
@@ -29,10 +29,10 @@ public class NaviNettyUDPServer extends ANaviPacketServer {
     }
 
     public ChannelBuffer getDelimiter() {
-        String packetDelimiter = NaviDefine.DEFAULT_PACKET_DELIMITER;
+        String packetDelimiter = NaviProps.DEFAULT_PACKET_DELIMITER;
         byte[] delimiterBytes = null;
-        if (ServerConfigure.containsKey(NaviDefine.PACKET_DELIMITER)) {
-            packetDelimiter = ServerConfigure.get(NaviDefine.PACKET_DELIMITER);
+        if (ServerConfigure.containsKey(NaviProps.PACKET_DELIMITER)) {
+            packetDelimiter = ServerConfigure.get(NaviProps.PACKET_DELIMITER);
         }
         if (null != packetDelimiter && packetDelimiter.contains("\\")) {
             delimiterBytes = new byte[]{Byte.parseByte(packetDelimiter.replace("\\", ""))};
@@ -44,9 +44,9 @@ public class NaviNettyUDPServer extends ANaviPacketServer {
     }
 
     public int getMaxPacketSize() {
-        int maxSize = NaviDefine.DEFAULT_MAX_UDP_PACKET_SIZE;
-        if (ServerConfigure.containsKey(NaviDefine.UDP_MAX_PACKET_SIZE)) {
-            maxSize = Integer.parseInt(ServerConfigure.get(NaviDefine.UDP_MAX_PACKET_SIZE));
+        int maxSize = NaviProps.DEFAULT_MAX_UDP_PACKET_SIZE;
+        if (ServerConfigure.containsKey(NaviProps.UDP_MAX_PACKET_SIZE)) {
+            maxSize = Integer.parseInt(ServerConfigure.get(NaviProps.UDP_MAX_PACKET_SIZE));
         }
         return maxSize;
     }

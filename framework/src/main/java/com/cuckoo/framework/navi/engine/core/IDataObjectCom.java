@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.engine.core;
 
-import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
 
-public interface IDataObjectCom<T extends AbstractNaviBean> {
+public interface IDataObjectCom<T extends AbstractNaviDto> {
     T get();
 
     T refresh();

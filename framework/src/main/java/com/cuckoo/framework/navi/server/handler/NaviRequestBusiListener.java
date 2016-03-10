@@ -6,14 +6,14 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
 
 public class NaviRequestBusiListener implements INaviHttpRequestListener {
 
-    private INaviHttpRequestDispatcher dispatcher;
+    private INaviHttpRequestDispatcher naviDispatcher;
 
     public NaviRequestBusiListener() {
-        this.dispatcher = new DefaultNaviRequestDispatcher();
+        this.naviDispatcher = new DefaultNaviRequestDispatcher();
     }
 
     public boolean process(HttpRequest request, HttpResponse response) throws Exception {
-        dispatcher.process(request, response);
+        naviDispatcher.process(request, response);
         return true;
     }
 

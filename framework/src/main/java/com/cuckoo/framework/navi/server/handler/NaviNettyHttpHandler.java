@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
+import com.cuckoo.framework.navi.api.NaviHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
@@ -27,7 +27,7 @@ public class NaviNettyHttpHandler extends AbstractNaviNettyHttpHandler {
     @Override
     public void handle(HttpRequest request, Channel channel) throws Exception {
         HttpResponse response = new NaviHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK);
-
+        
         for (INaviHttpRequestListener listener : listeners) {
             boolean res = listener.process(request, response);
             log.debug(listener.getClass().getName() + " is completed!");

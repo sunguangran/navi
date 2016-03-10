@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.ServerAddress;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.ServerUrlUtil;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.ShardJedisPoolConfig;
 import com.cuckoo.framework.navi.engine.redis.AbstractPoolBinaryShardedJedis;
@@ -12,12 +12,12 @@ import redis.clients.jedis.JedisShardInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NaviPoolShardedJedisDriver extends ANaviPoolJedisDriver {
+public class NaviPoolShardedJedisDriver extends AbstractNaviPoolJedisDriver {
 
     private PoolBinaryShardedJedis jedis;
     private ShardJedisPoolConfig poolConfig;
 
-    public NaviPoolShardedJedisDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
+    public NaviPoolShardedJedisDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.poolConfig = (ShardJedisPoolConfig) poolConfig;
         this.jedis = new PoolBinaryShardedJedis(constructShardInfo(

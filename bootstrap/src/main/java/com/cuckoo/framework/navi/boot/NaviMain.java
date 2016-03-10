@@ -12,36 +12,28 @@ public class NaviMain extends ANaviMain {
 
     @Override
     public String getStartClass(Properties sysprop) {
-        String protocol = sysprop.getProperty(NaviDefine.PROTOCOL);
-        switch (NaviDefine.WORK_PROTOCOL.toProtocol(protocol)) {
-            case HTTP:
-                return NaviDefine.SERVERCLASS;
+        String protocol = sysprop.getProperty(NaviProps.PROTOCOL);
+        switch (NaviProps.WORK_PROTOCOL.toProtocol(protocol)) {
             case TCP:
-                return NaviDefine.SERVERCLASS_TCP;
+                return NaviProps.SERVERCLASS_TCP;
             case UDP:
-                return NaviDefine.SERVERCLASS_UDP;
+                return NaviProps.SERVERCLASS_UDP;
             default:
-                return NaviDefine.SERVERCLASS;
+                return NaviProps.SERVERCLASS;
         }
     }
 
     @Override
     public String getConfPath() {
-        return NaviDefine.NAVI_CONF_PATH;
+        return NaviProps.NAVI_CONF_PATH;
     }
 
     public static void main(String[] args) {
         try {
-            if (NaviDefine.NAVI_HOME == null) {
-                System.out.println("NAVI_HOME not defined");
-                System.exit(1);
-            }
-
             NaviMain mainClass = new NaviMain();
 
             Properties props = mainClass.parseServerConfig(args);
             if (props == null) {
-                log.error("config parse failed.");
                 System.exit(1);
             }
 

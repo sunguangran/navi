@@ -1,12 +1,12 @@
 package com.cuckoo.framework.navi.engine.datasource;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.utils.ServerUrlUtil;
-import com.cuckoo.framework.navi.common.ServerAddress;
+import com.cuckoo.framework.navi.common.ServerUrlUtil;
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +43,10 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
             GenericObjectPool<INaviDriver> pool = pools.get(index);
             INaviDriver handle = pool.borrowObject();
             handle.setPool(pool);
-
+            
             return handle;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
         }
     }
 
@@ -60,7 +60,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
         Class<?> handleClassNm = getContextClassLoader().loadClass(driverClass);
 
         if (!splitHosts) {
-            ServerAddress serverAddr = new ServerAddress(
+            ServerUrl serverAddr = new ServerUrl(
                 ServerConfigure.isDeployEnv() ? getDeployConnectString() : getOfflineConnectString()
             );
 
@@ -70,11 +70,11 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
 
             pools.add(pool);
         } else {
-            List<ServerAddress> serverUrls = ServerUrlUtil.getServerUrl(
+            List<ServerUrl> serverUrls = ServerUrlUtil.getServerUrl(
                 ServerConfigure.isDeployEnv() ? getDeployConnectString() : getOfflineConnectString()
             );
 
-            for (ServerAddress serverUrl : serverUrls) {
+            for (ServerUrl serverUrl : serverUrls) {
                 GenericObjectPool<INaviDriver> pool = new GenericObjectPool<>(
                     new NaviPoolableObjectFactory(handleClassNm, serverUrl, auth), poolConfig
                 );
@@ -106,11 +106,12 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
 
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getOfflineConnectString()) || StringUtils.isBlank(getDeployConnectString())) {
-            throw new NaviSystemException("invalid server address!", NaviError.SYSERROR.code());
+            throw new NaviSystemException("invalid server address!",
+                NAVIERROR.SYSERROR.code());
         } else if (StringUtils.isBlank(driverClass)) {
-            throw new NaviSystemException("invalid driverClass!", NaviError.SYSERROR.code());
+            throw new NaviSystemException("invalid driverClass!",
+                NAVIERROR.SYSERROR.code());
         }
-
         initConnPool();
     }
 
@@ -119,11 +120,12 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
     }
 
     private class NaviPoolableObjectFactory extends BasePooledObjectFactory<INaviDriver> {
+
         private Class<?> handleClass;
         private String auth;
-        private ServerAddress server;
+        private ServerUrl server;
 
-        private NaviPoolableObjectFactory(Class<?> handleClass, ServerAddress server, String auth) {
+        private NaviPoolableObjectFactory(Class<?> handleClass, ServerUrl server, String auth) {
             this.handleClass = handleClass;
             this.auth = auth;
             this.server = server;
@@ -132,7 +134,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
         @Override
         public INaviDriver create() throws Exception {
             return (INaviDriver) BeanUtils.instantiateClass(
-                handleClass.getDeclaredConstructor(ServerAddress.class, String.class, NaviPoolConfig.class), this.server, this.auth, poolConfig
+                handleClass.getDeclaredConstructor(ServerUrl.class, String.class, NaviPoolConfig.class), this.server, this.auth, poolConfig
             );
         }
 

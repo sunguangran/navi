@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Navi队列接口
+ *
  */
 public interface INaviMessageQueue {
 

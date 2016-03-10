@@ -1,24 +1,24 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.ServerAddress;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.ServerUrlUtil;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.server.serviceobj.MonitorReportObject;
 import com.youku.java.navi.engine.nstatus.JavaNstatusExt;
+import com.cuckoo.framework.navi.serviceobj.MonitorReportObject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Slf4j
-public class NaviNstatusDriver extends ANaviDriver implements Runnable {
+public class NaviNstatusDriver extends AbstractNaviDriver implements Runnable {
 
     private BlockingQueue<MonitorReportObject> queue = new LinkedBlockingQueue<MonitorReportObject>();
     private Thread thread;
     private boolean running = true;
     private JavaNstatusExt nstatus;
 
-    public NaviNstatusDriver(ServerAddress server, String auth,
+    public NaviNstatusDriver(ServerUrlUtil.ServerUrl server, String auth,
                              NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         nstatus = new JavaNstatusExt(server.getUrl());

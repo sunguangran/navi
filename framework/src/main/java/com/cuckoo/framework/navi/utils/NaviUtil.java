@@ -1,15 +1,15 @@
 package com.cuckoo.framework.navi.utils;
 
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
-import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
-import com.cuckoo.framework.navi.server.serviceobj.INaviColumnDto;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
+import com.cuckoo.framework.navi.serviceobj.INaviColumnDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.bson.types.ObjectId;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 @Slf4j
 public class NaviUtil {
@@ -29,6 +30,7 @@ public class NaviUtil {
      * 使用唯一索引且有数值的属性作为检索条件
      *
      * @return
+     * @throws JSONException
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws ClassNotFoundException
@@ -37,14 +39,14 @@ public class NaviUtil {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
-    public static <T extends AbstractNaviBean> Criteria buildCriteria(T dto)
+    public static <T extends AbstractNaviDto> Criteria buildCriteria(T dto)
         throws JSONException, InstantiationException,
         IllegalAccessException, ClassNotFoundException, SecurityException,
         IllegalArgumentException, NoSuchMethodException,
         InvocationTargetException {
         CompoundIndexes compIndexes = dto.getClass().getAnnotation(
             CompoundIndexes.class);
-        AbstractNaviBean initDto = (AbstractNaviBean) Class.forName(
+        AbstractNaviDto initDto = (AbstractNaviDto) Class.forName(
             dto.getClass().getName(), true,
             dto.getClass().getClassLoader()).newInstance();
         Criteria c = null;
@@ -52,9 +54,12 @@ public class NaviUtil {
             if (!compIndex.unique()) {
                 continue;
             }
-            JSONObject fields = JSONObject.parseObject(compIndex.def());
+            JSONObject fields = new JSONObject(compIndex.def());
 
-            for (String fnm : fields.keySet()) {
+            @SuppressWarnings("unchecked")
+            Iterator<String> it = fields.keys();
+            while (it.hasNext()) {
+                String fnm = it.next();
                 Object conditionValue = dto.getValue(fnm);
                 if (conditionValue == null
                     || conditionValue.equals(initDto.getValue(fnm))) {
@@ -86,13 +91,13 @@ public class NaviUtil {
      * @throws ClassNotFoundException
      * @throws InstantiationException
      */
-    public static <T extends AbstractNaviBean> Update buildUpdate(T dto)
+    public static <T extends AbstractNaviDto> Update buildUpdate(T dto)
         throws SecurityException, IllegalArgumentException,
         NoSuchMethodException, IllegalAccessException,
         InvocationTargetException, InstantiationException,
         ClassNotFoundException {
         Field[] fields = dto.getClass().getDeclaredFields();
-        AbstractNaviBean initDto = (AbstractNaviBean) Class
+        AbstractNaviDto initDto = (AbstractNaviDto) Class
             .forName(dto.getClass().getName(), true,
                 dto.getClass().getClassLoader()).newInstance();
         Update up = new Update();
@@ -114,7 +119,7 @@ public class NaviUtil {
         return up;
     }
 
-    public static <T extends AbstractNaviBean> JSONObject toJSONObject(T dto)
+    public static <T extends AbstractNaviDto> JSONObject toJSONObject(T dto)
         throws SecurityException, IllegalArgumentException, JSONException,
         NoSuchMethodException, IllegalAccessException,
         InvocationTargetException {
@@ -126,8 +131,8 @@ public class NaviUtil {
         return json;
     }
 
-    public static <T extends AbstractNaviBean> void constructJsonObject(T dto, Field[] fields,
-                                                                        JSONObject json) throws JSONException, NoSuchMethodException,
+    public static <T extends AbstractNaviDto> void constructJsonObject(T dto, Field[] fields,
+                                                                       JSONObject json) throws JSONException, NoSuchMethodException,
         IllegalAccessException, InvocationTargetException {
         for (Field field : fields) {
             String fnm = field.getName();
@@ -143,7 +148,7 @@ public class NaviUtil {
     }
 
     public static NaviSystemException transferToNaviSysException(Exception e) {
-        NaviSystemException ee = new NaviSystemException(e.getMessage(), NaviError.SYSERROR.code(), e);
+        NaviSystemException ee = new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
         ee.setStackTrace(e.getStackTrace());
         return ee;
     }
@@ -259,12 +264,5 @@ public class NaviUtil {
             }
         }
         return null;
-    }
-
-
-    private static final String hostRegex = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
-
-    public static boolean validateHost(String host) {
-        return host.matches(hostRegex);
     }
 }

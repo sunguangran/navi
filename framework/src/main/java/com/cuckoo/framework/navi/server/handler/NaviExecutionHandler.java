@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * netty ChannelPipeline的handler,用于异步处理messageEvent
+ *
  */
 public class NaviExecutionHandler implements ChannelUpstreamHandler, NaviExecutionHandlerMBean {
 

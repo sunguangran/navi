@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server;
 
-import com.cuckoo.framework.navi.boot.NaviDefine;
-import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
+import com.cuckoo.framework.navi.boot.NaviProps;
+import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.netty.bootstrap.ServerBootstrap;
@@ -17,8 +17,6 @@ import java.rmi.UnknownHostException;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 实现TCP/IP服务
@@ -43,37 +41,27 @@ public abstract class ANaviTCPServer extends ANaviServer {
         log.info("start listening the port " + ServerConfigure.getPort() + ".");
 
         try {
-            ExecutorService executor = Executors.newCachedThreadPool(
-                new ThreadFactory() {
-                    private AtomicInteger threadIndex = new AtomicInteger(0);
-
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, String.format("netty boss(worker) selector_%d", this.threadIndex.incrementAndGet()));
-                    }
-                }
-            );
-
+            ExecutorService executor = Executors.newCachedThreadPool();
             NioServerSocketChannelFactory channelFactory = new NioServerSocketChannelFactory(executor, executor);
             ChannelPipelineFactory pipelineFactory = getPipelineFactory();
 
             bootstrap = new ServerBootstrap(channelFactory);
             bootstrap.setPipelineFactory(pipelineFactory);
 
-            if (ServerConfigure.containsKey(NaviDefine.BACKLOG)) {
-                bootstrap.setOption(NaviDefine.BACKLOG, ServerConfigure.get(NaviDefine.BACKLOG));
+            if (ServerConfigure.containsKey(NaviProps.BACKLOG)) {
+                bootstrap.setOption(NaviProps.BACKLOG, ServerConfigure.get(NaviProps.BACKLOG));
             }
 
-            if (ServerConfigure.containsKey(NaviDefine.REUSEADDRESS)) {
-                bootstrap.setOption(NaviDefine.REUSEADDRESS, Boolean.valueOf(ServerConfigure.get(NaviDefine.REUSEADDRESS)));
+            if (ServerConfigure.containsKey(NaviProps.REUSEADDRESS)) {
+                bootstrap.setOption(NaviProps.REUSEADDRESS, Boolean.valueOf(ServerConfigure.get(NaviProps.REUSEADDRESS)));
             }
 
-            if (ServerConfigure.containsKey(NaviDefine.CHILD_KEEPALIVE)) {
-                bootstrap.setOption(NaviDefine.CHILD_KEEPALIVE, Boolean.valueOf(ServerConfigure.get(NaviDefine.CHILD_KEEPALIVE)));
+            if (ServerConfigure.containsKey(NaviProps.CHILD_KEEPALIVE)) {
+                bootstrap.setOption(NaviProps.CHILD_KEEPALIVE, Boolean.valueOf(ServerConfigure.get(NaviProps.CHILD_KEEPALIVE)));
             }
 
-            if (ServerConfigure.containsKey(NaviDefine.CHILD_TCPNODELAY)) {
-                bootstrap.setOption(NaviDefine.CHILD_TCPNODELAY, Boolean.valueOf(ServerConfigure.get(NaviDefine.CHILD_TCPNODELAY)));
+            if (ServerConfigure.containsKey(NaviProps.CHILD_TCPNODELAY)) {
+                bootstrap.setOption(NaviProps.CHILD_TCPNODELAY, Boolean.valueOf(ServerConfigure.get(NaviProps.CHILD_TCPNODELAY)));
             }
             if (ServerConfigure.containsKey(ServerConfigure.CHILD_SENDBUFFERSIZE)) {
                 bootstrap.setOption(ServerConfigure.CHILD_SENDBUFFERSIZE, Integer.valueOf(ServerConfigure.get(ServerConfigure.CHILD_SENDBUFFERSIZE)));
@@ -141,7 +129,7 @@ public abstract class ANaviTCPServer extends ANaviServer {
 
     protected int getChildChannelIdleTime() {
         try {
-            return Integer.valueOf(ServerConfigure.get(NaviDefine.CHILD_CHANNEL_IDLTIME));
+            return Integer.valueOf(ServerConfigure.get(NaviProps.CHILD_CHANNEL_IDLTIME));
         } catch (Exception e) {
             return 0;
         }

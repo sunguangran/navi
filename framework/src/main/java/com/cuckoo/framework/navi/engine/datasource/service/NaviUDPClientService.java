@@ -3,9 +3,9 @@ package com.cuckoo.framework.navi.engine.datasource.service;
 import com.cuckoo.framework.navi.engine.core.INaviUDPClientService;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviUDPClientDriver;
 import com.cuckoo.framework.navi.server.ServerConfigure;
-import com.cuckoo.framework.navi.server.api.INaviUDPResponseHandler;
 import com.cuckoo.framework.navi.utils.NaviUtil;
-import com.cuckoo.framework.navi.common.ServerAddress;
+import com.cuckoo.framework.navi.api.INaviUDPResponseHandler;
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -18,10 +18,11 @@ import java.util.Random;
  * 如果发送的是json，请转换为String后传入<br>
  * 如果发送的是对象，直接传入，底层将对象序列化后传送，效率低<br>
  * 建议使用String,因为对象效率低，同时UDP报文大小有限制，使用对象可能超出限制。
+ *
  */
 @Slf4j
-public class NaviUDPClientService extends AbstractNaviDataService implements INaviUDPClientService {
-
+public class NaviUDPClientService extends AbstractNaviDataService implements
+    INaviUDPClientService {
     protected String offlineConnectString;
     protected String deployConnectString;
     protected String[] hosts;
@@ -165,9 +166,9 @@ public class NaviUDPClientService extends AbstractNaviDataService implements INa
         }
     }
 
-    public <T extends Serializable> void send(T msg, ServerAddress... hosts) {
+    public <T extends Serializable> void send(T msg, ServerUrl... hosts) {
         if (null != hosts) {
-            for (ServerAddress host : hosts) {
+            for (ServerUrl host : hosts) {
                 send(host.getHost(), host.getPort(), msg);
             }
         }

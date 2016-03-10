@@ -1,12 +1,13 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.ServerAddress;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviHttpPoolConfig;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.ClientConnectionManager;
@@ -24,16 +25,18 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Http Client驱动，连接池可配置两种模式，NaviHttpPoolConfig和NaviHttpBasicConfig
+ *
  */
 @Slf4j
-public class NaviHttpClientDriver extends ANaviDriver {
+public class NaviHttpClientDriver extends AbstractNaviDriver {
 
     private DefaultHttpClient httpClient;
     private BasicResponseHandler responseHandler;
     private ClientConnectionManager cm;
     private HttpParams params;
 
-    public NaviHttpClientDriver(ServerAddress server, String auth, NaviPoolConfig poolConfig) {
+    public NaviHttpClientDriver(ServerUrl server, String auth,
+                                NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
 
         if (poolConfig instanceof NaviHttpPoolConfig) {
@@ -91,27 +94,35 @@ public class NaviHttpClientDriver extends ANaviDriver {
         return params;
     }
 
-    private void createHttpClient(NaviPoolConfig poolConfig, ServerAddress server) {
+    private void createHttpClient(NaviPoolConfig poolConfig, ServerUrl server) {
         if (params == null) {
             // httpClient.setParams(params)HttpParams
             httpClient = new DefaultHttpClient(cm);
-            httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, poolConfig.getSocketTimeout());
-            httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, poolConfig.getConnectTimeout());
+            httpClient.getParams().setParameter(
+                CoreConnectionPNames.SO_TIMEOUT,
+                poolConfig.getSocketTimeout());
+            httpClient.getParams().setParameter(
+                CoreConnectionPNames.CONNECTION_TIMEOUT,
+                poolConfig.getConnectTimeout());
         } else {
             httpClient = new DefaultHttpClient(cm, params);
             if (poolConfig instanceof NaviHttpPoolConfig) {
-                httpClient.setHttpRequestRetryHandler(new NaviHttpRequestRetryHandler(((NaviHttpPoolConfig) poolConfig).getRetryTimes(), false));
+                httpClient
+                    .setHttpRequestRetryHandler(new NaviHttpRequestRetryHandler(
+                        ((NaviHttpPoolConfig) poolConfig)
+                            .getRetryTimes(), false));
             }
         }
         // 配置数据源
-        httpClient.getParams().setParameter(ClientPNames.DEFAULT_HOST, new HttpHost(server.getHost(), server.getPort()));
+        httpClient.getParams().setParameter(ClientPNames.DEFAULT_HOST,
+            new HttpHost(server.getHost(), server.getPort()));
     }
 
     public PoolingClientConnectionManager getPoolingClientConnectionManager(
         NaviHttpPoolConfig poolConfig) {
         PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(
-            SchemeRegistryFactory.createDefault(), poolConfig.getTimeToLive(), TimeUnit.MILLISECONDS
-        );
+            SchemeRegistryFactory.createDefault(),
+            poolConfig.getTimeToLive(), TimeUnit.MILLISECONDS);
         // timeToLive maximum time to live. May be zero if the connection does
         // not have an expiry deadline.
         connectionManager.setDefaultMaxPerRoute(poolConfig.getMaxPerRoute()); // 默认每个通道最高2个链接
@@ -134,7 +145,8 @@ public class NaviHttpClientDriver extends ANaviDriver {
         return isClose();
     }
 
-    public String execute(HttpUriRequest request) throws IOException {
+    public String execute(HttpUriRequest request)
+        throws ClientProtocolException, IOException {
         return httpClient.execute(request, responseHandler);
     }
 

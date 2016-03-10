@@ -1,6 +1,6 @@
 package com.cuckoo.framework.navi.test;
 
-import com.cuckoo.framework.navi.server.serviceobj.AbstractNaviBean;
+import com.cuckoo.framework.navi.serviceobj.AbstractNaviDto;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @CompoundIndexes({
     @CompoundIndex(name = "uid_index", def = "{'uid':1}", unique = true)
 })
-public class TestBean extends AbstractNaviBean {
+public class TestBean extends AbstractNaviDto {
 
     /**
      *

@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.server.handler;
 
-import com.cuckoo.framework.navi.server.module.INaviModuleContext;
-import com.cuckoo.framework.navi.server.module.NaviModuleContextFactory;
+import com.cuckoo.framework.navi.module.INaviModuleContext;
+import com.cuckoo.framework.navi.module.NaviModuleContextFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobLocator;

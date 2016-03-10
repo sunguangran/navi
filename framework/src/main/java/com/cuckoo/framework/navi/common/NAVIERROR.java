@@ -1,27 +1,21 @@
 package com.cuckoo.framework.navi.common;
 
-public enum NaviError {
+public enum NAVIERROR {
 
-    SUCCESS(0),
-    FAILED(-1),
-
-    NO_DATA(-102),
-    ACTION_UNKNOWN(404),
     SYSERROR(-500),
-    HOST_INVALID(-90),
+    INVALID_HOST(-90),
+    BUSI_NO_DATA(-91),
+    BUSI_PARAM_ERROR(-92);
 
-    PARAM_ERROR(-1001);
-
-    /***************************************************/
     private int code;
     private String desc;
 
-    NaviError(int code, String desc) {
+    private NAVIERROR(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    NaviError(int code) {
+    private NAVIERROR(int code) {
         this(code, "system error!");
     }
 
@@ -29,7 +23,7 @@ public enum NaviError {
         return code;
     }
 
-    public String desc() {
+    public String getDesc() {
         return desc;
     }
 }

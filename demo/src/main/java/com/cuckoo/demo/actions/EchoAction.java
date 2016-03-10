@@ -1,9 +1,9 @@
 package com.cuckoo.demo.actions;
 
-import com.cuckoo.framework.navi.common.annotation.Param;
-import com.cuckoo.framework.navi.common.annotation.Rest;
-import com.cuckoo.framework.navi.server.api.ANaviAction;
-import com.cuckoo.framework.navi.server.api.NaviHttpResponse;
+import com.cuckoo.framework.navi.annotation.Param;
+import com.cuckoo.framework.navi.annotation.Rest;
+import com.cuckoo.framework.navi.api.ANaviAction;
+import com.cuckoo.framework.navi.api.NaviHttpResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 

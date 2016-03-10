@@ -1,7 +1,7 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.common.ServerAddress;
 import org.apache.hadoop.hive.service.HiveClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -9,12 +9,12 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
-public class NaviHiveClientDriver extends ANaviDriver {
+public class NaviHiveClientDriver extends AbstractNaviDriver {
 
     private TTransport transport;
     private HiveClient client;
 
-    public NaviHiveClientDriver(ServerAddress server, String auth,
+    public NaviHiveClientDriver(ServerUrl server, String auth,
                                 NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         try {

@@ -1,10 +1,5 @@
 package com.cuckoo.framework.navi.engine.component;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
 public class NaviMQContext {
 
     /**
@@ -30,12 +25,20 @@ public class NaviMQContext {
     /**
      * MQ实现类型，默认1，Redis实现
      */
-    private MQType mqType = MQType.REDIS;
+    private MessageQueueType mqType = MessageQueueType.REDIS;
+
+    public int getConsumeRate() {
+        return consumeRate;
+    }
 
     public void setConsumeRate(int consumeRate) {
         if (consumeRate > 0) {
             this.consumeRate = consumeRate;
         }
+    }
+
+    public int getBlockTime() {
+        return blockTime;
     }
 
     public void setBlockTime(int blockTime) {
@@ -45,8 +48,8 @@ public class NaviMQContext {
     }
 
     public void setMqType(int mqType) {
-        if (mqType >= 0 && mqType < MQType.values().length) {
-            this.mqType = MQType.values()[mqType];
+        if (mqType >= 0 && mqType < MessageQueueType.values().length) {
+            this.mqType = MessageQueueType.values()[mqType];
         }
     }
 
@@ -54,8 +57,12 @@ public class NaviMQContext {
         return mqType.ordinal();
     }
 
-    public MQType getMqEnumType() {
+    public MessageQueueType getMqEnumType() {
         return mqType;
+    }
+
+    public int getThreadRate() {
+        return threadRate;
     }
 
     public void setThreadRate(int threadRate) {
@@ -64,7 +71,15 @@ public class NaviMQContext {
         }
     }
 
-    public enum MQType {
+    public void setExceptionSleepTime(int exceptionSleepTime) {
+        this.exceptionSleepTime = exceptionSleepTime;
+    }
+
+    public int getExceptionSleepTime() {
+        return exceptionSleepTime;
+    }
+
+    public enum MessageQueueType {
         REDIS, MUTIREDIS, OLDMUTIREDIS, ZOOKEEPER
     }
 }

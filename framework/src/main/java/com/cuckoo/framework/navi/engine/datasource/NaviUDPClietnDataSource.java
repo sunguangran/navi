@@ -1,12 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource;
 
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.core.INaviDriver;
 import com.cuckoo.framework.navi.engine.core.IUDPClientDataSource;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviUDPClientPoolConfig;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
@@ -17,8 +15,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-@Setter
-@Getter
 public class NaviUDPClietnDataSource implements IUDPClientDataSource, ApplicationContextAware {
     private GenericObjectPool<INaviDriver> pool;
     private ClassLoader contextClassLoader;
@@ -27,26 +23,28 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
     protected void initConnPool() throws Exception {
         Class<?> handleClassNm = getContextClassLoader().loadClass(driverClass);
-        pool = new GenericObjectPool<>(new NaviPoolableObjectFactory(handleClassNm), poolConfig);
+        pool = new GenericObjectPool<INaviDriver>(
+            new NaviPoolableObjectFactory(handleClassNm), poolConfig);
     }
 
     public INaviDriver getHandle() {
-        INaviDriver handle;
+        INaviDriver handle = null;
         try {
             handle = pool.borrowObject();
             handle.setPool(pool);
             return handle;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(),
+                NAVIERROR.SYSERROR.code(), e);
         }
 
     }
 
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getDriverClass())) {
-            throw new NaviSystemException("invalid driverClass!", NaviError.SYSERROR.code());
+            throw new NaviSystemException("invalid driverClass!",
+                NAVIERROR.SYSERROR.code());
         }
-
         initConnPool();
     }
 
@@ -59,6 +57,26 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
         this.contextClassLoader = applicationContext.getClassLoader();
     }
 
+    public ClassLoader getContextClassLoader() {
+        return contextClassLoader;
+    }
+
+    public String getDriverClass() {
+        return driverClass;
+    }
+
+    public void setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
+    }
+
+    public NaviUDPClientPoolConfig getPoolConfig() {
+        return poolConfig;
+    }
+
+    public void setPoolConfig(NaviUDPClientPoolConfig poolConfig) {
+        this.poolConfig = poolConfig;
+    }
+
     protected class NaviPoolableObjectFactory extends BasePooledObjectFactory<INaviDriver> {
 
         private Class<?> handleClass;
@@ -69,7 +87,8 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
         @Override
         public INaviDriver create() throws Exception {
-            return (INaviDriver) BeanUtils.instantiateClass(handleClass.getDeclaredConstructor());
+            return (INaviDriver) BeanUtils.instantiateClass(handleClass
+                .getDeclaredConstructor());
         }
 
         @Override
@@ -88,7 +107,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
         @Override
         public PooledObject<INaviDriver> wrap(INaviDriver obj) {
-            return new DefaultPooledObject<>(obj);
+            return new DefaultPooledObject<INaviDriver>(obj);
         }
     }
 

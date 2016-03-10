@@ -1,20 +1,17 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.cuckoo.framework.navi.common.NaviError;
-import com.cuckoo.framework.navi.common.exception.NaviRuntimeException;
+import com.cuckoo.framework.navi.common.NAVIERROR;
+import com.cuckoo.framework.navi.common.NaviRuntimeException;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviHBaseDriver;
-import com.cuckoo.framework.navi.server.serviceobj.*;
+import com.cuckoo.framework.navi.serviceobj.*;
 import com.cuckoo.framework.navi.utils.NaviUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * HBaseService类，用于针对INaviColumnDto子类的查询操作
@@ -80,26 +77,27 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (t_obj instanceof NaviColumnExtDto) {
                 obj = (NaviColumnExtDto) t_obj;
             } else {
-                if (t_obj instanceof NaviBaseColumnBean) {
-                    obj = ((NaviBaseColumnBean) t_obj).toColumnExtDto();
+                if (t_obj instanceof NaviBaseColumnDto) {
+                    obj = ((NaviBaseColumnDto) t_obj).toColumnExtDto();
                 }
             }
             if (obj != null) {
                 try {
                     // 遍历ColumnExtDto
-                    JSONObject json = JSONObject.parseObject(obj.dataToString());
+                    JSONObject json = new JSONObject(obj.dataToString());
                     byte[] rowKey = obj.getRowkey();
-                    for (String cfNm : json.keySet()) {
+                    for (Iterator<String> cfit = json.keys(); cfit.hasNext(); ) {
+                        String cfNm = cfit.next();
                         JSONObject cols = json.getJSONObject(cfNm);
                         for (Object key : cols.keySet()) {
                             String colNm = (String) key;
                             JSONArray col = cols.getJSONArray(colNm);
-                            for (int i = 0; i < col.size(); i++) {
+                            for (int i = 0; i < col.length(); i++) {
                                 JSONObject vl = col.getJSONObject(i);
                                 Put put = new Put(rowKey);
                                 byte[] value = NaviUtil.getByteVal(
                                     t.getClass(), colNm, vl.get("value"));
-                                if (vl.containsKey("timestamp")) {
+                                if (vl.has("timestamp")) {
                                     put.add(cfNm.getBytes(), colNm.getBytes(),
                                         vl.getLong("timestamp"), value);
                                 } else {
@@ -157,24 +155,25 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (t_obj instanceof NaviColumnExtDto) {
                 obj = (NaviColumnExtDto) t_obj;
             } else {
-                if (t_obj instanceof NaviBaseColumnBean) {
-                    obj = ((NaviBaseColumnBean) t_obj).toColumnExtDto();
+                if (t_obj instanceof NaviBaseColumnDto) {
+                    obj = ((NaviBaseColumnDto) t_obj).toColumnExtDto();
                 }
             }
             if (obj != null) {
                 try {
                     // 遍历ColumnExtDto
-                    JSONObject json = JSONObject.parseObject(obj.dataToString());
+                    JSONObject json = new JSONObject(obj.dataToString());
                     byte[] rowKey = obj.getRowkey();
-                    for (String cfNm : json.keySet()) {
+                    for (Iterator<String> cfit = json.keys(); cfit.hasNext(); ) {
+                        String cfNm = cfit.next();
                         JSONObject cols = json.getJSONObject(cfNm);
                         for (Object key : cols.keySet()) {
                             String colNm = (String) key;
                             JSONArray col = cols.getJSONArray(colNm);
-                            for (int i = 0; i < col.size(); i++) {
+                            for (int i = 0; i < col.length(); i++) {
                                 JSONObject vl = col.getJSONObject(i);
                                 Delete delete = new Delete(rowKey);
-                                if (vl.containsKey("timestamp")) {
+                                if (vl.has("timestamp")) {
                                     delete.deleteColumn(cfNm.getBytes(),
                                         colNm.getBytes(),
                                         vl.getLong("timestamp"));
@@ -414,7 +413,9 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
     public List<T> getPage(Class<T> entityClass, byte[] startKey,
                            byte[] endKey, int page, int pageLength) {
         if (page < 1 || pageLength < 1) {
-            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "page or pageLength must be bigger than 1");
+            throw new NaviRuntimeException(
+                "page or pageLength must be bigger than 1",
+                NAVIERROR.BUSI_PARAM_ERROR.code());
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {
@@ -426,7 +427,8 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
         } else if (null != startKey) {
             scan = new Scan(startKey);
         } else if (null == startKey) {
-            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "startKey can't be null");
+            throw new NaviRuntimeException("startKey can't be null",
+                NAVIERROR.BUSI_PARAM_ERROR.code());
         }
         List<T> list = find(scan, entityClass);
         if (null != last) {
@@ -445,7 +447,9 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             } else {
                 int maxPage = list.size() % pageLength == 0 ? list.size()
                     / pageLength : list.size() / pageLength + 1;
-                throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "error page:" + page + ",max page:" + maxPage);
+                throw new NaviRuntimeException("error page:" + page
+                    + ",max page:" + maxPage,
+                    NAVIERROR.BUSI_PARAM_ERROR.code());
             }
         }
         return null;
@@ -463,7 +467,8 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
      */
     public int count(Class<T> entityClass, byte[] startKey, byte[] endKey) {
         if (null == entityClass || null == startKey || null == endKey) {
-            throw new NaviRuntimeException(NaviError.PARAM_ERROR.code(), "error param!");
+            throw new NaviRuntimeException("error param!",
+                NAVIERROR.BUSI_PARAM_ERROR.code());
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {
@@ -511,7 +516,8 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             admin = driver.getAdmin();
         }
         if (null == admin) {
-            throw new NaviRuntimeException(NaviError.SYSERROR.code(), "get admin error");
+            throw new NaviRuntimeException("get admin error",
+                NAVIERROR.SYSERROR.code());
         }
         return admin;
     }

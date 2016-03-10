@@ -1,8 +1,8 @@
 package com.cuckoo.framework.navi.engine.datasource.driver;
 
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
+import com.cuckoo.framework.navi.common.NaviSystemException;
+import com.cuckoo.framework.navi.common.ServerUrlUtil.ServerUrl;
 import com.cuckoo.framework.navi.engine.datasource.pool.NaviPoolConfig;
-import com.cuckoo.framework.navi.common.ServerAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.dao.DataAccessException;
@@ -25,13 +25,13 @@ import java.util.*;
 import static redis.clients.jedis.Protocol.toByteArray;
 
 @Slf4j
-public class NaviShardJedisDriver extends ANaviDriver {
+public class NaviShardJedisDriver extends AbstractNaviDriver {
 
     private ShardedJedis shardJedis;
-    private ServerAddress server;
+    private ServerUrl server;
     private NaviPoolConfig poolConfig;
 
-    public NaviShardJedisDriver(ServerAddress server, String auth,
+    public NaviShardJedisDriver(ServerUrl server, String auth,
                                 NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.server = server;

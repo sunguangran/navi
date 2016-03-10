@@ -1,10 +1,10 @@
 package com.cuckoo.framework.navi.engine.datasource.service;
 
-import com.cuckoo.framework.navi.common.exception.NaviSystemException;
-import com.cuckoo.framework.navi.engine.core.INaviHttp;
+import com.cuckoo.framework.navi.common.NaviSystemException;
 import com.cuckoo.framework.navi.engine.datasource.driver.NaviHttpClientDriver;
-import com.cuckoo.framework.navi.utils.AsynchExecUtil;
 import com.cuckoo.framework.navi.utils.NaviUtil;
+import com.cuckoo.framework.navi.engine.core.INaviHttp;
+import com.cuckoo.framework.navi.utils.AsynchExecUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -18,13 +18,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Slf4j
-public class NaviHttpClientService extends AbstractNaviDataService implements INaviHttp {
+public class NaviHttpClientService extends AbstractNaviDataService implements
+    INaviHttp {
 
-    @Override
     public String doGet(String uri) throws NaviSystemException {
         HttpGet httpGet = new HttpGet(uri);
         try {
             return getHttpClientDrive().execute(httpGet);
+        } catch (ClientProtocolException e) {
+            throw NaviUtil.transferToNaviSysException(e);
         } catch (IOException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -34,13 +36,16 @@ public class NaviHttpClientService extends AbstractNaviDataService implements IN
         try {
             HttpPost httPost = new HttpPost(uri);
             return getHttpClientDrive().execute(httPost);
+        } catch (UnsupportedEncodingException e) {
+            throw NaviUtil.transferToNaviSysException(e);
+        } catch (ClientProtocolException e) {
+            throw NaviUtil.transferToNaviSysException(e);
         } catch (IOException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
 
     }
 
-    @Override
     public String doPost(String uri, List<BasicNameValuePair> params)
         throws NaviSystemException {
         try {
@@ -57,7 +62,6 @@ public class NaviHttpClientService extends AbstractNaviDataService implements IN
 
     }
 
-    @Override
     public String execute(HttpUriRequest request)
         throws NaviSystemException {
         try {
@@ -100,7 +104,9 @@ public class NaviHttpClientService extends AbstractNaviDataService implements IN
         return doGet(uri);
     }
 
-    public String doPost(final String uri, final List<BasicNameValuePair> params, boolean asynchronous) throws NaviSystemException {
+    public String doPost(final String uri,
+                         final List<BasicNameValuePair> params, boolean asynchronous)
+        throws NaviSystemException {
         if (asynchronous) {
             AsynchExecUtil.execute(new Runnable() {
 
@@ -115,11 +121,11 @@ public class NaviHttpClientService extends AbstractNaviDataService implements IN
             });
             return null;
         }
-
         return doPost(uri, params);
     }
 
-    public String doPut(String uri, List<BasicNameValuePair> params, boolean asynchronous) throws NaviSystemException {
+    public String doPut(String uri, List<BasicNameValuePair> params,
+                        boolean asynchronous) throws NaviSystemException {
         return null;
     }
 }

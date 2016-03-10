@@ -4,8 +4,8 @@ import java.util.Properties;
 
 public interface INaviServer {
 
-    int SUCCESS = 0;
     int FAIL = 1;
+    int SUCCESS = 0;
 
     int setupServer(Properties serverCfg);
 
