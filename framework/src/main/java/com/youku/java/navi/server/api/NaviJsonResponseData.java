@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
-public class NaviJsonResponseData extends AbstractNaviResponseData {
+public class NaviJsonResponseData extends ANaviResponseData {
 
     public NaviJsonResponseData(Object data) {
         this(data, "data", 0, 0, 0);
@@ -25,34 +25,6 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
     }
 
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-//		StringBuilder sb = new StringBuilder("{");
-//		String str = data.toString();
-//		if (StringUtils.isNotBlank(str)) {
-//			sb.append("\"").append(dataFieldNm).append("\":");
-//			if(str.indexOf("{")>=0 || str.indexOf("[")>=0){
-//				sb.append(str);
-//			}else{
-//				sb.append("\"").append(str).append("\"");
-//			}
-//			sb.append(",");
-//		}
-//		if (page > 0) {
-//			sb.append("\"page\":" + page + ",");
-//		}
-//		if (pageLength > 0) {
-//			sb.append("\"page_length\":" + pageLength + ",");
-//		}
-//		if (total > 0) {
-//			sb.append("\"total\":" + total + ",");
-//		}
-//		return sb.append("\"cost\":").append(cost * 0.001f).append(",")
-//				.append("\"e\":").append("{\"provider\":\"")
-//				.append(ServerConfigure.getServer()).append("\",")
-//				.append("\"desc\":")
-//				.append(StringUtils.isNotBlank(desc) ? desc : "\"\"")
-//				.append(",\"code\":").append(code).append("}}").toString();
-
-
         JSONObject re = new JSONObject();
         re.put(dataFieldNm, data != null ? data : "");
         if (page > 0) {
@@ -113,17 +85,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
             }
 
             return toJsonData(datas, "", "", 0);
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (JSONException | SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
@@ -141,17 +103,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
                 datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | IllegalArgumentException | JSONException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
@@ -161,17 +113,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
         try {
             return toJsonData(
                 (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString(), "", "", 0);
-        } catch (SecurityException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalArgumentException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (JSONException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (NoSuchMethodException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (IllegalAccessException e) {
-            throw NaviUtil.transferToNaviSysException(e);
-        } catch (InvocationTargetException e) {
+        } catch (SecurityException | IllegalArgumentException | NoSuchMethodException | IllegalAccessException | JSONException | InvocationTargetException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }

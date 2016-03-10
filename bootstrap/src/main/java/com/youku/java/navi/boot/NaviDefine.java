@@ -45,9 +45,9 @@ public interface NaviDefine {
     //moudle enter class
     //http server enter class
 
-    String SERVERCLASS = "com.cuckoo.framework.navi.server.NaviNettyServer";
-    String SERVERCLASS_UDP = "com.cuckoo.framework.navi.server.NaviNettyUDPServer";
-    String SERVERCLASS_TCP = "com.cuckoo.framework.navi.server.NaviNettyTCPServer";
+    String SERVERCLASS = "com.youku.java.navi.server.NaviNettyServer";
+    String SERVERCLASS_UDP = "com.youku.java.navi.server.NaviNettyUDPServer";
+    String SERVERCLASS_TCP = "com.youku.java.navi.server.NaviNettyTCPServer";
 
     //default setting
     String DEFAULT_PORT = "8080";

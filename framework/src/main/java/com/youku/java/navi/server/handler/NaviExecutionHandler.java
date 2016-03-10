@@ -27,7 +27,7 @@ public class NaviExecutionHandler implements ChannelUpstreamHandler, NaviExecuti
     private int minThreadPoolSize = Runtime.getRuntime().availableProcessors() * 2;
     private int maxThreadPoolSize = Runtime.getRuntime().availableProcessors() * 25;
 
-    private final static String MBEANNM = "com.cuckoo.framework.navi.stats:type=NaviExecutionHandler";
+    private final static String MBEANNM = "com.youku.java.navi.stats:type=NaviExecutionHandler";
 
     public NaviExecutionHandler() {
 

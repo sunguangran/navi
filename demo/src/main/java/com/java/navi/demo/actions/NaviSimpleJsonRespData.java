@@ -1,4 +1,4 @@
-package com.cuckoo.demo.actions;
+package com.java.navi.demo.actions;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;

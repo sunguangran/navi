@@ -26,7 +26,7 @@ import java.lang.management.ManagementFactory;
 @SuppressWarnings("unused")
 public class NaviNettyServer extends ANaviTCPServer {
 
-    private final static String MBEANNM = "com.cuckoo.framework.navi.stats:type=NaviHttpServerStats";
+    private final static String MBEANNM = "com.youku.java.navi.stats:type=NaviHttpServerStats";
 
     private NaviHttpServerStatsHandler globalTcHandler;
     private Timer tcTimer;

@@ -1,21 +1,18 @@
 package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.common.annotation.Param;
-import com.youku.java.navi.common.annotation.Rest;
 import com.youku.java.navi.common.RestApi;
+import com.youku.java.navi.common.annotation.Rest;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
-import com.youku.java.navi.server.module.NaviModuleContextFactory;
 import com.youku.java.navi.server.ServerConfigure;
+import com.youku.java.navi.server.module.NaviModuleContextFactory;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 @Slf4j
@@ -37,39 +34,39 @@ public abstract class ANaviAction implements InitializingBean {
                 return;
             }
 
-            Object[] args = new Object[method.getParameterCount()];
+            Object[] args = new Object[]{request, response};
 
-            for (int i = 0; i < method.getParameterCount(); i++) {
-                Parameter param = method.getParameters()[i];
-                if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpRequest.class)) {
-                    args[i] = request;
-                } else if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpResponse.class)) {
-                    args[i] = response;
-                } else {
-                    Param an = param.getAnnotation(Param.class);
-                    boolean empty = StringUtils.isEmpty(request.getParameter(an.value()));
+//            for (int i = 0; i < method.getParameterCount(); i++) {
+//                Parameter param = method.getParameters()[i];
+//                if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpRequest.class)) {
+//                    args[i] = request;
+//                } else if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpResponse.class)) {
+//                    args[i] = response;
+//                } else {
+//                    Param an = param.getAnnotation(Param.class);
+//                    boolean empty = StringUtils.isEmpty(request.getParameter(an.value()));
+//
+//                    Class<?> type = param.getType();
+//
+//                    Object value;
+//                    if (type.equals(Integer.class) || type.equals(int.class)) {
+//                        value = empty ? 0 : Integer.parseInt(request.getParameter(an.value()));
+//                    } else if (type.equals(Long.class) || type.equals(long.class)) {
+//                        value = empty ? 0L : Long.parseLong(request.getParameter(an.value()));
+//                    } else if (type.equals(Float.class) || type.equals(float.class)) {
+//                        value = empty ? 0F : Float.parseFloat(request.getParameter(an.value()));
+//                    } else if (type.equals(Double.class) || type.equals(double.class)) {
+//                        value = empty ? 0D : Double.parseDouble(request.getParameter(an.value()));
+//                    } else {
+//                        value = empty ? null : request.getParameter(an.value());
+//                    }
+//
+//                    args[i] = value;
+//                }
+//            }
 
-                    Class<?> type = param.getType();
-
-                    Object value;
-                    if (type.equals(Integer.class) || type.equals(int.class)) {
-                        value = empty ? 0 : Integer.parseInt(request.getParameter(an.value()));
-                    } else if (type.equals(Long.class) || type.equals(long.class)) {
-                        value = empty ? 0L : Long.parseLong(request.getParameter(an.value()));
-                    } else if (type.equals(Float.class) || type.equals(float.class)) {
-                        value = empty ? 0F : Float.parseFloat(request.getParameter(an.value()));
-                    } else if (type.equals(Double.class) || type.equals(double.class)) {
-                        value = empty ? 0D :Double.parseDouble(request.getParameter(an.value()));
-                    } else {
-                        value = empty ? null : request.getParameter(an.value());
-                    }
-
-                    args[i] = value;
-                }
-            }
-
-            // 处理
-            Object res = method.invoke(this, args);
+            // action
+            method.invoke(this, args);
 
             // 后置操作
             postAction(request, response);
@@ -96,14 +93,14 @@ public abstract class ANaviAction implements InitializingBean {
                 return;
             }
 
-            String moduleNm = typeAns[1];
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodAn = method.getAnnotation(Rest.class);
                 if (methodAn != null) {
                     String uri = "/" + ServerConfigure.getServer() + typeAn.value() + methodAn.value();
+                    uri = uri.replace("//", "/");
 
                     RestApi api = new RestApi();
-                    api.setModuleNm(moduleNm);
+                    api.setModuleNm(typeAn.module());
                     api.setUri(uri);
                     api.setClazz(this.getClass());
                     api.setMethod(method);
@@ -146,11 +143,11 @@ public abstract class ANaviAction implements InitializingBean {
     /**
      * 异常处理方法
      */
-    protected void error(com.youku.java.navi.server.api.NaviHttpRequest request, com.youku.java.navi.server.api.NaviHttpResponse response, Throwable e) throws Exception {
+    protected void error(NaviHttpRequest request, NaviHttpResponse response, Throwable e) throws Exception {
 
     }
 
-    protected boolean postAction(com.youku.java.navi.server.api.NaviHttpRequest request, com.youku.java.navi.server.api.NaviHttpResponse response) throws Exception {
+    protected boolean postAction(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
         if (interrupters == null) {
             return true;
         }
@@ -164,7 +161,7 @@ public abstract class ANaviAction implements InitializingBean {
         return true;
     }
 
-    protected boolean preAction(com.youku.java.navi.server.api.NaviHttpRequest request, com.youku.java.navi.server.api.NaviHttpResponse response) throws Exception {
+    protected boolean preAction(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
         if (interrupters == null) {
             return true;
         }
