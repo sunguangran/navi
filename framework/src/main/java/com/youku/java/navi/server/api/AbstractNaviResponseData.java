@@ -1,13 +1,13 @@
 package com.youku.java.navi.server.api;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Collection;
 

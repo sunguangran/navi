@@ -1,5 +1,8 @@
 package com.youku.java.navi.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
@@ -8,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.bson.types.ObjectId;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -54,10 +55,10 @@ public class NaviUtil {
             if (!compIndex.unique()) {
                 continue;
             }
-            JSONObject fields = new JSONObject(compIndex.def());
+            JSONObject fields = JSON.parseObject(compIndex.def());
 
             @SuppressWarnings("unchecked")
-            Iterator<String> it = fields.keys();
+            Iterator<String> it = fields.keySet().iterator();
             while (it.hasNext()) {
                 String fnm = it.next();
                 Object conditionValue = dto.getValue(fnm);

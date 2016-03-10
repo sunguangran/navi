@@ -1,17 +1,17 @@
 package com.youku.java.navi.engine.datasource.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.IHiveClient;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.datasource.driver.NaviHiveClientDriver;
-import com.youku.java.navi.common.NAVIERROR;
-import com.youku.java.navi.common.exception.NaviSystemException;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.apache.hadoop.hive.metastore.api.Schema;
 import org.apache.hadoop.hive.service.HiveClient;
 import org.apache.hadoop.hive.service.HiveServerException;
 import org.apache.thrift.TException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class NaviHiveClientService extends AbstractNaviDataService implements IH
                     FieldSchema field = fields.get(i);
                     obj.put(field.getName(), fieldVals[i]);
                 }
-                array.put(obj);
+                array.add(obj);
             }
         }
         return array;

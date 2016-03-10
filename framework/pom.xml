@@ -3,14 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.cuckoo.framework</groupId>
-        <artifactId>navi</artifactId>
-        <version>1.0.0-release</version>
+        <groupId>com.youku.java.navi</groupId>
+        <artifactId>javanavi</artifactId>
+        <version>3.0.0-release</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>framework</artifactId>
-    <version>1.0.0-release</version>
 
     <dependencies>
         <dependency>
@@ -58,10 +57,6 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
         </dependency>
@@ -91,7 +86,7 @@
             <artifactId>spring-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cuckoo.framework</groupId>
+            <groupId>com.youku.java.navi</groupId>
             <artifactId>bootstrap</artifactId>
         </dependency>
         <dependency>
@@ -116,10 +111,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>

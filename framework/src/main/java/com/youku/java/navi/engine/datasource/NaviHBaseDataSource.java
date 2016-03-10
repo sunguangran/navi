@@ -1,10 +1,11 @@
 package com.youku.java.navi.engine.datasource;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.server.ServerConfigure;
 import org.apache.hadoop.conf.Configuration;
-import org.json.JSONObject;
 
 public class NaviHBaseDataSource extends NaviLinearDataSource {
     private String offlineConnectString;
@@ -47,9 +48,9 @@ public class NaviHBaseDataSource extends NaviLinearDataSource {
     public void afterPropertiesSet() throws Exception {
         JSONObject json = null;
         if (ServerConfigure.isDeployEnv()) {
-            json = new JSONObject(this.deployConnectString);
+            json = JSON.parseObject(this.deployConnectString);
         } else {
-            json = new JSONObject(this.offlineConnectString);
+            json = JSON.parseObject(this.offlineConnectString);
         }
         NaviPoolConfig poolConfig = new NaviHBasePoolConfig(json.toString());
         this.setConfig(poolConfig);

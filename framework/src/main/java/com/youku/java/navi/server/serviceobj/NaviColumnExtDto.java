@@ -1,8 +1,8 @@
 package com.youku.java.navi.server.serviceobj;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
@@ -54,7 +54,7 @@ public class NaviColumnExtDto implements INaviColumnDto {
         }
         try {
             JSONObject cfObj = null;
-            if (!columns.has(cf)) { // 空值
+            if (!columns.containsKey(cf)) { // 空值
                 JSONArray cArr = new JSONArray();
 
                 JSONObject cValue = new JSONObject();
@@ -62,7 +62,7 @@ public class NaviColumnExtDto implements INaviColumnDto {
                     cValue.put("timestamp", timestamp);
                 }
                 cValue.put("value", value);
-                cArr.put(cValue);
+                cArr.add(cValue);
                 cfObj = new JSONObject();
                 cfObj.put(column, cArr);
                 flag = true;
@@ -71,52 +71,52 @@ public class NaviColumnExtDto implements INaviColumnDto {
                 cfObj = columns.getJSONObject(cf);
 
                 JSONArray cvArr = null;
-                if (cfObj.has(column)) {
+                if (cfObj.containsKey(column)) {
                     // 找到列
                     cvArr = cfObj.getJSONArray(column);
                     JSONObject cvobj = null;
                     if (timestamp != null) {
                         // 插入数据带timestamp
-                        for (int cvi = 0; cvi < cvArr.length(); cvi++) {
+                        for (int cvi = 0; cvi < cvArr.size(); cvi++) {
                             JSONObject cvobj_p = cvArr.getJSONObject(cvi);
-                            if (cvobj_p.has("timestamp")) {
+                            if (cvobj_p.containsKey("timestamp")) {
                                 if (cvobj_p.getString("timestamp").equals(timestamp)) {
                                     cvArr.remove(cvi);
                                     cvobj = new JSONObject();
                                     cvobj.put("timestamp", timestamp);
                                     cvobj.put("value", value);
-                                    cvArr.put(cvi, cvobj);
+                                    cvArr.add(cvi, cvobj);
                                     flag = true;
                                     break;
                                 }
                             }
-                            if ((cvi == cvArr.length() - 1) && flag == false) {
+                            if ((cvi == cvArr.size() - 1) && flag == false) {
                                 cvobj = new JSONObject();
                                 if (timestamp != null) {
                                     cvobj.put("timestamp", timestamp);
                                 }
                                 cvobj.put("value", value);
-                                cvArr.put(cvobj);
+                                cvArr.add(cvobj);
                                 flag = true;
                             }
 
                         }
                     } else {
                         // 插入数据没有timestamp
-                        for (int cvi = 0; cvi < cvArr.length(); cvi++) {
+                        for (int cvi = 0; cvi < cvArr.size(); cvi++) {
                             JSONObject cvobj_p = cvArr.getJSONObject(cvi);
-                            if (!cvobj_p.has("timestamp")) {
+                            if (!cvobj_p.containsKey("timestamp")) {
                                 cvArr.remove(cvi);
                                 cvobj = new JSONObject();
                                 cvobj.put("value", value);
-                                cvArr.put(cvi, cvobj);
+                                cvArr.add(cvi, cvobj);
                                 flag = true;
                                 break;
                             } else {
-                                if (cvi == cvArr.length() - 1) {
+                                if (cvi == cvArr.size() - 1) {
                                     cvobj = new JSONObject();
                                     cvobj.put("value", value);
-                                    cvArr.put(cvobj);
+                                    cvArr.add(cvobj);
                                     flag = true;
                                     break;
                                 }
@@ -132,7 +132,7 @@ public class NaviColumnExtDto implements INaviColumnDto {
                         cValue.put("timestamp", timestamp);
                     }
                     cValue.put("value", value);
-                    cvArr.put(cValue);
+                    cvArr.add(cValue);
                     cfObj.put(column, cvArr);
                     flag = true;
                 }
@@ -155,9 +155,9 @@ public class NaviColumnExtDto implements INaviColumnDto {
      */
     public JSONArray getValue(String cf, String column) {
         JSONArray resArr = new JSONArray();
-        if (this.columns.has(cf)) {
+        if (this.columns.containsKey(cf)) {
             JSONObject cfObj = this.columns.getJSONObject(cf);
-            if (cfObj.has(column)) {
+            if (cfObj.containsKey(column)) {
                 resArr = cfObj.getJSONArray(column);
                 ;
             }
@@ -180,15 +180,15 @@ public class NaviColumnExtDto implements INaviColumnDto {
         JSONArray resArr = new JSONArray();
         if (timestamp == null)
             return getValue(cf, column);
-        if (this.columns.has(cf)) {
+        if (this.columns.containsKey(cf)) {
             JSONObject cfObj = this.columns.getJSONObject(cf);
-            if (cfObj.has(column)) {
+            if (cfObj.containsKey(column)) {
                 JSONArray cvArr = cfObj.getJSONArray(column);
-                for (int cvi = 0; cvi < cvArr.length(); cvi++) {
+                for (int cvi = 0; cvi < cvArr.size(); cvi++) {
                     JSONObject cv = cvArr.getJSONObject(cvi);
-                    if (cv.has("timestamp")) {
+                    if (cv.containsKey("timestamp")) {
                         if (cv.get("timestamp").equals(timestamp)) {
-                            resArr.put(cv);
+                            resArr.add(cv);
                         }
                     }
                 }
@@ -206,13 +206,13 @@ public class NaviColumnExtDto implements INaviColumnDto {
      */
     public JSONArray getValue(String cf) {
         JSONArray resArr = new JSONArray();
-        if (this.columns.has(cf)) {
+        if (this.columns.containsKey(cf)) {
             JSONObject cfObj = this.columns.getJSONObject(cf);
             for (Object column : cfObj.keySet()) {
                 JSONObject col = new JSONObject();
                 JSONArray colarr = cfObj.getJSONArray((String) column);
                 col.put((String) column, colarr);
-                resArr.put(col);
+                resArr.add(col);
             }
         }
         return resArr;
@@ -256,7 +256,7 @@ public class NaviColumnExtDto implements INaviColumnDto {
                             column = field.getName();
                         }
                         JSONArray array = this.getValue(cf, column);
-                        Object value = (array.length() > 0) ? array.getJSONObject(0).get("value") : null;
+                        Object value = (array.size() > 0) ? array.getJSONObject(0).get("value") : null;
                         if (null != value && !"".equals(value)) {
                             ((NaviBaseColumnDto) obj).setValue(field.getName(), value);
                         }

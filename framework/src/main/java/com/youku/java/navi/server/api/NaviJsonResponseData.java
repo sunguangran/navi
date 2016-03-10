@@ -1,15 +1,15 @@
 package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.utils.NaviUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.utils.NaviUtil;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -108,7 +108,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
             }
             for (Object data : list) {
                 if (data instanceof AbstractNaviDto) {
-                    datas.put(NaviUtil.toJSONObject((AbstractNaviDto) data));
+                    datas.add(NaviUtil.toJSONObject((AbstractNaviDto) data));
                 }
             }
 
@@ -138,7 +138,7 @@ public class NaviJsonResponseData extends AbstractNaviResponseData {
             AbstractNaviDto[] dtos = (AbstractNaviDto[]) data;
             JSONArray datas = new JSONArray();
             for (AbstractNaviDto dto : dtos) {
-                datas.put(NaviUtil.toJSONObject(dto));
+                datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
         } catch (SecurityException e) {

@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.cuckoo.framework</groupId>
-        <artifactId>navi</artifactId>
-        <version>1.0.0-release</version>
+        <groupId>com.youku.java.navi</groupId>
+        <artifactId>javanavi</artifactId>
+        <version>3.0.0-release</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,9 +15,9 @@
     <dependencies>
         <!-- JAVA NAVI DEPENDENCY -->
         <dependency>
-            <groupId>com.cuckoo.framework</groupId>
+            <groupId>com.youku.java.navi</groupId>
             <artifactId>framework</artifactId>
-            <version>1.0.0-release</version>
+            <version>3.0.0-release</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

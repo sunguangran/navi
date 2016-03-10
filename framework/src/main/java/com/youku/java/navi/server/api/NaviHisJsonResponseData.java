@@ -1,8 +1,8 @@
 package com.youku.java.navi.server.api;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NaviHisJsonResponseData extends NaviJsonResponseData {
 
@@ -12,10 +12,11 @@ public class NaviHisJsonResponseData extends NaviJsonResponseData {
 
     @Override
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-        return new JSONObject()
-            .put("errno", code)
-            .put("errText", StringUtils.isEmpty(desc) ? "OK" : desc)
-            .put("data", data)
-            .toString();
+        JSONObject ret = new JSONObject();
+        ret.put("errno", code);
+        ret.put("errText", StringUtils.isEmpty(desc) ? "OK" : desc);
+        ret.put("data", data);
+
+        return ret.toString();
     }
 }

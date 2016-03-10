@@ -1,10 +1,10 @@
 package com.youku.java.navi.server;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.data.ACL;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;

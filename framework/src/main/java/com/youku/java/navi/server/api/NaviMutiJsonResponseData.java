@@ -1,13 +1,13 @@
 package com.youku.java.navi.server.api;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.boot.NaviDefine;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.utils.NaviUtil;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,10 +65,10 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
         }
         if (data instanceof JSONArray) {
             JSONArray array = (JSONArray) data;
-            for (int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.size(); i++) {
                 if (array.get(i) instanceof JSONObject) {
                     JSONObject json = array.getJSONObject(i);
-                    if (json.has("_id")) {
+                    if (json.containsKey("_id")) {
                         json.put("id", json.getLong("_id"));
                         json.remove("_id");
                     }
@@ -76,7 +76,7 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
             }
         } else if (data instanceof JSONObject) {
             JSONObject json = (JSONObject) data;
-            if (json.has("_id")) {
+            if (json.containsKey("_id")) {
                 json.put("id", json.getLong("_id"));
                 json.remove("_id");
             }
@@ -90,7 +90,16 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
                 json.put(key, filterMap.get(key));
             }
         }
-        json.put("e", new JSONObject().put("provider", provider).put("desc", desc).put("code", code));
+
+        JSONObject e = new JSONObject(true);
+        e.put("code", code);
+        e.put("desc", desc);
+        e.put("provider", provider);
+
+        json.put("e", e);
+
+
+        json.put("e", e);
 
         return json.toString();
     }

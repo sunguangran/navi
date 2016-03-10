@@ -1,5 +1,8 @@
 package com.youku.java.navi.engine.datasource.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.datasource.driver.NaviHBaseDriver;
@@ -7,8 +10,6 @@ import com.youku.java.navi.server.serviceobj.*;
 import com.youku.java.navi.utils.NaviUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
@@ -84,20 +85,20 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (obj != null) {
                 try {
                     // 遍历ColumnExtDto
-                    JSONObject json = new JSONObject(obj.dataToString());
+                    JSONObject json = JSON.parseObject(obj.dataToString());
                     byte[] rowKey = obj.getRowkey();
-                    for (Iterator<String> cfit = json.keys(); cfit.hasNext(); ) {
+                    for (Iterator<String> cfit = json.keySet().iterator(); cfit.hasNext(); ) {
                         String cfNm = cfit.next();
                         JSONObject cols = json.getJSONObject(cfNm);
                         for (Object key : cols.keySet()) {
                             String colNm = (String) key;
                             JSONArray col = cols.getJSONArray(colNm);
-                            for (int i = 0; i < col.length(); i++) {
+                            for (int i = 0; i < col.size(); i++) {
                                 JSONObject vl = col.getJSONObject(i);
                                 Put put = new Put(rowKey);
                                 byte[] value = NaviUtil.getByteVal(
                                     t.getClass(), colNm, vl.get("value"));
-                                if (vl.has("timestamp")) {
+                                if (vl.containsKey("timestamp")) {
                                     put.add(cfNm.getBytes(), colNm.getBytes(),
                                         vl.getLong("timestamp"), value);
                                 } else {
@@ -162,18 +163,18 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             if (obj != null) {
                 try {
                     // 遍历ColumnExtDto
-                    JSONObject json = new JSONObject(obj.dataToString());
+                    JSONObject json = JSON.parseObject(obj.dataToString());
                     byte[] rowKey = obj.getRowkey();
-                    for (Iterator<String> cfit = json.keys(); cfit.hasNext(); ) {
+                    for (Iterator<String> cfit = json.keySet().iterator(); cfit.hasNext(); ) {
                         String cfNm = cfit.next();
                         JSONObject cols = json.getJSONObject(cfNm);
                         for (Object key : cols.keySet()) {
                             String colNm = (String) key;
                             JSONArray col = cols.getJSONArray(colNm);
-                            for (int i = 0; i < col.length(); i++) {
+                            for (int i = 0; i < col.size(); i++) {
                                 JSONObject vl = col.getJSONObject(i);
                                 Delete delete = new Delete(rowKey);
-                                if (vl.has("timestamp")) {
+                                if (vl.containsKey("timestamp")) {
                                     delete.deleteColumn(cfNm.getBytes(),
                                         colNm.getBytes(),
                                         vl.getLong("timestamp"));
