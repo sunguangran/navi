@@ -1,7 +1,9 @@
-package com.cuckoo.demo.actions;
+package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.server.api.NaviJsonResponseData;
+import com.youku.java.navi.boot.NaviDefine;
+import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
+import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.utils.NaviUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,30 +12,38 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NaviSimpleJsonRespData extends NaviJsonResponseData {
+public class NaviMutiJsonResponseData extends NaviJsonResponseData {
 
     private Map<String, Object> filterMap;
-
-    private int code;
-    private String desc;
+    private String dataKey;
 
     public void setCost(long cost) {
         putData("cost", cost * 1.00f / 1000f);
     }
 
-    public NaviSimpleJsonRespData(int code, String desc) {
-        super(null);
-        this.code = code;
-        this.desc = desc;
+    public NaviMutiJsonResponseData(Object data) {
+        super(data);
+        //this.dataKey = "data";//注释by tianjianfeng
+        filterMap = new HashMap<String, Object>();
     }
 
-    public static NaviSimpleJsonRespData createInstance(int code, String desc) {
-        return new NaviSimpleJsonRespData(code, desc);
+    public NaviMutiJsonResponseData(String dataKey, Object data) {
+        super(data);
+        this.dataKey = dataKey;
+        filterMap = new HashMap<String, Object>();
+    }
+
+    public NaviMutiJsonResponseData(String dataKey, Object data, long total, int page, int page_length) {
+        super(data);
+        putData("total", total);
+        putData("page", page);
+        putData("page_length", page_length);
+        this.dataKey = dataKey;
     }
 
     public void putData(String key, Object value) {
         if (filterMap == null) {
-            filterMap = new HashMap<>();
+            filterMap = new HashMap<String, Object>();
         }
         filterMap.put(key, value);
     }
@@ -41,15 +51,18 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "mfp", this.desc, this.code);
+            return toJsonData("", "navi", "no data",
+                NAVIERROR.BUSI_NO_DATA.code());
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
     }
 
-    @Override
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
-        provider = "mfp";
+        provider = ServerConfigure.get(NaviDefine.SERVER);
+        if (null == provider || "".equals(provider)) {
+            provider = "navi-server";
+        }
         if (data instanceof JSONArray) {
             JSONArray array = (JSONArray) data;
             for (int i = 0; i < array.length(); i++) {
@@ -68,6 +81,8 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
                 json.remove("_id");
             }
         }
+        if (dataKey != null)
+            putData(dataKey, data);
 
         JSONObject json = new JSONObject();
         if (filterMap != null) {
