@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource.service;
 
+import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviZookeeper;
 import com.youku.java.navi.engine.core.IZookeeperEventHander;
 import com.youku.java.navi.engine.datasource.driver.NaviZooKeeperDriver;
 import com.youku.java.navi.utils.AlibabaJsonSerializer;
 import com.youku.java.navi.utils.NaviUtil;
-import com.youku.java.navi.common.exception.NaviSystemException;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.Watcher;

@@ -1,7 +1,7 @@
 package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.exception.NaviBusinessException;
 
 import java.util.List;
 

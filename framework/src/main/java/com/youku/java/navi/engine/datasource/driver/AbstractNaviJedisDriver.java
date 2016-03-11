@@ -1,7 +1,7 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisListCommands.Position;

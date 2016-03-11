@@ -1,7 +1,7 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import org.apache.hadoop.hive.service.HiveClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;

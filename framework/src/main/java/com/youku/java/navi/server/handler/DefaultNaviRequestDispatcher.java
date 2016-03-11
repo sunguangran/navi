@@ -1,16 +1,16 @@
 package com.youku.java.navi.server.handler;
 
+import com.youku.java.navi.boot.NaviDefine;
+import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.RestApi;
 import com.youku.java.navi.common.exception.NaviBusinessException;
+import com.youku.java.navi.common.exception.NaviSystemException;
+import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.api.ANaviAction;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
-import com.youku.java.navi.boot.NaviDefine;
-import com.youku.java.navi.common.NAVIERROR;
-import com.youku.java.navi.common.exception.NaviSystemException;
-import com.youku.java.navi.common.RestApi;
 import com.youku.java.navi.server.module.INaviModuleContext;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
-import com.youku.java.navi.server.ServerConfigure;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 
 import java.util.*;

@@ -24,7 +24,6 @@ import java.util.Set;
 
 /**
  * navi框架默认request对象，为DefaultHttpRequest对象适配器
- *
  */
 @Setter
 @Getter

@@ -81,7 +81,6 @@ public class NaviDaemonJobRunner {
      * Static setter for the {@link SystemExiter} so it can be adjusted before
      * dependency injection. Typically overridden by
      * {@link #setSystemExiter(SystemExiter)}.
-     *
      */
     public static void presetSystemExiter(SystemExiter systemExiter) {
         NaviDaemonJobRunner.systemExiter = systemExiter;
@@ -100,7 +99,6 @@ public class NaviDaemonJobRunner {
 
     /**
      * Injection setter for the {@link SystemExiter}.
-     *
      */
     public void setSystemExiter(SystemExiter systemExiter) {
         NaviDaemonJobRunner.systemExiter = systemExiter;

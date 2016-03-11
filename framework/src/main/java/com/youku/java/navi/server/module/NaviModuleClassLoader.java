@@ -11,7 +11,6 @@ import java.net.URLConnection;
 
 /**
  * 加载模块资源
- *
  */
 public class NaviModuleClassLoader extends NaviJarClassLoader {
 

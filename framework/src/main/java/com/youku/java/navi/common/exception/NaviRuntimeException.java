@@ -3,7 +3,7 @@ package com.youku.java.navi.common.exception;
 public class NaviRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -5821255308346220789L;
-    
+
     private int code;
 
     public NaviRuntimeException(String desc, int code) {

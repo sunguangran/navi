@@ -2,9 +2,9 @@ package com.youku.java.navi.engine.datasource.driver;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
-import com.youku.java.navi.common.ServerUrlUtil;
 
 public class NaviMetricsMonitorDriver extends AbstractNaviDriver {
 

@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource.service;
 
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.engine.core.INaviUDPClientService;
 import com.youku.java.navi.engine.datasource.driver.NaviUDPClientDriver;
 import com.youku.java.navi.server.ServerConfigure;
-import com.youku.java.navi.utils.NaviUtil;
 import com.youku.java.navi.server.api.INaviUDPResponseHandler;
-import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.utils.NaviUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -18,7 +18,6 @@ import java.util.Random;
  * 如果发送的是json，请转换为String后传入<br>
  * 如果发送的是对象，直接传入，底层将对象序列化后传送，效率低<br>
  * 建议使用String,因为对象效率低，同时UDP报文大小有限制，使用对象可能超出限制。
- *
  */
 @Slf4j
 public class NaviUDPClientService extends AbstractNaviDataService implements

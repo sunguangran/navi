@@ -12,7 +12,7 @@ public abstract class ANaviTCPMain extends ANaviMain {
         Properties serverCfg;
         if (NaviDefine.NAVI_HOME == null) {
             log.warn("the config file is invalid!So will use default config.");
-            
+
             serverCfg = new Properties();
             serverCfg.setProperty(NaviDefine.PORT, NaviDefine.DEFAULT_PORT);
             serverCfg.setProperty(NaviDefine.SERVER, NaviDefine.DEFAULT_SERVER);

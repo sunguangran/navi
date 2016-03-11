@@ -4,7 +4,6 @@ import org.apache.zookeeper.WatchedEvent;
 
 /**
  * 节点状态变更事件处理类
- *
  */
 public interface IZookeeperEventHander {
 

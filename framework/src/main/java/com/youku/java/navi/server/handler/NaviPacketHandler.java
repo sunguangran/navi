@@ -1,9 +1,9 @@
 package com.youku.java.navi.server.handler;
 
-import com.youku.java.navi.server.api.NaviRequestPacket;
-import com.youku.java.navi.server.api.NaviResponsePacket;
 import com.youku.java.navi.boot.NaviDefine;
 import com.youku.java.navi.server.ServerConfigure;
+import com.youku.java.navi.server.api.NaviRequestPacket;
+import com.youku.java.navi.server.api.NaviResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;

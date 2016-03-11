@@ -2,9 +2,9 @@ package com.youku.java.navi.engine.component;
 
 import com.youku.java.navi.engine.core.INaviCache;
 import com.youku.java.navi.engine.core.INaviMessageQueue;
+import com.youku.java.navi.engine.datasource.driver.AbstractNaviJedisDriver;
 import com.youku.java.navi.engine.redis.INaviMultiRedis;
 import com.youku.java.navi.utils.AlibabaJsonSerializer;
-import com.youku.java.navi.engine.datasource.driver.AbstractNaviJedisDriver;
 import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Response;

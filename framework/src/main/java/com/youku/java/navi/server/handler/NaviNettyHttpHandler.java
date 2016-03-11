@@ -27,7 +27,7 @@ public class NaviNettyHttpHandler extends AbstractNaviNettyHttpHandler {
     @Override
     public void handle(HttpRequest request, Channel channel) throws Exception {
         HttpResponse response = new NaviHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK);
-        
+
         for (INaviHttpRequestListener listener : listeners) {
             boolean res = listener.process(request, response);
             log.debug(listener.getClass().getName() + " is completed!");

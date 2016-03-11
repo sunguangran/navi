@@ -1,12 +1,12 @@
 package com.youku.java.navi.engine.datasource.driver;
 
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.engine.datasource.pool.ShardJedisPoolConfig;
 import com.youku.java.navi.engine.redis.AbstractPoolBinaryShardedJedis;
 import com.youku.java.navi.engine.redis.MultiJedisPoolInfo;
 import com.youku.java.navi.engine.redis.MultiPoolBinaryShardedJedis;
-import com.youku.java.navi.common.ServerUrlUtil;
 
 import java.util.ArrayList;
 import java.util.List;

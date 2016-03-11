@@ -8,7 +8,6 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * 处理非正规请求
- *
  */
 @Slf4j
 public class NoNormalRequestLister implements INaviHttpRequestListener {
@@ -34,7 +33,7 @@ public class NoNormalRequestLister implements INaviHttpRequestListener {
 
                 request.setUri(builder.toString());
             }
-            
+
             return true;
         }
 

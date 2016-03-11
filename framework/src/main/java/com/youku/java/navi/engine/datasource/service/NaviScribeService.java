@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviDriver;
-import com.youku.java.navi.engine.datasource.driver.NaviScribeDriver;
-import com.youku.java.navi.engine.core.INaviLog;
-import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
+import com.youku.java.navi.engine.core.INaviDriver;
+import com.youku.java.navi.engine.core.INaviLog;
+import com.youku.java.navi.engine.datasource.driver.NaviScribeDriver;
+import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.utils.AsynchExecUtil;
 import org.apache.commons.lang.StringUtils;
 import scribe.thrift.LogEntry;

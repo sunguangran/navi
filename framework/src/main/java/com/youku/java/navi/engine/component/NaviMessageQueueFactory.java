@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.component;
 
-import com.youku.java.navi.engine.core.IBaseDataService;
-import com.youku.java.navi.engine.core.INaviCache;
-import com.youku.java.navi.engine.core.INaviMessageQueue;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.component.NaviMQContext.MessageQueueType;
+import com.youku.java.navi.engine.core.IBaseDataService;
+import com.youku.java.navi.engine.core.INaviCache;
+import com.youku.java.navi.engine.core.INaviMessageQueue;
 
 public class NaviMessageQueueFactory {
 

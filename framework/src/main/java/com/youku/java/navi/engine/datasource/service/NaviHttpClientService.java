@@ -1,10 +1,10 @@
 package com.youku.java.navi.engine.datasource.service;
 
 import com.youku.java.navi.common.exception.NaviSystemException;
-import com.youku.java.navi.engine.datasource.driver.NaviHttpClientDriver;
-import com.youku.java.navi.utils.NaviUtil;
 import com.youku.java.navi.engine.core.INaviHttp;
+import com.youku.java.navi.engine.datasource.driver.NaviHttpClientDriver;
 import com.youku.java.navi.utils.AsynchExecUtil;
+import com.youku.java.navi.utils.NaviUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;

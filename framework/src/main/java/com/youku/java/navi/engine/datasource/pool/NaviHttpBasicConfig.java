@@ -12,7 +12,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 /**
  * 简单http client配置，每个Route保持一个链接
- *
  */
 @Slf4j
 public class NaviHttpBasicConfig extends NaviPoolConfig implements

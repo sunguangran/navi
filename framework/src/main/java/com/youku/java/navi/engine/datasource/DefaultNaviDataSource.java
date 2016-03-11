@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource;
 
 import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.server.ServerConfigure;
-import com.youku.java.navi.common.ServerUrlUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
             GenericObjectPool<INaviDriver> pool = pools.get(index);
             INaviDriver handle = pool.borrowObject();
             handle.setPool(pool);
-            
+
             return handle;
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);

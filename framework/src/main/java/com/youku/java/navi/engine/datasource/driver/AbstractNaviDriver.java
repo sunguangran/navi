@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource.driver;
 
+import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
+import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
-import com.youku.java.navi.common.NAVIERROR;
-import com.youku.java.navi.common.exception.NaviSystemException;
-import com.youku.java.navi.common.ServerUrlUtil;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import java.util.concurrent.atomic.AtomicBoolean;

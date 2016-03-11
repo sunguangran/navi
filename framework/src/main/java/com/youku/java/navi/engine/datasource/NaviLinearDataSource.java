@@ -1,11 +1,11 @@
 package com.youku.java.navi.engine.datasource;
 
 import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.server.ServerConfigure;
-import com.youku.java.navi.common.ServerUrlUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -16,7 +16,6 @@ import java.util.Random;
 /**
  * 按照不同host:port，创建对应的驱动实例，适用于自身带有连接池且具有重连接<br>
  * 以及异常处理的驱动实例, 可以随机访问获得驱动实例，使用效果一致
- *
  */
 public class NaviLinearDataSource extends DefaultNaviDataSource {
 

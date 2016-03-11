@@ -1,7 +1,7 @@
 package com.youku.java.navi.engine.core;
 
-import com.youku.java.navi.server.api.INaviUDPResponseHandler;
 import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.server.api.INaviUDPResponseHandler;
 
 import java.io.IOException;
 import java.io.Serializable;

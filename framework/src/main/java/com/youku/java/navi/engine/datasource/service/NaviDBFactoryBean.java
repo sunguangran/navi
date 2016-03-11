@@ -1,13 +1,12 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.engine.core.INaviDB;
 import com.youku.java.navi.engine.core.INaviLog;
+import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
  * NaviDB工厂bean,用于将真实service包装成代理service
- *
  */
 public class NaviDBFactoryBean implements FactoryBean<INaviDB> {
 

@@ -1,9 +1,9 @@
 package com.youku.java.navi.test;
 
+import com.youku.java.navi.engine.datasource.service.NaviHttpClientService;
 import com.youku.java.navi.server.api.ANaviAction;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
-import com.youku.java.navi.engine.datasource.service.NaviHttpClientService;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;

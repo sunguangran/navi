@@ -19,7 +19,7 @@ public class NaviResponsePacket implements INaviResponsePacket {
         } else if (null != responseString) {
             return responseString.getBytes();
         }
-        
+
         return null;
     }
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 /**
  * 多线程http client配置
- *
  */
 public class NaviHttpPoolConfig extends NaviPoolConfig implements
     InitializingBean {

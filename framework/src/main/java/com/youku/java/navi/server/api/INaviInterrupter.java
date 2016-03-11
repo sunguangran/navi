@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 业务前后操作中断处理
- *
  */
 public interface INaviInterrupter {
 

@@ -9,7 +9,6 @@ import org.springframework.util.Assert;
 
 /**
  * 支持热部署下延时资源回收策略
- *
  */
 @Slf4j
 public class NaviClassPathXmlApplicationContext extends ClassPathXmlApplicationContext {

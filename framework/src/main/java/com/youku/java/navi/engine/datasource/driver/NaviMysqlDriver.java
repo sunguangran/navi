@@ -1,7 +1,7 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 
 public class NaviMysqlDriver extends NaviJdbcDriver {
 

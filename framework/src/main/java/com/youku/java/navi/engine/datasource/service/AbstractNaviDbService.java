@@ -1,9 +1,9 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviDB;
-import com.youku.java.navi.engine.core.INaviDataSource;
 import com.youku.java.navi.common.NAVIERROR;
 import com.youku.java.navi.common.exception.NaviSystemException;
+import com.youku.java.navi.engine.core.INaviDB;
+import com.youku.java.navi.engine.core.INaviDataSource;
 
 public abstract class AbstractNaviDbService implements INaviDB {
 

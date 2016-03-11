@@ -2,9 +2,9 @@ package com.youku.java.navi.server.serviceobj;
 
 import com.youku.java.navi.engine.core.INaviCache;
 import com.youku.java.navi.engine.core.INaviDB;
-import com.youku.java.navi.utils.NaviUtil;
 import com.youku.java.navi.engine.core.INaviZookeeper;
 import com.youku.java.navi.engine.core.IZookeeperEventHander;
+import com.youku.java.navi.utils.NaviUtil;
 import org.apache.zookeeper.WatchedEvent;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -119,7 +119,6 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
 
     /**
      * 缓存一个对象
-     *
      */
     protected void set(T t) {
         if (cacheService == null) {

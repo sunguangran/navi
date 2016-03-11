@@ -1,14 +1,14 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.common.NAVIERROR;
-import com.youku.java.navi.common.exception.NaviSystemException;
-import com.youku.java.navi.common.ServerUrlUtil;
-import com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig;
-import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
 import com.mongodb.ServerAddress;
+import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.ServerUrlUtil;
+import com.youku.java.navi.common.exception.NaviSystemException;
+import com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig;
+import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.UnknownHostException;
@@ -79,7 +79,6 @@ public class NaviMongoDriver extends AbstractNaviDriver {
     /**
      * 在热部署点，因为并发的问题，会出现该driver实例已被关闭而仍还有线程调用该实例连接
      * 数据库，导致连接泄露，所以开此线程，在driver关闭情况下仍在1min内重复关闭2次，已确保 连接确实均被关闭
-     *
      */
     class MongoIdleCleaner extends Thread {
         private int initCount = 0;

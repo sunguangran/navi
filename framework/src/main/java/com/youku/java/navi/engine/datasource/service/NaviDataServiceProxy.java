@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.engine.core.IBaseDataService;
 import com.youku.java.navi.engine.core.INaviLog;
+import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import java.net.UnknownHostException;
 
 /**
  * DataService的动态代理类
- *
  */
 @Slf4j
 public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandler {

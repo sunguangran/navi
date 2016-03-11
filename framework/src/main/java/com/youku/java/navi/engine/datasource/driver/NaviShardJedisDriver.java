@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.datasource.driver;
 
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
-import com.youku.java.navi.common.ServerUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.dao.DataAccessException;

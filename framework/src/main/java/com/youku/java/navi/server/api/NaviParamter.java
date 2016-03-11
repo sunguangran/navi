@@ -5,7 +5,6 @@ import lombok.Setter;
 
 /**
  * API 参数封装
- *
  */
 @Setter
 @Getter

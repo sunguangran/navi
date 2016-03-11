@@ -1,9 +1,9 @@
 package com.youku.java.navi.engine.datasource.driver;
 
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviHttpPoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
-import com.youku.java.navi.common.ServerUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpVersion;
@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Http Client驱动，连接池可配置两种模式，NaviHttpPoolConfig和NaviHttpBasicConfig
- *
  */
 @Slf4j
 public class NaviHttpClientDriver extends AbstractNaviDriver {

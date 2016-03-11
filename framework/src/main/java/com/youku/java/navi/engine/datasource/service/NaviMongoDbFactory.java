@@ -1,10 +1,10 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviDataSource;
-import com.youku.java.navi.engine.datasource.DefaultNaviDataSource;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
+import com.youku.java.navi.engine.core.INaviDataSource;
+import com.youku.java.navi.engine.datasource.DefaultNaviDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.util.Assert;

@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.datasource.driver;
 
+import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
-import com.youku.java.navi.common.ServerUrlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -462,8 +462,9 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
 
     /**
      * 指定行key,列族名，列名获取最新的值
+     * <p>
+     * 行key
      *
-     *     行key
      * @param family
      *     列族名
      * @param qualifier

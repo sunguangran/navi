@@ -1,9 +1,9 @@
 package com.youku.java.navi.server.handler;
 
+import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.server.api.INaviResponseData;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
-import com.youku.java.navi.common.exception.NaviBusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpRequest;

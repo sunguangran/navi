@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.component;
 
-import com.youku.java.navi.server.api.INaviUDPResponseHandler;
 import com.youku.java.navi.engine.component.NaviMQContext.MessageQueueType;
 import com.youku.java.navi.engine.core.*;
+import com.youku.java.navi.server.api.INaviUDPResponseHandler;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
@@ -13,7 +13,6 @@ import java.util.List;
  * 除了需要配置父类的属性，本类只需要配置service(缓存service和UDPservice)和handler(UDP响应处理类)，<br>
  * msgType(发送消息的class),还有queueKey(缓存key)，如果不需要处理UDP响应，handler也可以不配置。<br>
  * 其他配置已提供默认值。
- *
  */
 @SuppressWarnings("rawtypes")
 public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQueueCom {

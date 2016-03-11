@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.component;
 
-import com.youku.java.navi.engine.core.INaviMessageQueue;
-import com.youku.java.navi.engine.core.IBaseDataService;
 import com.youku.java.navi.engine.component.NaviMQContext.MessageQueueType;
+import com.youku.java.navi.engine.core.IBaseDataService;
+import com.youku.java.navi.engine.core.INaviMessageQueue;
 import org.springframework.beans.factory.FactoryBean;
 
 public class NaviMessageQueueFactoryBean implements FactoryBean<INaviMessageQueue> {
