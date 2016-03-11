@@ -40,8 +40,8 @@ JVMARGS="-DNAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8 "
 #JVMARGS="$JVMARGS -Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 
 
-MAINCLASS="com.cuckoo.framework.navi.boot.NaviMain"
-BOOTPATH="${NAVI_HOME}/libs/bootstrap-0.0.1-release.jar:${NAVI_HOME}/libs/logback-core-1.1.2.jar:${NAVI_HOME}/libs/logback-classic-1.1.2.jar:${NAVI_HOME}/libs/logback-access-1.1.2.jar:${NAVI_HOME}/libs/slf4j-api-1.7.5.jar:${NAVI_HOME}/libs/slf4j-log4j12-1.7.5.jar:${NAVI_HOME}/libs/commons-lang-2.6.jar"
+MAINCLASS="com.youku.java.navi.boot.NaviMain"
+BOOTPATH="${NAVI_HOME}/libs/bootstrap-1.0.0-release.jar:${NAVI_HOME}/libs/logback-core-1.1.2.jar:${NAVI_HOME}/libs/logback-classic-1.1.2.jar:${NAVI_HOME}/libs/logback-access-1.1.2.jar:${NAVI_HOME}/libs/slf4j-api-1.7.5.jar:${NAVI_HOME}/libs/slf4j-log4j12-1.7.5.jar:${NAVI_HOME}/libs/commons-lang-2.6.jar"
 CONFIGPATH="${NAVI_HOME}/conf/server.conf"
 
 if [ $# -eq 0 ]; then
@@ -75,7 +75,7 @@ if [ $? -eq 0 ]; then
    pid=$!
    if test $( ps -p ${pid} | wc -l ) -ne 1
    then
-     echo ${pid}>${PID_FILE}
+     echo ${pid} > ${PID_FILE}
      echo "navi server process $pid has been started successfully.";
      exit 0
    else

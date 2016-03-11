@@ -4,15 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.cuckoo.framework</groupId>
-    <artifactId>navi</artifactId>
-    <version>1.0.0-release</version>
+    <groupId>com.youku.java.navi</groupId>
+    <artifactId>javanavi</artifactId>
+    <version>3.0.0-release</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>bootstrap</module>
         <module>framework</module>
         <module>demo</module>
+        <module>plugin</module>
     </modules>
 
     <dependencyManagement>
@@ -114,9 +115,9 @@
                 <version>1.0.0.RELEASE</version>
             </dependency>
             <dependency>
-                <groupId>com.cuckoo.framework</groupId>
+                <groupId>com.youku.java.navi</groupId>
                 <artifactId>bootstrap</artifactId>
-                <version>0.0.1-release</version>
+                <version>1.0.0-release</version>
             </dependency>
             <dependency>
                 <groupId>com.youku.java.navi.engine</groupId>
@@ -237,8 +238,8 @@
         <downloadSources>true</downloadSources>
 
         <!-- compiler settings properties -->
-        <java_source_version>1.8</java_source_version>
-        <java_target_version>1.8</java_target_version>
+        <java_source_version>1.7</java_source_version>
+        <java_target_version>1.7</java_target_version>
         <file_encoding>UTF-8</file_encoding>
     </properties>
 
