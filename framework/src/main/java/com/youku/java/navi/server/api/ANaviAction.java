@@ -9,6 +9,7 @@ import com.youku.java.navi.server.serviceobj.MonitorReportObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.lang.reflect.Method;
@@ -95,7 +96,7 @@ public abstract class ANaviAction implements InitializingBean {
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodAn = method.getAnnotation(Rest.class);
                 if (methodAn != null) {
-                    String uri = typeAn.value() + methodAn.value();
+                    String uri = typeAn.value() + (StringUtils.isEmpty(methodAn.value()) ? "/" + method.getName() + ".json" : methodAn.value());
 
                     while (true) {
                         if (uri.contains("//")) {
