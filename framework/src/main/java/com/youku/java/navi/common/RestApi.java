@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 public class RestApi {
 
     private String uri;
-    private String moduleNm;
     private Class clazz;
     private Method method;
 
