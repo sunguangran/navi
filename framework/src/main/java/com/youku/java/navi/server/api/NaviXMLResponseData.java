@@ -2,7 +2,7 @@ package com.youku.java.navi.server.api;
 
 import com.youku.java.navi.common.exception.NaviSystemException;
 
-public class NaviXMLResponseData extends AbstractNaviResponseData {
+public class NaviXMLResponseData extends ANaviResponseData {
 
     public NaviXMLResponseData(Object data) {
         super(data);

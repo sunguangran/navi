@@ -1,5 +1,6 @@
 package com.youku.java.navi.server.handler;
 
+import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.server.api.ANaviAction;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
@@ -34,13 +35,11 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         String[] uriSplits = uri.split("/");
         if (uriSplits.length < 4) {
             throw new NaviSystemException("malformed URL!", NAVIERROR.SYSERROR.code());
-        } else if (!uriSplits[1].equals(ServerConfigure.get(NaviDefine.SERVER))) {
-            throw new NaviSystemException("invalid server name: " + uriSplits[1] + ".", NAVIERROR.SYSERROR.code());
         }
 
         NaviHttpRequest naviReq = new NaviHttpRequest(request);
-        naviReq.setServer(uriSplits[1]);
-        naviReq.setModuleNm(uriSplits[2]);
+        naviReq.setServer(ServerConfigure.get(NaviDefine.SERVER));
+        naviReq.setModuleNm(uriSplits[1]);
         naviReq.setUri(uri);
         return naviReq;
     }
@@ -54,7 +53,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
 
         RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(request.getUri());
         if (restApi == null) {
-            throw new NaviSystemException("'" + request.getUri() + "' not found!", NAVIERROR.SYSERROR.code());
+            throw new NaviBusinessException("'" + request.getUri() + "' not found!", NAVIERROR.NOT_SUPPORTED.code());
         }
 
         ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(restApi.getModuleNm(), restApi.getClazz()));

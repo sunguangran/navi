@@ -6,6 +6,6 @@
     <!-- IMPORTS -->
 
     <!-- ACTIONS -->
-    <bean id="echoCtrl" class="com.java.navi.demo.actions.EchoAction" />
+    <bean class="com.java.navi.demo.actions.EchoAction" />
 
 </beans>

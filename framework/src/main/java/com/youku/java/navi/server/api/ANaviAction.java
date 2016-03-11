@@ -4,7 +4,6 @@ import com.youku.java.navi.common.RestApi;
 import com.youku.java.navi.common.annotation.Rest;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
-import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
 import lombok.Getter;
@@ -96,7 +95,7 @@ public abstract class ANaviAction implements InitializingBean {
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodAn = method.getAnnotation(Rest.class);
                 if (methodAn != null) {
-                    String uri = "/" + ServerConfigure.getServer() + typeAn.value() + methodAn.value();
+                    String uri = "/" + typeAn.module() + typeAn.value() + methodAn.value();
                     uri = uri.replace("//", "/");
 
                     RestApi api = new RestApi();

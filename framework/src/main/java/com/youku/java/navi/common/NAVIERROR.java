@@ -2,6 +2,7 @@ package com.youku.java.navi.common;
 
 public enum NAVIERROR {
 
+    NOT_SUPPORTED(-404),
     SYSERROR(-500),
     INVALID_HOST(-90),
     BUSI_NO_DATA(-91),
