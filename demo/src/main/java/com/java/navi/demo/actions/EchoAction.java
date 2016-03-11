@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Setter
 @Slf4j
-@Rest(value = "/test/aaa", module = "demo")
+@Rest("/test/aaa")
 public class EchoAction extends ANaviAction {
 
     @Rest("/do.json")

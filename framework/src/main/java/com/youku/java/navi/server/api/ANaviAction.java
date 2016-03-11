@@ -95,11 +95,17 @@ public abstract class ANaviAction implements InitializingBean {
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodAn = method.getAnnotation(Rest.class);
                 if (methodAn != null) {
-                    String uri = "/" + typeAn.module() + typeAn.value() + methodAn.value();
-                    uri = uri.replace("//", "/");
+                    String uri = typeAn.value() + methodAn.value();
+
+                    while (true) {
+                        if (uri.contains("//")) {
+                            uri = uri.replace("//", "/");
+                        } else {
+                            break;
+                        }
+                    }
 
                     RestApi api = new RestApi();
-                    api.setModuleNm(typeAn.module());
                     api.setUri(uri);
                     api.setClazz(this.getClass());
                     api.setMethod(method);

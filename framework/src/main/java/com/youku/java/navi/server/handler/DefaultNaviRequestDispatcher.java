@@ -51,12 +51,15 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
             throw new NaviSystemException("module " + request.getModuleNm() + " not found!", NAVIERROR.SYSERROR.code());
         }
 
-        RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(request.getUri());
+        String uri = request.getUri();
+        uri = uri.substring(uri.indexOf(request.getModuleNm()) + request.getModuleNm().length());
+
+        RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(uri);
         if (restApi == null) {
             throw new NaviBusinessException("'" + request.getUri() + "' not found!", NAVIERROR.NOT_SUPPORTED.code());
         }
 
-        ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(restApi.getModuleNm(), restApi.getClazz()));
+        ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(request.getModuleNm(), restApi.getClazz()));
         if (bean == null) {
             throw new NaviSystemException("'" + request.getUri() + "' not found!", NAVIERROR.SYSERROR.code());
         }
