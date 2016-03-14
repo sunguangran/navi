@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.youku.java.navi.common.annotation;
+package com.youku.java.navi.common;
 
 import java.lang.annotation.*;
 

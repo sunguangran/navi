@@ -3,7 +3,7 @@ package com.youku.java.navi.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
 import com.youku.java.navi.server.serviceobj.INaviColumnDto;
@@ -149,7 +149,7 @@ public class NaviUtil {
     }
 
     public static NaviSystemException transferToNaviSysException(Exception e) {
-        NaviSystemException ee = new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+        NaviSystemException ee = new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         ee.setStackTrace(e.getStackTrace());
         return ee;
     }

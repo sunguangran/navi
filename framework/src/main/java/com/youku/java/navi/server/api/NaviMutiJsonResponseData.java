@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.boot.NaviDefine;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.utils.NaviUtil;
@@ -51,8 +51,7 @@ public class NaviMutiJsonResponseData extends NaviJsonResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "navi", "no data",
-                NAVIERROR.BUSI_NO_DATA.code());
+            return toJsonData("", "navi", "no data", NaviError.ERR_NO_DATA);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }

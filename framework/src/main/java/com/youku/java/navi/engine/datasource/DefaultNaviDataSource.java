@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
@@ -45,7 +45,7 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
 
             return handle;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -106,10 +106,10 @@ public class DefaultNaviDataSource extends AbstractNaviDataSource implements App
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getOfflineConnectString()) || StringUtils.isBlank(getDeployConnectString())) {
             throw new NaviSystemException("invalid server address!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         } else if (StringUtils.isBlank(driverClass)) {
             throw new NaviSystemException("invalid driverClass!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         initConnPool();
     }

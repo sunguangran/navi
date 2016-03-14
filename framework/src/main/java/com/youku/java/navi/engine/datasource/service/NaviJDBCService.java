@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.core.INaviJdbc;
@@ -18,7 +18,7 @@ public class NaviJDBCService extends AbstractNaviDataService implements
         }
         driver.close();
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR);
     }
 
     public ResultSet doQuery(String sql) throws SQLException {

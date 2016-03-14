@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.IZookeeperEventHander;
@@ -46,7 +46,7 @@ public class NaviZooKeeperDriver extends AbstractNaviDriver {
             }
         } catch (InterruptedException e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR, e);
         }
     }
 
@@ -62,7 +62,7 @@ public class NaviZooKeeperDriver extends AbstractNaviDriver {
             }
         } catch (InterruptedException e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR, e);
         }
         zooKeeper = new ZooKeeper(getServer().getUrl(), getPoolConfig()
             .getConnectTimeout(), watcher);

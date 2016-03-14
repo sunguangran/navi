@@ -1,7 +1,7 @@
 package com.youku.java.navi.engine.datasource.service;
 
 import com.mongodb.WriteResult;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDB;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -30,7 +30,7 @@ public class NaviMongoService extends AbstractNaviDataService implements INaviDB
         super.afterPropertiesSet();
         if (databaseNm == null) {
             throw new NaviSystemException("dataSource or databaseNm is null",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         mongoTempt = new NaviMongoTemplateFactory(dataSource)
             .getMongoTemplate(databaseNm);

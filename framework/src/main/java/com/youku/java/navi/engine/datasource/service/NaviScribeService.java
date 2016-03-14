@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.core.INaviLog;
@@ -45,7 +45,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return driver.sendLog(list);
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR, e);
         } finally {
             driver.close();
         }
@@ -120,7 +120,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return driver.sendLog(list);
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR, e);
         } finally {
             driver.close();
         }
@@ -167,7 +167,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
             return (NaviScribeDriver) driver;
         }
         throw new NaviSystemException("the log system driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR);
     }
 
     private String getStackTrace(Throwable t) {

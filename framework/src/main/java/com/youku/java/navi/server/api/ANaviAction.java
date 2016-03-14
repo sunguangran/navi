@@ -1,7 +1,7 @@
 package com.youku.java.navi.server.api;
 
 import com.youku.java.navi.common.RestApi;
-import com.youku.java.navi.common.annotation.Rest;
+import com.youku.java.navi.common.Rest;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;

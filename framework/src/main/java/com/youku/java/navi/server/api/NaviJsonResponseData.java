@@ -3,7 +3,7 @@ package com.youku.java.navi.server.api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.ServerConfigure;
@@ -53,7 +53,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "", "\"no data!\"", NAVIERROR.BUSI_NO_DATA.code());
+            return toJsonData("", "", "\"no data!\"", NaviError.ERR_NO_DATA);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }

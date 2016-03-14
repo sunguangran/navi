@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
@@ -65,7 +65,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
             // 安全模式
             throw new NaviSystemException(new StringBuilder("the dataSource ")
                 .append(getNamespace()).append(" is the safemode.")
-                .toString(), NAVIERROR.SYSERROR.code());
+                .toString(), NaviError.SYSERROR);
         }
 
         int index = random.nextInt(poolDrivers.size());
@@ -77,10 +77,10 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         if (StringUtils.isBlank(getOfflineConnectString())
             || StringUtils.isBlank(getDeployConnectString())) {
             throw new NaviSystemException("invalid server address!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         } else if (StringUtils.isBlank(getDriverClass())) {
             throw new NaviSystemException("invalid driverClass!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         initConnPool();
         //exeCheckPool = Executors.newSingleThreadScheduledExecutor();
@@ -121,7 +121,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
                 driver.destroy();
             } catch (Exception e) {
                 // throw new NaviSystemException(e.getMessage(),
-                // NAVIERROR.SYSERROR.code(), e);
+                // NaviError.SYSERROR, e);
             }
         }
         poolDrivers.clear();

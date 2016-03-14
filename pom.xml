@@ -121,6 +121,11 @@
                 <version>1.0.0-release</version>
             </dependency>
             <dependency>
+                <groupId>com.youku.java.navi</groupId>
+                <artifactId>framework</artifactId>
+                <version>3.0.0-release</version>
+            </dependency>
+            <dependency>
                 <groupId>com.youku.java.navi.engine</groupId>
                 <artifactId>redisproxy</artifactId>
                 <version>0.0.3-release</version>
@@ -288,6 +293,18 @@
         </repository>
     </repositories>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <description>1.增加对HTTP请求协议错误按照HTTP协议响应逻辑
         2.优化异常按照HTTP协议响应逻辑

@@ -1,6 +1,6 @@
 package com.java.navi.demo.actions;
 
-import com.youku.java.navi.common.annotation.Rest;
+import com.youku.java.navi.common.Rest;
 import com.youku.java.navi.server.api.ANaviAction;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;

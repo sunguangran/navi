@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.core.IUDPClientDataSource;
@@ -35,7 +35,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
             return handle;
         } catch (Exception e) {
             throw new NaviSystemException(e.getMessage(),
-                NAVIERROR.SYSERROR.code(), e);
+                NaviError.SYSERROR, e);
         }
 
     }
@@ -43,7 +43,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getDriverClass())) {
             throw new NaviSystemException("invalid driverClass!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         initConnPool();
     }

@@ -3,7 +3,7 @@ package com.youku.java.navi.engine.datasource.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.datasource.driver.NaviHBaseDriver;
 import com.youku.java.navi.server.serviceobj.*;
@@ -416,7 +416,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
         if (page < 1 || pageLength < 1) {
             throw new NaviRuntimeException(
                 "page or pageLength must be bigger than 1",
-                NAVIERROR.BUSI_PARAM_ERROR.code());
+                NaviError.ERR_PARAMS);
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {
@@ -428,8 +428,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
         } else if (null != startKey) {
             scan = new Scan(startKey);
         } else if (null == startKey) {
-            throw new NaviRuntimeException("startKey can't be null",
-                NAVIERROR.BUSI_PARAM_ERROR.code());
+            throw new NaviRuntimeException("startKey can't be null", NaviError.ERR_PARAMS);
         }
         List<T> list = find(scan, entityClass);
         if (null != last) {
@@ -448,9 +447,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             } else {
                 int maxPage = list.size() % pageLength == 0 ? list.size()
                     / pageLength : list.size() / pageLength + 1;
-                throw new NaviRuntimeException("error page:" + page
-                    + ",max page:" + maxPage,
-                    NAVIERROR.BUSI_PARAM_ERROR.code());
+                throw new NaviRuntimeException("error page:" + page + ",max page:" + maxPage, NaviError.ERR_PARAMS);
             }
         }
         return null;
@@ -468,8 +465,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
      */
     public int count(Class<T> entityClass, byte[] startKey, byte[] endKey) {
         if (null == entityClass || null == startKey || null == endKey) {
-            throw new NaviRuntimeException("error param!",
-                NAVIERROR.BUSI_PARAM_ERROR.code());
+            throw new NaviRuntimeException("error param!", NaviError.ERR_PARAMS);
         }
         T last = null;
         if (!Arrays.equals(startKey, endKey)) {
@@ -518,7 +514,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
         }
         if (null == admin) {
             throw new NaviRuntimeException("get admin error",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         return admin;
     }

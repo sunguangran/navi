@@ -4,7 +4,7 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
 import com.mongodb.ServerAddress;
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig;
@@ -82,7 +82,7 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
     public Mongo getMongo() {
         if (isClose()) {
             throw new NaviSystemException("the driver has been closed!",
-                NAVIERROR.SYSERROR.code());
+                NaviError.SYSERROR);
         }
         /*
         try {

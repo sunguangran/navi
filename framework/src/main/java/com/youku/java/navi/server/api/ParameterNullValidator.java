@@ -1,6 +1,6 @@
 package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class ParameterNullValidator implements INaviInterrupter {
         }
         for (NaviParamter param : parameters) {
             if (param.isRequiered() && request.isEmpty(param.getName())) {
-                throw new NaviBusinessException(param.getName() + " is required", NAVIERROR.BUSI_PARAM_ERROR.code());
+                throw new NaviBusinessException(param.getName() + " is required", NaviError.ERR_PARAMS);
             }
         }
 

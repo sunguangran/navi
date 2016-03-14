@@ -1,6 +1,6 @@
 package com.youku.java.navi.server.handler;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.api.INaviPacketAction;
 import com.youku.java.navi.server.api.NaviRequestPacket;
@@ -18,12 +18,12 @@ public class DefaultNaviPacketDispatcher extends AbstractNaviPacketDispatcher {
             .getNaviModuleContext(packet.getRequestModule());
         if (moduleCtx == null) {
             throw new NaviSystemException("module " + packet.getRequestModule()
-                + " not found!", NAVIERROR.SYSERROR.code());
+                + " not found!", NaviError.SYSERROR);
         }
         INaviPacketAction bean = (INaviPacketAction) moduleCtx.getBean(packet.getRequestApi());
         if (bean == null) {
             throw new NaviSystemException("api " + packet.getRequestApi()
-                + " not found!", NAVIERROR.SYSERROR.code());
+                + " not found!", NaviError.SYSERROR);
         }
         bean.action(packet, response);
     }

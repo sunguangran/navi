@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviCache;
 import com.youku.java.navi.engine.core.INaviDriver;
@@ -25,7 +25,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         }
         driver.close();
         throw new NaviSystemException("the driver is invalid!",
-            NAVIERROR.SYSERROR.code());
+            NaviError.SYSERROR);
     }
 
     private <K> String object2String(K k) {

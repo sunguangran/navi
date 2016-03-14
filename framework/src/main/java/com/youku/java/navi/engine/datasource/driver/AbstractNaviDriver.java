@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.common.exception.NaviSystemException;
@@ -46,7 +46,7 @@ public abstract class AbstractNaviDriver implements INaviDriver {
             } catch (Exception e) {
                 throw new NaviRuntimeException(
                     "Could not return the resource to the pool",
-                    NAVIERROR.SYSERROR.code(), e);
+                    NaviError.SYSERROR, e);
             }
         } finally {
             close.set(true);

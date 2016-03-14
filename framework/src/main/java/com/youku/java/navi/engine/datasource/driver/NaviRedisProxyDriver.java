@@ -1,6 +1,6 @@
 package com.youku.java.navi.engine.datasource.driver;
 
-import com.youku.java.navi.common.NAVIERROR;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
@@ -81,7 +81,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "EXPIRE", key, param);
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -94,7 +94,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SET", key, param);
             return returnBoolean(rs, "OK");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -107,7 +107,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SETNX", key, param);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -121,7 +121,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SETEX", key, param1, param2);
             return returnBoolean(rs, "OK");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -134,7 +134,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "GETSET", key, param);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -146,7 +146,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "GET", key, new CmdParam[0]);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -161,7 +161,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "MGET", key, params);
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -179,7 +179,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
                 return returnLong(rs);
             }
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -197,7 +197,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
                 return returnLong(rs);
             }
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -209,7 +209,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "EXISTS", key, new CmdParam[0]);
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -225,7 +225,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "DEL", key, params);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -238,7 +238,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZBATCHADD", key, params);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -252,7 +252,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZADD", key, param2, param1);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -265,7 +265,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZSCORE", key, param);
             return returnDouble(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -289,7 +289,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREVRANGEBYSCORE", key, params.toArray(new CmdParam[0]));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -313,7 +313,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZRANGEBYSCORE", key, params.toArray(new CmdParam[0]));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -328,7 +328,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZCOUNT", key, params.toArray(new CmdParam[0]));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -340,7 +340,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZCARD", key, new CmdParam[0]);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -358,7 +358,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZRANGE", key, params.toArray(new CmdParam[0]));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -377,7 +377,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREVRANGE", key, params.toArray(new CmdParam[0]));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -390,7 +390,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREM", key, params);
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -405,7 +405,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREMRANGEBYRANK", key, params.toArray(new CmdParam[0]));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -420,7 +420,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREMRANGEBYSCORE", key, params.toArray(new CmdParam[0]));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -433,7 +433,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LPUSH", key, params);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -445,7 +445,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LPOP", key, new CmdParam[0]);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -459,7 +459,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "RPUSH", key, params);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -471,7 +471,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "RPOP", key, new CmdParam[0]);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -484,7 +484,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LLEN", key, new CmdParam[0]);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -499,7 +499,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LRANGE", key, params.toArray(new CmdParam[0]));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -514,7 +514,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LTRIM", key, params.toArray(new CmdParam[0]));
             return returnBoolean(rs, "OK");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -526,7 +526,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "LINDEX", key, CmdParamFactory.buildIntParam(index));
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -538,7 +538,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SADD", key, CmdParamFactory.buildListParam(val));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -550,7 +550,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SADD", key, CmdParamFactory.buildArrayParam(value));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -562,7 +562,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SREM", key, CmdParamFactory.buildArrayParam(value));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -574,7 +574,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SPOP", key, new CmdParam[0]);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -586,7 +586,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SMEMBERS", key, new CmdParam[0]);
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -598,7 +598,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SRANDMEMBER", key, new CmdParam[0]);
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -610,7 +610,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SCARD", key, new CmdParam[0]);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -622,7 +622,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "SREM", key, CmdParamFactory.buildArrayParam(value));
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -637,7 +637,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HMGET", key, CmdParamFactory.buildListParam(fields));
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -657,7 +657,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HMSET", key, params.toArray(new CmdParam[0]));
             return returnBoolean(rs, "OK");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -671,7 +671,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HSET", key, fieldParam, valueParam);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -685,7 +685,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HSETNX", key, fieldParam, valueParam);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -697,7 +697,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HGET", key, CmdParamFactory.buildArrayParam(field));
             return returnString(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -712,7 +712,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HDEL", key, CmdParamFactory.buildListParam(fields));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -724,7 +724,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HLEN", key, new CmdParam[0]);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -736,7 +736,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HKEYS", key, new CmdParam[0]);
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -748,7 +748,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HVALS", key, new CmdParam[0]);
             return returnList(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -768,7 +768,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             }
             return map;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -780,7 +780,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "HEXISTS", key, CmdParamFactory.buildArrayParam(field));
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -794,7 +794,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
                 CmdParamFactory.buildArrayParam(String.valueOf(delta)));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -806,7 +806,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "APPEND", key, CmdParamFactory.buildArrayParam(val));
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -818,7 +818,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             RedisProxyResult rs = proxy.execmd(serverGroup, "TTL", key, new CmdParam[0]);
             return returnLong(rs);
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -832,7 +832,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
                 CmdParamFactory.buildArrayParam(val ? "1" : "0"));
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
@@ -845,7 +845,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
                 CmdParamFactory.buildArrayParam(String.valueOf(offset)));
             return returnBoolean(rs, "1");
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(), NAVIERROR.SYSERROR.code(), e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
     }
 
