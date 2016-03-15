@@ -1,5 +1,6 @@
 package com.youku.java.navi.boot;
 
+import ch.qos.logback.classic.BasicConfigurator;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +24,16 @@ public abstract class ANaviMain {
 
             // 初始化Logback
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-            JoranConfigurator configurator = new JoranConfigurator();
-            configurator.setContext(lc);
+
             lc.reset();
 
             if (NaviDefine.NAVI_HOME != null) {
+                JoranConfigurator configurator = new JoranConfigurator();
+                configurator.setContext(lc);
                 configurator.doConfigure(NaviDefine.NAVI_LOGBACK_PATH);
             } else {
-                configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
+                BasicConfigurator.configure(lc);
+                // configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,19 +84,37 @@ public abstract class ANaviMain {
      */
     public Properties parseServerConfig(String[] args) {
         if (NaviDefine.NAVI_HOME == null) {
-            log.error("NAVI_HOME not defined");
-            return null;
+            log.error("NAVI_HOME not defined, will use default config");
+
+            Properties serverCfg = new Properties();
+            serverCfg.setProperty(NaviDefine.PORT, NaviDefine.DEFAULT_PORT);
+            serverCfg.setProperty(NaviDefine.SERVER, NaviDefine.DEFAULT_SERVER);
+            serverCfg.setProperty(NaviDefine.CHUNK_AGGR_SIZE, NaviDefine.DEFAULT_CHUNK_SIZE);
+
+            return serverCfg;
         } else {
             return parseConfig(getConfPath());
         }
     }
 
     protected void doMain(Properties serverConfig) throws Exception {
-        NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread().getContextClassLoader());
-        Thread.currentThread().setContextClassLoader(loader);
-
-        final INaviServer server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
-        int statCode = server.setupServer(serverConfig);
+        String mode = serverConfig.getProperty(NaviDefine.MODE);
+        int statCode;
+        final INaviServer server;
+        if (NaviDefine.WORK_MODE.DEV == NaviDefine.WORK_MODE.toEnum(mode)) {
+            server = (INaviServer) Class.forName(getStartClass(serverConfig), true, Thread.currentThread().getContextClassLoader()).newInstance();
+//			statCode = server.setupServer(serverConfig);
+//			Runtime.getRuntime().addShutdownHook(new NaviShutdownHook(server));
+        } else {
+            NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread()
+                .getContextClassLoader());
+            Thread.currentThread().setContextClassLoader(loader);
+            server = (INaviServer) Class.forName(
+                getStartClass(serverConfig),
+                true,
+                loader).newInstance();
+        }
+        statCode = server.setupServer(serverConfig);
         if (statCode == INaviServer.SUCCESS) {
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override

@@ -17,7 +17,12 @@ public final class ServerConfigure implements NaviDefine {
         return WORK_MODE.DEPLOY == getWorkMode();
     }
 
+    public static boolean isDevEnv() {
+        return WORK_MODE.DEV == getWorkMode();
+    }
+
     public static boolean isDaemonEnv() {
+        // TODO
         return false;
     }
 

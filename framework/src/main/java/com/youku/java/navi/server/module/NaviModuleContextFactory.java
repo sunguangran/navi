@@ -46,16 +46,20 @@ public class NaviModuleContextFactory {
     }
 
     public void startCheckModuleProccess() {
-        ScheduledExecutorService exe = Executors.newScheduledThreadPool(1);
-        exe.scheduleAtFixedRate(new CheckModuleVersion(), DELAY, ServerConfigure.getModuleLoadInterval(), TimeUnit.SECONDS);
+        if (!ServerConfigure.isDevEnv()) {
+            ScheduledExecutorService exe = Executors.newScheduledThreadPool(1);
+            exe.scheduleAtFixedRate(new CheckModuleVersion(), DELAY, ServerConfigure.getModuleLoadInterval(), TimeUnit.SECONDS);
+        }
     }
 
     public INaviModuleContext getNaviModuleContext(String module) throws Exception {
         if (!map.containsKey(module)) {
-            if (ServerConfigure.isDaemonEnv()) {
+            if (ServerConfigure.isDevEnv()) {
+                map.put(module, new NaviDevModuleContext(module).initModule());
+            } else if (ServerConfigure.isDaemonEnv()) {
                 map.put(module, new NaviDaemonModuleContext(module).initModule());
             } else {
-                throw new FileNotFoundException("module not found: " + module);
+                throw new FileNotFoundException("no module file:" + module);
             }
         }
 

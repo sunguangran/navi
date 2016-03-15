@@ -69,11 +69,11 @@ public interface NaviDefine {
 
     enum WORK_MODE {
 
-        UNKNOWN, TEST, DEPLOY;
+        DEV, TEST, DEPLOY;
 
         public static WORK_MODE toEnum(String mode) {
             if (mode == null) {
-                return UNKNOWN;
+                return DEV;
             }
 
             for (WORK_MODE env : values()) {
@@ -82,7 +82,7 @@ public interface NaviDefine {
                 }
             }
 
-            return UNKNOWN;
+            return DEV;
         }
 
         @Override
