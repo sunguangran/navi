@@ -1,7 +1,7 @@
 package com.youku.java.navi.server.api;
 
-import com.youku.java.navi.common.RestApi;
 import com.youku.java.navi.common.Rest;
+import com.youku.java.navi.common.RestApi;
 import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
@@ -96,7 +96,10 @@ public abstract class ANaviAction implements InitializingBean {
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodAn = method.getAnnotation(Rest.class);
                 if (methodAn != null) {
-                    String uri = typeAn.value() + (StringUtils.isEmpty(methodAn.value()) ? "/" + method.getName() + ".json" : methodAn.value());
+                    String uri = "/" + typeAn.value() + (StringUtils.isEmpty(methodAn.value()) ? "/" + method.getName() + ".json" : "/" + methodAn.value()).trim();
+                    if (!uri.endsWith(".json")) {
+                        uri += ".json";
+                    }
 
                     while (true) {
                         if (uri.contains("//")) {

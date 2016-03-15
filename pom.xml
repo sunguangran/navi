@@ -298,6 +298,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -306,7 +307,8 @@
         </plugins>
     </build>
 
-    <description>1.增加对HTTP请求协议错误按照HTTP协议响应逻辑
+    <description>
+        1.增加对HTTP请求协议错误按照HTTP协议响应逻辑
         2.优化异常按照HTTP协议响应逻辑
         3.增加JMX监控Mbean
         4.修改start.sh，增加对启动失败的提示

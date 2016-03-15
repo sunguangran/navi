@@ -16,4 +16,5 @@ public @interface CommentDocument {
     int rate() default 15 * 60000;
 
     int expire() default 864000;
+
 }

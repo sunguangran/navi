@@ -31,6 +31,11 @@ public class AutoIncrDTO extends AbstractNaviDto {
 
     @Override
     public String getOId() {
-        return null;
+        return this._id;
+    }
+
+    @Override
+    public void setOId(Long id) {
+        this._id = id + "";
     }
 }

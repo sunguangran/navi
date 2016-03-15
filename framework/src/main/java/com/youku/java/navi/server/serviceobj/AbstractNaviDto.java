@@ -1,8 +1,15 @@
 package com.youku.java.navi.server.serviceobj;
 
+import com.alibaba.fastjson.JSONObject;
+import com.youku.java.navi.common.Resp;
+import com.youku.java.navi.utils.AlibabaJsonSerializer;
+import com.youku.java.navi.utils.StringUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -12,25 +19,85 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
 
     private static final long serialVersionUID = -3983785947326217708L;
 
+    private int _null_;
+
     public AbstractNaviDto() {
     }
 
-    public final void setValue(String fieldNm, Object value) throws InvocationTargetException, IllegalAccessException {
+    public boolean isNull() {
+        return (1 == _null_);
+    }
+
+    public void setNull() {
+        _null_ = 1;
+    }
+
+    public void setValue(String key, Object value) throws InvocationTargetException, IllegalAccessException {
         if (value == null) {
             return;
         }
 
-        BeanUtils.setProperty(this, fieldNm, value);
+        BeanUtils.setProperty(this, key, value);
     }
 
-    public final Object getValue(String fieldNm) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        return BeanUtils.getProperty(this, fieldNm);
+    public Object getValue(String key) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        return BeanUtils.getProperty(this, key);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        if (this.isNull()) {
+            return null;
+        }
+
+        for (Field field : this.getClass().getDeclaredFields()) {
+            Annotation[] ans = field.getDeclaredAnnotations();
+            if (ans != null && ans.length != 0) {
+                for (Annotation an : ans) {
+                    if (an instanceof Resp) {
+                        try {
+                            field.setAccessible(true);
+                            Object val = field.get(this);
+                            if (val != null) {
+                                if (((Resp) an).ip()) {
+                                    json.put(((Resp) an).value(), StringUtils.longToIP((Long) val));
+                                } else if (((Resp) an).encode()) {
+                                    json.put(((Resp) an).value(), StringUtils.encode((Long) val));
+                                } else {
+                                    json.put(((Resp) an).value(), val);
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            // log.error(e.getMessage(), e);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        json.remove("_null_");
+
+        return json;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
+            return new String(jsonSerializer.getJSONBytes(this), "utf-8");
+        } catch (UnsupportedEncodingException ignored) {
+            return null;
+        }
     }
 
     /**
      * 获取唯一标识对象的ID
      */
     public abstract String getOId();
+
+    public abstract void setOId(Long id);
 
     protected String getPrefix() {
         String prefix = null;

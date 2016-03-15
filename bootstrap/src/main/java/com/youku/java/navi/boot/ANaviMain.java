@@ -92,10 +92,16 @@ public abstract class ANaviMain {
         NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread().getContextClassLoader());
         Thread.currentThread().setContextClassLoader(loader);
 
-        INaviServer server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
+        final INaviServer server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
         int statCode = server.setupServer(serverConfig);
         if (statCode == INaviServer.SUCCESS) {
-            Runtime.getRuntime().addShutdownHook(new NaviShutdownHook(server));
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    log.info("navi server detected jvm shutdown, server will exit.");
+                    server.stopServer();
+                }
+            });
         } else {
             System.exit(statCode);
         }

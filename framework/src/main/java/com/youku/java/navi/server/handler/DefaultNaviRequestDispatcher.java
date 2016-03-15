@@ -22,6 +22,16 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
     @Override
     public NaviHttpRequest packageNaviHttpRequest(HttpRequest request) throws Exception {
         String uri = request.getUri();
+
+        // 过滤　"//"
+        while (true) {
+            if (uri.contains("//")) {
+                uri = uri.replace("//", "/");
+            } else {
+                break;
+            }
+        }
+
         //重定向
         uri = redirect(uri);
         if (uri == null || uri.length() == 0) {

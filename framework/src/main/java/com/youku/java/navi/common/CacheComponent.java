@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by user on 2015/6/15.
+ *
+ * @author sgran<sgran@youku.com>
+ * @since 2016/03/14
  */
 @Slf4j
 public class CacheComponent {

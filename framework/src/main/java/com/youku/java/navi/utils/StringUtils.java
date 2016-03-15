@@ -1,4 +1,4 @@
-package com.youku.java.navi.util;
+package com.youku.java.navi.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
