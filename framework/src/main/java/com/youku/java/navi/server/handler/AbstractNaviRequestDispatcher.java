@@ -9,6 +9,8 @@ import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 
+import java.lang.reflect.InvocationTargetException;
+
 @Slf4j
 public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestDispatcher {
 
@@ -38,13 +40,15 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
                 log.warn("Navi Request is null!");
             }
         } catch (Exception e) {
-            if (e instanceof NaviBusinessException) {
-                t = System.currentTimeMillis() - t;
-                NaviBusinessException ee = (NaviBusinessException) e;
-                ee.setCost(t);
-                response.setContent(ee.getResponseData());
-                response.headers().set(Names.CONTENT_TYPE, ee.getResponseType());
-                return;
+            if (e instanceof InvocationTargetException) {
+                if (((InvocationTargetException) e).getTargetException() instanceof NaviBusinessException) {
+                    t = System.currentTimeMillis() - t;
+                    NaviBusinessException ee = (NaviBusinessException) ((InvocationTargetException) e).getTargetException();
+                    ee.setCost(t);
+                    response.setContent(ee.getResponseData());
+                    response.headers().set(Names.CONTENT_TYPE, ee.getResponseType());
+                    return;
+                }
             }
 
             throw e;
