@@ -53,6 +53,15 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
                 }
             }
 
+            if (e instanceof NaviBusinessException) {
+                t = System.currentTimeMillis() - t;
+                NaviBusinessException ee = (NaviBusinessException) e;
+                ee.setCost(t);
+                response.setContent(ee.getResponseData());
+                response.headers().set(Names.CONTENT_TYPE, ee.getResponseType());
+                return;
+            }
+
             throw e;
         }
     }
