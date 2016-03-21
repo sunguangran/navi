@@ -72,14 +72,13 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
             hTable = getHTable(tableNm);
         }
         if (hTable != null) {
-            final T t_obj = t;
             NaviColumnExtDto obj = null;
             List<Put> puts = new ArrayList<Put>();
-            if (t_obj instanceof NaviColumnExtDto) {
-                obj = (NaviColumnExtDto) t_obj;
+            if (t instanceof NaviColumnExtDto) {
+                obj = (NaviColumnExtDto) t;
             } else {
-                if (t_obj instanceof NaviBaseColumnDto) {
-                    obj = ((NaviBaseColumnDto) t_obj).toColumnExtDto();
+                if (t instanceof NaviBaseColumnDto) {
+                    obj = ((NaviBaseColumnDto) t).toColumnExtDto();
                 }
             }
             if (obj != null) {
@@ -87,8 +86,7 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
                     // 遍历ColumnExtDto
                     JSONObject json = JSON.parseObject(obj.dataToString());
                     byte[] rowKey = obj.getRowkey();
-                    for (Iterator<String> cfit = json.keySet().iterator(); cfit.hasNext(); ) {
-                        String cfNm = cfit.next();
+                    for (String cfNm : json.keySet()) {
                         JSONObject cols = json.getJSONObject(cfNm);
                         for (Object key : cols.keySet()) {
                             String colNm = (String) key;
@@ -113,12 +111,10 @@ public class NaviHBaseDbService<T extends INaviColumnDto> extends
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 } finally {
-                    if (null != hTable) {
-                        try {
-                            hTable.close();
-                        } catch (IOException e) {
-                            log.error(e.getMessage(), e);
-                        }
+                    try {
+                        hTable.close();
+                    } catch (IOException e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
             }

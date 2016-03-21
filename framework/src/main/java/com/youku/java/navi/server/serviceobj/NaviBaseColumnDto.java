@@ -22,9 +22,7 @@ public abstract class NaviBaseColumnDto extends AbstractNaviDto implements INavi
             if (anatation != null) {
                 String cf = anatation.cf();
                 String column = anatation.column();
-                if (cf.equals("")) {
-                    continue;
-                } else {
+                if (!cf.equals("")) {
                     String fieldNm = field.getName();
                     if (column.equals("")) {
                         column = fieldNm;

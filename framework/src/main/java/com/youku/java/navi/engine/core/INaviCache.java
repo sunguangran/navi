@@ -859,18 +859,18 @@ public interface INaviCache extends IBaseDataService {
     <K> List<List<K>> groupKey(Class<K> classNm, K... keys);
 
 
-    public <K> INaviMultiRedis multi(K key);
+    <K> INaviMultiRedis multi(K key);
 
-    public <K> INaviMultiRedis openPipeline(K key);
+    <K> INaviMultiRedis openPipeline(K key);
 
-    public <K> Object eval(K key, String script, int keyCount, String... params);
+    <K> Object eval(K key, String script, int keyCount, String... params);
 
-    public <K> Object evalsha(K key, String sha, int keyCount, String... params);
+    <K> Object evalsha(K key, String sha, int keyCount, String... params);
 
     /**
      * Typed ZSet tuple.
      */
-    public interface TypedTuple<V> extends Comparable<Double> {
+    interface TypedTuple<V> extends Comparable<Double> {
         V getValue();
 
         Double getScore();

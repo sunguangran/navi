@@ -28,32 +28,28 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         }
         poolDrivers = new ArrayList<>();
         random = new Random();
-        Class<?> handleClassNm = getContextClassLoader().loadClass(
-            getDriverClass());
+        Class<?> handleClassNm = getContextClassLoader().loadClass(getDriverClass());
 
         if (!isSplitHosts()) {
             ServerUrlUtil.ServerUrl serverAddr = new ServerUrlUtil.ServerUrl(
-                (workMode == null && ServerConfigure.isDeployEnv())
-                    || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString()
-                    : getOfflineConnectString());
-            INaviDriver naviDriver = (INaviDriver) BeanUtils.instantiateClass(
-                handleClassNm.getDeclaredConstructor(ServerUrlUtil.ServerUrl.class,
-                    String.class, NaviPoolConfig.class), serverAddr,
-                getAuth(), this.poolConfig);
-            poolDrivers.add(naviDriver);
+                (workMode == null && ServerConfigure.isDeployEnv()) || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString() : getOfflineConnectString()
+            );
 
+            INaviDriver naviDriver = (INaviDriver) BeanUtils.instantiateClass(
+                handleClassNm.getDeclaredConstructor(ServerUrlUtil.ServerUrl.class, String.class, NaviPoolConfig.class), serverAddr, getAuth(), this.poolConfig
+            );
+
+            poolDrivers.add(naviDriver);
         } else {
-            List<ServerUrlUtil.ServerUrl> serverUrls = ServerUrlUtil
-                .getServerUrl((workMode == null && ServerConfigure
-                    .isDeployEnv())
-                    || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString()
-                    : getOfflineConnectString());
+            List<ServerUrlUtil.ServerUrl> serverUrls = ServerUrlUtil.getServerUrl(
+                (workMode == null && ServerConfigure.isDeployEnv()) || (workMode != null && workMode.equals("deploy")) ? getDeployConnectString() : getOfflineConnectString()
+            );
+
             for (ServerUrlUtil.ServerUrl serverUrl : serverUrls) {
-                INaviDriver naviDriver = (INaviDriver) BeanUtils
-                    .instantiateClass(handleClassNm.getDeclaredConstructor(
-                        ServerUrlUtil.ServerUrl.class, String.class,
-                        NaviPoolConfig.class), serverUrl, getAuth(),
-                        this.poolConfig);
+                INaviDriver naviDriver = (INaviDriver) BeanUtils.instantiateClass(handleClassNm.getDeclaredConstructor(
+                    ServerUrlUtil.ServerUrl.class, String.class, NaviPoolConfig.class), serverUrl, getAuth(), this.poolConfig
+                );
+
                 poolDrivers.add(naviDriver);
             }
         }
@@ -63,9 +59,9 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
     public INaviDriver getHandle() throws NaviSystemException {
         if (isSafeMode()) {
             // 安全模式
-            throw new NaviSystemException(new StringBuilder("the dataSource ")
-                .append(getNamespace()).append(" is the safemode.")
-                .toString(), NaviError.SYSERROR);
+            throw new NaviSystemException(
+                "the dataSource " + getNamespace() + " is the safemode.", NaviError.SYSERROR
+            );
         }
 
         int index = random.nextInt(poolDrivers.size());
@@ -74,19 +70,15 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (StringUtils.isBlank(getOfflineConnectString())
-            || StringUtils.isBlank(getDeployConnectString())) {
-            throw new NaviSystemException("invalid server address!",
-                NaviError.SYSERROR);
+        if (StringUtils.isBlank(getOfflineConnectString()) || StringUtils.isBlank(getDeployConnectString())) {
+            throw new NaviSystemException("invalid server address!", NaviError.SYSERROR);
         } else if (StringUtils.isBlank(getDriverClass())) {
-            throw new NaviSystemException("invalid driverClass!",
-                NaviError.SYSERROR);
+            throw new NaviSystemException("invalid driverClass!", NaviError.SYSERROR);
         }
+
         initConnPool();
         //exeCheckPool = Executors.newSingleThreadScheduledExecutor();
-        //exeCheckPool.scheduleAtFixedRate(new CheckPool(), 0, SLEEPTIME,
-        //		TimeUnit.SECONDS);
-
+        //exeCheckPool.scheduleAtFixedRate(new CheckPool(), 0, SLEEPTIME, TimeUnit.SECONDS);
     }
 
     /*
@@ -124,6 +116,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
                 // NaviError.SYSERROR, e);
             }
         }
+
         poolDrivers.clear();
         poolDrivers = null;
         //exeCheckPool.shutdown();

@@ -9,10 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class ANaviServer implements INaviServer {
 
-    public final int setupServer(Properties serverCfg) {
-        if (preStartServer(serverCfg)) {
+    public final int setupServer(Properties props) {
+        if (preStartServer(props)) {
             String zkopen = ServerConfigure.get("zk.open");
-            if (!StringUtils.isEmpty(zkopen) && zkopen.equalsIgnoreCase("true")) {
+            if (StringUtils.isNotEmpty(zkopen) && zkopen.equalsIgnoreCase("true")) {
                 Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new NaviRegisterTask(getServerType()), 0, 1, TimeUnit.MINUTES);
             }
 
@@ -23,6 +23,7 @@ public abstract class ANaviServer implements INaviServer {
 
             postStartServer();
         }
+
         return SUCCESS;
     }
 

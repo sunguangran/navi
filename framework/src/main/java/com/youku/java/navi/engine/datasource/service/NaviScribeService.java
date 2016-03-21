@@ -34,7 +34,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
     public boolean batchAppend(List<BatchLogEntry> logs) {
         NaviScribeDriver driver = getScribeDriver();
         try {
-            List<LogEntry> list = new ArrayList<LogEntry>();
+            List<LogEntry> list = new ArrayList<>();
             for (BatchLogEntry entry : logs) {
                 if (this.level > entry.getLevel()) {
                     continue;
@@ -64,8 +64,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
         return append(LogLevel.DEBUG.ordinal(), log, null, asynchronous);
     }
 
-    public boolean debug(String log, Throwable t,
-                         boolean asynchronous) {
+    public boolean debug(String log, Throwable t, boolean asynchronous) {
         return append(LogLevel.DEBUG.ordinal(), log, t, asynchronous);
     }
 
@@ -73,8 +72,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
         return append(LogLevel.INFO.ordinal(), log, null, asynchronous);
     }
 
-    public boolean info(String log, Throwable t,
-                        boolean asynchronous) {
+    public boolean info(String log, Throwable t, boolean asynchronous) {
         return append(LogLevel.INFO.ordinal(), log, t, asynchronous);
     }
 
@@ -82,8 +80,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
         return append(LogLevel.WARN.ordinal(), log, null, asynchronous);
     }
 
-    public boolean warn(String log, Throwable t,
-                        boolean asynchronous) {
+    public boolean warn(String log, Throwable t, boolean asynchronous) {
         return append(LogLevel.WARN.ordinal(), log, t, asynchronous);
     }
 
@@ -91,8 +88,7 @@ public class NaviScribeService extends AbstractNaviDataService implements INaviL
         return append(LogLevel.ERROR.ordinal(), log, null, asynchronous);
     }
 
-    public boolean error(String log, Throwable t,
-                         boolean asynchronous) {
+    public boolean error(String log, Throwable t, boolean asynchronous) {
         return append(LogLevel.ERROR.ordinal(), log, t, asynchronous);
     }
 

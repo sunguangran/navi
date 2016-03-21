@@ -2,7 +2,6 @@ package com.youku.java.navi.engine.datasource.service;
 
 import com.youku.java.navi.engine.core.INaviCache;
 
-
 public class DefaultTypedTuple<V> implements INaviCache.TypedTuple<V> {
 
     private final Double score;

@@ -22,7 +22,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.Iterator;
 
 @Slf4j
 public class NaviUtil {
@@ -45,11 +44,11 @@ public class NaviUtil {
         IllegalAccessException, ClassNotFoundException, SecurityException,
         IllegalArgumentException, NoSuchMethodException,
         InvocationTargetException {
-        CompoundIndexes compIndexes = dto.getClass().getAnnotation(
-            CompoundIndexes.class);
+        CompoundIndexes compIndexes = dto.getClass().getAnnotation(CompoundIndexes.class);
         AbstractNaviDto initDto = (AbstractNaviDto) Class.forName(
-            dto.getClass().getName(), true,
-            dto.getClass().getClassLoader()).newInstance();
+            dto.getClass().getName(), true, dto.getClass().getClassLoader()
+        ).newInstance();
+
         Criteria c = null;
         for (CompoundIndex compIndex : compIndexes.value()) {
             if (!compIndex.unique()) {
@@ -57,18 +56,16 @@ public class NaviUtil {
             }
             JSONObject fields = JSON.parseObject(compIndex.def());
 
-            @SuppressWarnings("unchecked")
-            Iterator<String> it = fields.keySet().iterator();
-            while (it.hasNext()) {
-                String fnm = it.next();
+            for (String fnm : fields.keySet()) {
                 Object conditionValue = dto.getValue(fnm);
-                if (conditionValue == null
-                    || conditionValue.equals(initDto.getValue(fnm))) {
+                if (conditionValue == null || conditionValue.equals(initDto.getValue(fnm))) {
                     break;
                 }
+
                 if (c == null) {
                     c = new Criteria();
                 }
+
                 c.and(fnm).is(conditionValue);
             }
             if (c != null) {
@@ -92,15 +89,14 @@ public class NaviUtil {
      * @throws ClassNotFoundException
      * @throws InstantiationException
      */
-    public static <T extends AbstractNaviDto> Update buildUpdate(T dto)
-        throws SecurityException, IllegalArgumentException,
+    public static <T extends AbstractNaviDto> Update buildUpdate(T dto) throws SecurityException, IllegalArgumentException,
         NoSuchMethodException, IllegalAccessException,
         InvocationTargetException, InstantiationException,
         ClassNotFoundException {
         Field[] fields = dto.getClass().getDeclaredFields();
-        AbstractNaviDto initDto = (AbstractNaviDto) Class
-            .forName(dto.getClass().getName(), true,
-                dto.getClass().getClassLoader()).newInstance();
+        AbstractNaviDto initDto = (AbstractNaviDto) Class.forName(
+            dto.getClass().getName(), true, dto.getClass().getClassLoader()
+        ).newInstance();
         Update up = new Update();
         for (Field field : fields) {
             String fnm = field.getName();

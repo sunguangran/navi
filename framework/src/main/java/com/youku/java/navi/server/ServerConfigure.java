@@ -22,8 +22,7 @@ public final class ServerConfigure implements NaviDefine {
     }
 
     public static boolean isDaemonEnv() {
-        // TODO
-        return false;
+        return serverCfg.containsKey(DAEMON_MODULE_NAME);
     }
 
     public static String get(String name) {
@@ -62,11 +61,11 @@ public final class ServerConfigure implements NaviDefine {
         if (StringUtils.isBlank(get(CHILD_CHANNEL_CLOSE))) {
             return true;
         }
+
         return Boolean.valueOf(get(CHILD_CHANNEL_CLOSE));
     }
 
     public static int getModuleLoadInterval() {
-
         return get(MODULE_LOAD_INTERVAL) == null ? DEFAULT_MODULE_LOAD_PERIOD : Integer.valueOf(get(MODULE_LOAD_INTERVAL));
     }
 

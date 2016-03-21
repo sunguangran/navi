@@ -15,8 +15,7 @@ import java.util.*;
 
 /**
  */
-public class NaviShardedJedisService extends AbstractNaviDataService implements
-    INaviCache {
+public class NaviShardedJedisService extends AbstractNaviDataService implements INaviCache {
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
 
@@ -26,8 +25,7 @@ public class NaviShardedJedisService extends AbstractNaviDataService implements
             return (NaviShardJedisDriver) driver;
         }
         driver.close();
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR);
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR);
     }
 
     private <K> byte[] object2Bytes(K k) {

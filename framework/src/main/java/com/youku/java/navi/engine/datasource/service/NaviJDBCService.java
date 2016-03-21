@@ -8,8 +8,7 @@ import com.youku.java.navi.engine.datasource.driver.NaviJdbcDriver;
 
 import java.sql.*;
 
-public class NaviJDBCService extends AbstractNaviDataService implements
-    INaviJdbc {
+public class NaviJDBCService extends AbstractNaviDataService implements INaviJdbc {
 
     protected NaviJdbcDriver getDriver() {
         INaviDriver driver = dataSource.getHandle();
@@ -17,8 +16,7 @@ public class NaviJDBCService extends AbstractNaviDataService implements
             return (NaviJdbcDriver) driver;
         }
         driver.close();
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR);
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR);
     }
 
     public ResultSet doQuery(String sql) throws SQLException {

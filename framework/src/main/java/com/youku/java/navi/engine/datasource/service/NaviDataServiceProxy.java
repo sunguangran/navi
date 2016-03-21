@@ -5,6 +5,7 @@ import com.youku.java.navi.engine.core.INaviLog;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -27,7 +28,11 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
     private IBaseDataService realService;
     private Object proxyService;
     private String localhost;
+
+    @Setter
     private INaviMonitorCollector collector;
+
+    @Setter
     private INaviLog naviLog;
 
     public NaviDataServiceProxy(IBaseDataService realService, Class<?> inter) {
@@ -35,9 +40,9 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
         Class<?>[] inters = realService.getClass().getInterfaces();
         //直接实现目标的接口的情况下使用java原生动态代理,否则使用cglib
         if (find(inters, inter)) {
-            this.proxyService = Proxy.newProxyInstance(realService.getClass()
-                    .getClassLoader(), realService.getClass().getInterfaces(),
-                this);
+            this.proxyService = Proxy.newProxyInstance(
+                realService.getClass().getClassLoader(), realService.getClass().getInterfaces(), this
+            );
         } else {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(this.realService.getClass());
@@ -61,8 +66,7 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
         return false;
     }
 
-    public Object intercept(Object proxyObject, Method method, Object[] args,
-                            MethodProxy proxy) throws Throwable {
+    public Object intercept(Object proxyObject, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         return invoke(proxyObject, method, args);
     }
 
@@ -132,14 +136,6 @@ public class NaviDataServiceProxy implements MethodInterceptor, InvocationHandle
             }
         }
         return localhost;
-    }
-
-    public void setCollector(INaviMonitorCollector collector) {
-        this.collector = collector;
-    }
-
-    public void setLog(INaviLog log) {
-        this.naviLog = log;
     }
 
 }

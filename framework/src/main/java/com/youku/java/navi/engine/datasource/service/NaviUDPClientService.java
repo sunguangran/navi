@@ -6,6 +6,8 @@ import com.youku.java.navi.engine.datasource.driver.NaviUDPClientDriver;
 import com.youku.java.navi.server.ServerConfigure;
 import com.youku.java.navi.server.api.INaviUDPResponseHandler;
 import com.youku.java.navi.utils.NaviUtil;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -20,8 +22,10 @@ import java.util.Random;
  * 建议使用String,因为对象效率低，同时UDP报文大小有限制，使用对象可能超出限制。
  */
 @Slf4j
-public class NaviUDPClientService extends AbstractNaviDataService implements
-    INaviUDPClientService {
+@Setter
+@Getter
+public class NaviUDPClientService extends AbstractNaviDataService implements INaviUDPClientService {
+
     protected String offlineConnectString;
     protected String deployConnectString;
     protected String[] hosts;
@@ -254,38 +258,6 @@ public class NaviUDPClientService extends AbstractNaviDataService implements
                 }
             }
         }
-    }
-
-    public String getOfflineConnectString() {
-        return offlineConnectString;
-    }
-
-    public void setOfflineConnectString(String offlineConnectString) {
-        this.offlineConnectString = offlineConnectString;
-    }
-
-    public String getDeployConnectString() {
-        return deployConnectString;
-    }
-
-    public void setDeployConnectString(String deployConnectString) {
-        this.deployConnectString = deployConnectString;
-    }
-
-    public boolean isSendAll() {
-        return sendAll;
-    }
-
-    public void setSendAll(boolean sendAll) {
-        this.sendAll = sendAll;
-    }
-
-    public void setHosts(String[] hosts) {
-        this.hosts = hosts;
-    }
-
-    public String[] getHosts() {
-        return hosts;
     }
 
     public void send(String host, int port, byte[] packet) {

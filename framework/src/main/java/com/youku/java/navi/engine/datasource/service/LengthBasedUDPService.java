@@ -4,8 +4,7 @@ import com.youku.java.navi.engine.core.ILengthBasedUDPService;
 
 public class LengthBasedUDPService extends NaviUDPClientService implements ILengthBasedUDPService {
 
-    public byte[] parseUDPPacket(String service, String module, String api, String extra,
-                                 byte[] msg) {
+    public byte[] parseUDPPacket(String service, String module, String api, String extra, byte[] msg) {
         int headerLength = 0;
         if (null != service && !"".equals(service)) {
             headerLength = headerLength + service.getBytes().length;

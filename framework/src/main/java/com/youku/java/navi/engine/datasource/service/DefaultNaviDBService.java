@@ -1,6 +1,5 @@
 package com.youku.java.navi.engine.datasource.service;
 
-import com.youku.java.navi.engine.core.INaviDB;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -8,8 +7,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import java.util.Collection;
 import java.util.List;
 
-public class DefaultNaviDBService extends AbstractNaviDataService implements
-    INaviDB {
+public class DefaultNaviDBService extends AbstractNaviDbService {
 
     public <T> void insert(T t) {
         // TODO Auto-generated method stub

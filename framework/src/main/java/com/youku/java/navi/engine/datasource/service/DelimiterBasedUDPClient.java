@@ -3,6 +3,7 @@ package com.youku.java.navi.engine.datasource.service;
 import com.youku.java.navi.engine.core.IDelimiterBasedUDPService;
 
 public class DelimiterBasedUDPClient extends NaviUDPClientService implements IDelimiterBasedUDPService {
+
     /**
      * 所有的分隔符必须为1个byte大小，否则为无效分隔符。
      *
@@ -20,9 +21,7 @@ public class DelimiterBasedUDPClient extends NaviUDPClientService implements IDe
      *     报文结尾分隔符
      * @return
      */
-    public String parseUDPPacket(String service, String module, String api, String extra,
-                                 String msg, String headerDelimiter, String msgDelimiter,
-                                 String packetDemlimiter) {
+    public String parseUDPPacket(String service, String module, String api, String extra, String msg, String headerDelimiter, String msgDelimiter, String packetDemlimiter) {
         StringBuilder result = new StringBuilder();
         if (null != service) {
             result.append(service);
@@ -44,6 +43,7 @@ public class DelimiterBasedUDPClient extends NaviUDPClientService implements IDe
             result.append(msg);
         }
         result.append(packetDemlimiter);
+
         return result.toString();
     }
 }

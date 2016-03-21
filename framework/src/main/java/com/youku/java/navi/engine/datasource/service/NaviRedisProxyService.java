@@ -12,11 +12,9 @@ import java.util.*;
 
 /**
  */
-public class NaviRedisProxyService extends AbstractNaviDataService implements
-    INaviCache {
+public class NaviRedisProxyService extends AbstractNaviDataService implements INaviCache {
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
-
 
     protected NaviRedisProxyDriver getDriver() {
         INaviDriver driver = dataSource.getHandle();
@@ -24,8 +22,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
             return (NaviRedisProxyDriver) driver;
         }
         driver.close();
-        throw new NaviSystemException("the driver is invalid!",
-            NaviError.SYSERROR);
+        throw new NaviSystemException("the driver is invalid!", NaviError.SYSERROR);
     }
 
     private <K> String object2String(K k) {
@@ -51,7 +48,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
     }
 
     private <V> List<V> strList2ObjList(List<String> list, Class<V> classNm) {
-        List<V> objList = new ArrayList<V>();
+        List<V> objList = new ArrayList<>();
         for (String str : list) {
             objList.add(string2Object(str, classNm));
         }
@@ -600,7 +597,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
             if (result == null || result.size() == 0) {
                 return null;
             }
-            Map<F, V> map = new LinkedHashMap<F, V>();
+            Map<F, V> map = new LinkedHashMap<>();
             for (String field : result.keySet()) {
                 map.put(string2Object(field, fieldClassNm), string2Object(result.get(field), valueClassNm));
             }
@@ -672,8 +669,7 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
         throw new UnsupportedOperationException();
     }
 
-    public <K> Object eval(K key, String script, int keyCount,
-                           String... params) {
+    public <K> Object eval(K key, String script, int keyCount, String... params) {
         throw new UnsupportedOperationException();
     }
 
@@ -684,6 +680,5 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements
     public <K> List<List<K>> groupKey(Class<K> classNm, K... keys) {
         throw new UnsupportedOperationException();
     }
-
 
 }

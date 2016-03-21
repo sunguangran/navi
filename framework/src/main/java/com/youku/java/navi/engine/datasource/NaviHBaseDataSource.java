@@ -8,6 +8,7 @@ import com.youku.java.navi.server.ServerConfigure;
 import org.apache.hadoop.conf.Configuration;
 
 public class NaviHBaseDataSource extends NaviLinearDataSource {
+
     private String offlineConnectString;
     private String deployConnectString;
     private NaviPoolConfig poolConfig;
@@ -46,12 +47,13 @@ public class NaviHBaseDataSource extends NaviLinearDataSource {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        JSONObject json = null;
+        JSONObject json;
         if (ServerConfigure.isDeployEnv()) {
             json = JSON.parseObject(this.deployConnectString);
         } else {
             json = JSON.parseObject(this.offlineConnectString);
         }
+        
         NaviPoolConfig poolConfig = new NaviHBasePoolConfig(json.toString());
         this.setConfig(poolConfig);
         super.initConnPool();

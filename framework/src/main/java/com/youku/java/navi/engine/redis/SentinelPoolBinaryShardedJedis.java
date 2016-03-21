@@ -9,10 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class SentinelPoolBinaryShardedJedis
-    extends
-    AbstractPoolBinaryShardedJedis<JedisSentinelPool, SentinelPoolJedisShardInfo> {
-
+public class SentinelPoolBinaryShardedJedis extends AbstractPoolBinaryShardedJedis<JedisSentinelPool, SentinelPoolJedisShardInfo> {
 
     public SentinelPoolBinaryShardedJedis(
         List<SentinelPoolJedisShardInfo> shards) {
@@ -50,7 +47,7 @@ public class SentinelPoolBinaryShardedJedis
             Pool<Jedis> multiJedis = getShard(key);
             List<byte[]> group = map.get(multiJedis);
             if (group == null) {
-                group = new LinkedList<byte[]>();
+                group = new LinkedList<>();
             }
             group.add(key);
             map.put(multiJedis, group);
@@ -58,6 +55,4 @@ public class SentinelPoolBinaryShardedJedis
         groups.addAll(map.values());
         return groups;
     }
-
-
 }

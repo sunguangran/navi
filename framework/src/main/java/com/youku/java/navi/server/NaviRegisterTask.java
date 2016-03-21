@@ -55,18 +55,22 @@ public class NaviRegisterTask implements Runnable {
         if (zookeeper == null) {
             return;
         }
+
         try {
             log.info("regist");
             if (zookeeper.exists("/naviserver", false) == null) {
                 zookeeper.create("/naviserver", "".getBytes(), DEFAULT_ACL, CreateMode.PERSISTENT);
             }
+
             String[] names = ManagementFactory.getRuntimeMXBean().getName().split("@");
+
             String hostname = names[1];
             String pid = names[0];
             String hostpath = "/navi".concat("/").concat(hostname);
             if (zookeeper.exists(hostpath, false) == null) {
                 zookeeper.create(hostpath, "".getBytes(), DEFAULT_ACL, CreateMode.PERSISTENT);
             }
+
             String node = hostpath.concat("/").concat(pid);
             if (zookeeper.exists(node, false) == null) {
                 zookeeper.create(node, buildNode(pid).toString().getBytes(), DEFAULT_ACL, CreateMode.EPHEMERAL);

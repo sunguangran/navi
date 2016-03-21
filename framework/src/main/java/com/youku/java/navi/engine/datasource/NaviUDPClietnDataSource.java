@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 public class NaviUDPClietnDataSource implements IUDPClientDataSource, ApplicationContextAware {
+
     private GenericObjectPool<INaviDriver> pool;
     private ClassLoader contextClassLoader;
     private String driverClass;
@@ -23,28 +24,25 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
     protected void initConnPool() throws Exception {
         Class<?> handleClassNm = getContextClassLoader().loadClass(driverClass);
-        pool = new GenericObjectPool<>(
-            new NaviPoolableObjectFactory(handleClassNm), poolConfig);
+        pool = new GenericObjectPool<>(new NaviPoolableObjectFactory(handleClassNm), poolConfig);
     }
 
     public INaviDriver getHandle() {
-        INaviDriver handle = null;
+        INaviDriver handle;
         try {
             handle = pool.borrowObject();
             handle.setPool(pool);
             return handle;
         } catch (Exception e) {
-            throw new NaviSystemException(e.getMessage(),
-                NaviError.SYSERROR, e);
+            throw new NaviSystemException(e.getMessage(), NaviError.SYSERROR, e);
         }
-
     }
 
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(getDriverClass())) {
-            throw new NaviSystemException("invalid driverClass!",
-                NaviError.SYSERROR);
+            throw new NaviSystemException("invalid driverClass!", NaviError.SYSERROR);
         }
+
         initConnPool();
     }
 
@@ -52,8 +50,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
         pool.close();
     }
 
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.contextClassLoader = applicationContext.getClassLoader();
     }
 

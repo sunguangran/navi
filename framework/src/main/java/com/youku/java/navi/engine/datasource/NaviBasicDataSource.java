@@ -1,40 +1,18 @@
 package com.youku.java.navi.engine.datasource;
 
 import com.youku.java.navi.server.ServerConfigure;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.InitializingBean;
 
+@Setter
+@Getter
 public class NaviBasicDataSource extends BasicDataSource implements InitializingBean {
-
 
     private String deployUrl;
     private String deployPassword;
     private String deployUsername;
-
-
-    public String getDeployUrl() {
-        return deployUrl;
-    }
-
-    public void setDeployUrl(String deployUrl) {
-        this.deployUrl = deployUrl;
-    }
-
-    public String getDeployPassword() {
-        return deployPassword;
-    }
-
-    public void setDeployPassword(String deployPassword) {
-        this.deployPassword = deployPassword;
-    }
-
-    public String getDeployUsername() {
-        return deployUsername;
-    }
-
-    public void setDeployUsername(String deployUsername) {
-        this.deployUsername = deployUsername;
-    }
 
     public void afterPropertiesSet() throws Exception {
         if (ServerConfigure.isDeployEnv()) {
@@ -43,6 +21,4 @@ public class NaviBasicDataSource extends BasicDataSource implements Initializing
             super.setPassword(deployPassword);
         }
     }
-
-
 }

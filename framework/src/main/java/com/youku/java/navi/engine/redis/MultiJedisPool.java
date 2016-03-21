@@ -69,15 +69,14 @@ public class MultiJedisPool {
             }
         }
 
-        if (servers.size() == 0) {
+        if (servers == null || servers.size() == 0) {
             log.error("All sentinels down, can't find redis servers");
             throw new RuntimeException("All sentinels down, can't find redis servers");
         }
 
         for (String sentinel : sentinels) {
             final HostAndPort hap = toHostAndPort(sentinel.split(":"));
-            MasterListener masterListener = new MasterListener(masterName,
-                hap.getHost(), hap.getPort(), readMaster);
+            MasterListener masterListener = new MasterListener(masterName, hap.getHost(), hap.getPort(), readMaster);
             masterListeners.add(masterListener);
             masterListener.start();
         }
@@ -111,7 +110,6 @@ public class MultiJedisPool {
     }
 
     public void destroy() {
-
         for (MasterListener m : masterListeners) {
             m.shutdown();
         }
@@ -122,7 +120,6 @@ public class MultiJedisPool {
     }
 
     public JedisPool randomJedisPool() {
-
         while (true) {
             Set<String> keys = poolsMap.keySet();
             String randomkey = keys.toArray(new String[0])[random.nextInt(keys.size())];
@@ -181,14 +178,12 @@ public class MultiJedisPool {
             this.readMaster = readMaster;
         }
 
-        public MasterListener(String masterName, String host, int port, boolean readMaster,
-                              long subscribeRetryWaitTimeMillis) {
+        public MasterListener(String masterName, String host, int port, boolean readMaster, long subscribeRetryWaitTimeMillis) {
             this(masterName, host, port, readMaster);
             this.subscribeRetryWaitTimeMillis = subscribeRetryWaitTimeMillis;
         }
 
         public void run() {
-
             running.set(true);
 
             while (running.get()) {

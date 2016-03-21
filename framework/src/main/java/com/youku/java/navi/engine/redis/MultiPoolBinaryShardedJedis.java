@@ -8,8 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MultiPoolBinaryShardedJedis extends
-    AbstractPoolBinaryShardedJedis<MultiJedisPool, MultiJedisPoolInfo> {
+public class MultiPoolBinaryShardedJedis extends AbstractPoolBinaryShardedJedis<MultiJedisPool, MultiJedisPoolInfo> {
 
     public MultiPoolBinaryShardedJedis(List<MultiJedisPoolInfo> shards) {
         super(shards);
@@ -29,7 +28,6 @@ public class MultiPoolBinaryShardedJedis extends
 
     @Override
     public List<List<byte[]>> groupKeys(byte[][] keys) {
-
         List<List<byte[]>> groups = new LinkedList<>();
 
         if (keys.length == 0) {
@@ -54,6 +52,7 @@ public class MultiPoolBinaryShardedJedis extends
             map.put(multiJedis, group);
         }
         groups.addAll(map.values());
+
         return groups;
     }
 

@@ -22,7 +22,7 @@ public class NaviHBaseTemplateFactory {
 
     public NaviHBaseTemplateFactory(INaviDataSource dataSource) {
         this.dataSource = dataSource;
-        tmptMap = new HashMap<String, HbaseTemplate>();
+        tmptMap = new HashMap<>();
     }
 
     public HbaseTemplate getHBaseTemplate(String table) {

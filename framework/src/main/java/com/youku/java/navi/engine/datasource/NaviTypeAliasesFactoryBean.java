@@ -1,5 +1,7 @@
 package com.youku.java.navi.engine.datasource;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.context.ApplicationContext;
@@ -22,15 +24,15 @@ import java.util.List;
  * 2015年1月14日   hequnfei      1.0            1.0
  * Why & What is modified: newly added
  */
-public class NaviTypeAliasesFactoryBean implements FactoryBean<List<Class<?>>>,
-    ApplicationContextAware {
+@Setter
+@Getter
+public class NaviTypeAliasesFactoryBean implements FactoryBean<List<Class<?>>>, ApplicationContextAware {
 
     private ApplicationContext context;
 
     private String[] types;
 
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
     }
 
@@ -39,6 +41,7 @@ public class NaviTypeAliasesFactoryBean implements FactoryBean<List<Class<?>>>,
         for (String type : types) {
             list.add(context.getClassLoader().loadClass(type));
         }
+        
         return list;
     }
 
@@ -48,22 +51,6 @@ public class NaviTypeAliasesFactoryBean implements FactoryBean<List<Class<?>>>,
 
     public boolean isSingleton() {
         return true;
-    }
-
-    public ApplicationContext getContext() {
-        return context;
-    }
-
-    public void setContext(ApplicationContext context) {
-        this.context = context;
-    }
-
-    public String[] getTypes() {
-        return types;
-    }
-
-    public void setTypes(String[] types) {
-        this.types = types;
     }
 
 }

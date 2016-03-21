@@ -3,6 +3,7 @@ package com.youku.java.navi.engine.datasource.service;
 import com.youku.java.navi.engine.core.INaviCache;
 import com.youku.java.navi.engine.core.INaviLog;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
+import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
@@ -10,16 +11,23 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public class NaviCacheFactoryBean implements FactoryBean<INaviCache> {
 
+    @Setter
     private INaviCache realService;
+
+    @Setter
     private boolean useproxy = true;
+
+    @Setter
     private INaviMonitorCollector collector;
+
+    @Setter
     private INaviLog log;
 
     public INaviCache getObject() throws Exception {
         if (useproxy) {
             NaviDataServiceProxy proxy = new NaviDataServiceProxy(realService, INaviCache.class);
             proxy.setCollector(collector);
-            proxy.setLog(log);
+            proxy.setNaviLog(log);
             return (INaviCache) proxy.getProxyService();
         } else {
             return realService;
@@ -32,22 +40,6 @@ public class NaviCacheFactoryBean implements FactoryBean<INaviCache> {
 
     public boolean isSingleton() {
         return true;
-    }
-
-    public void setRealService(INaviCache realService) {
-        this.realService = realService;
-    }
-
-    public void setUseproxy(boolean useproxy) {
-        this.useproxy = useproxy;
-    }
-
-    public void setCollector(INaviMonitorCollector collector) {
-        this.collector = collector;
-    }
-
-    public void setLog(INaviLog log) {
-        this.log = log;
     }
 
 }

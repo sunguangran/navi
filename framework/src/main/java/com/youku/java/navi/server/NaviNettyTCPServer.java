@@ -49,12 +49,13 @@ public class NaviNettyTCPServer extends ANaviTCPServer {
         if (null != delimiter) {
             return delimiter;
         }
+
         String packetDelimiter = NaviDefine.DEFAULT_PACKET_DELIMITER;
         byte[] delimiterBytes = packetDelimiter.getBytes();
         if (ServerConfigure.containsKey(NaviDefine.PACKET_DELIMITER)) {
             packetDelimiter = ServerConfigure.get(NaviDefine.PACKET_DELIMITER);
             delimiterBytes = packetDelimiter.getBytes();
-            if (null != packetDelimiter && packetDelimiter.contains("\\")) {
+            if (packetDelimiter.contains("\\")) {
                 delimiterBytes = new byte[]{Byte.parseByte(packetDelimiter.replace("\\", ""))};
             }
         }
@@ -67,6 +68,7 @@ public class NaviNettyTCPServer extends ANaviTCPServer {
         if (ServerConfigure.containsKey(NaviDefine.TCP_MAX_PACKET_SIZE)) {
             maxSize = Integer.parseInt(ServerConfigure.get(NaviDefine.TCP_MAX_PACKET_SIZE));
         }
+
         return maxSize;
     }
 

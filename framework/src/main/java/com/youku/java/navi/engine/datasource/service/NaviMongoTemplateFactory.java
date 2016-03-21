@@ -17,7 +17,7 @@ import java.util.Map;
 public class NaviMongoTemplateFactory {
 
     private INaviDataSource dataSource;
-    private Map<String, MongoTemplate> tmptMap = new HashMap<String, MongoTemplate>();
+    private Map<String, MongoTemplate> tmptMap = new HashMap<>();
 
     public NaviMongoTemplateFactory(INaviDataSource dataSource) {
         this.dataSource = dataSource;
@@ -28,10 +28,8 @@ public class NaviMongoTemplateFactory {
         if (!tmptMap.containsKey(database)) {
             synchronized (this) {
                 if (!tmptMap.containsKey(database)) {
-                    NaviMongoDbFactory dbFactory = new NaviMongoDbFactory(
-                        dataSource, database);
-                    MongoTemplate template = new MongoTemplate(dbFactory,
-                        getDefaultMongoConverter(dbFactory));
+                    NaviMongoDbFactory dbFactory = new NaviMongoDbFactory(dataSource, database);
+                    MongoTemplate template = new MongoTemplate(dbFactory, getDefaultMongoConverter(dbFactory));
                     template.setWriteConcern(WriteConcern.SAFE);
                     tmptMap.put(database, template);
                 }
@@ -42,8 +40,7 @@ public class NaviMongoTemplateFactory {
     }
 
     private MongoConverter getDefaultMongoConverter(MongoDbFactory factory) {
-        MappingMongoConverter converter = new MappingMongoConverter(factory,
-            new MongoMappingContext());
+        MappingMongoConverter converter = new MappingMongoConverter(factory, new MongoMappingContext());
         converter.afterPropertiesSet();
         converter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return converter;

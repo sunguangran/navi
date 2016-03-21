@@ -3,11 +3,13 @@ package com.youku.java.navi.engine.datasource.service;
 import com.youku.java.navi.engine.core.INaviDB;
 import com.youku.java.navi.engine.core.INaviLog;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
+import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
  * NaviDB工厂bean,用于将真实service包装成代理service
  */
+@Setter
 public class NaviDBFactoryBean implements FactoryBean<INaviDB> {
 
     private INaviDB realService;
@@ -19,7 +21,7 @@ public class NaviDBFactoryBean implements FactoryBean<INaviDB> {
         if (useproxy) {
             NaviDataServiceProxy proxy = new NaviDataServiceProxy(realService, INaviDB.class);
             proxy.setCollector(collector);
-            proxy.setLog(log);
+            proxy.setNaviLog(log);
             return (INaviDB) proxy.getProxyService();
         } else {
             return realService;
@@ -32,22 +34,6 @@ public class NaviDBFactoryBean implements FactoryBean<INaviDB> {
 
     public boolean isSingleton() {
         return true;
-    }
-
-    public void setRealService(INaviDB realService) {
-        this.realService = realService;
-    }
-
-    public void setUseproxy(boolean useproxy) {
-        this.useproxy = useproxy;
-    }
-
-    public void setCollector(INaviMonitorCollector collector) {
-        this.collector = collector;
-    }
-
-    public void setLog(INaviLog log) {
-        this.log = log;
     }
 
 }

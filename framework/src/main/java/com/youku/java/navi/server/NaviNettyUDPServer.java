@@ -13,6 +13,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 
 public class NaviNettyUDPServer extends ANaviPacketServer {
+
     private NaviExecutionHandler executionHandler;
 
     public ChannelPipelineFactory getPipelineFactory() {
@@ -30,7 +31,7 @@ public class NaviNettyUDPServer extends ANaviPacketServer {
 
     public ChannelBuffer getDelimiter() {
         String packetDelimiter = NaviDefine.DEFAULT_PACKET_DELIMITER;
-        byte[] delimiterBytes = null;
+        byte[] delimiterBytes;
         if (ServerConfigure.containsKey(NaviDefine.PACKET_DELIMITER)) {
             packetDelimiter = ServerConfigure.get(NaviDefine.PACKET_DELIMITER);
         }

@@ -44,6 +44,9 @@ public interface NaviDefine {
 
     //moudle enter class
     //http server enter class
+    //运行后台模块必需
+    String DAEMON_MODULE_NAME="daemon_module_name";
+    String DAEMON_CLASS_ARGS="daemon_class_args";
 
     String SERVERCLASS = "com.youku.java.navi.server.NaviNettyServer";
     String SERVERCLASS_UDP = "com.youku.java.navi.server.NaviNettyUDPServer";

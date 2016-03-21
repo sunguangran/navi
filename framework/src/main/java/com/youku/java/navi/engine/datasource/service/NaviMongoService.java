@@ -4,6 +4,8 @@ import com.mongodb.WriteResult;
 import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDB;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
@@ -15,25 +17,17 @@ import java.util.List;
 
 public class NaviMongoService extends AbstractNaviDataService implements INaviDB {
 
+    @Setter @Getter
     private String databaseNm;
     private MongoTemplate mongoTempt;
-
-    public String getDatabaseNm() {
-        return databaseNm;
-    }
-
-    public void setDatabaseNm(String databaseNm) {
-        this.databaseNm = databaseNm;
-    }
 
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         if (databaseNm == null) {
-            throw new NaviSystemException("dataSource or databaseNm is null",
-                NaviError.SYSERROR);
+            throw new NaviSystemException("dataSource or databaseNm is null", NaviError.SYSERROR);
         }
-        mongoTempt = new NaviMongoTemplateFactory(dataSource)
-            .getMongoTemplate(databaseNm);
+
+        mongoTempt = new NaviMongoTemplateFactory(dataSource).getMongoTemplate(databaseNm);
     }
 
     public <T> void insert(T t) {
@@ -100,8 +94,7 @@ public class NaviMongoService extends AbstractNaviDataService implements INaviDB
     }
 
     public <T> MongoPersistentProperty getIdProperties(Class<T> classNm) {
-        return mongoTempt.getConverter().getMappingContext()
-            .getPersistentEntity(classNm).getIdProperty();
+        return mongoTempt.getConverter().getMappingContext().getPersistentEntity(classNm).getIdProperty();
     }
 
     public <T> List<T> findAll(Class<T> entityClass) {
