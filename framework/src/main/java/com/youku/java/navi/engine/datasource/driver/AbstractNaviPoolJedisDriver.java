@@ -21,17 +21,15 @@ import static redis.clients.jedis.Protocol.toByteArray;
 
 public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDriver {
 
-
     public AbstractNaviPoolJedisDriver(ServerUrlUtil.ServerUrl server, String auth) {
         super(server, auth);
     }
 
-    public AbstractNaviPoolJedisDriver(ServerUrlUtil.ServerUrl server, String auth,
-                                       NaviPoolConfig poolConfig) {
+    public AbstractNaviPoolJedisDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }
 
-    abstract public AbstractPoolBinaryShardedJedis<?, ?> getJedis();
+    public abstract AbstractPoolBinaryShardedJedis<?, ?> getJedis();
 
     public Boolean exists(byte[] key) {
         return getJedis().exists(key);
@@ -87,8 +85,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public List<byte[]> sort(byte[] key, SortParameters params) {
-        SortingParams sortParams = NaviShardedJedisUtils
-            .convertSortParams(params);
+        SortingParams sortParams = NaviShardedJedisUtils.convertSortParams(params);
         return getJedis() != null ? getJedis().sort(key, sortParams) : getJedis().sort(key);
     }
 
@@ -101,9 +98,10 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public List<byte[]> mGet(byte[]... keys) {
+        // TODO 返回结果要保持输入key值的顺序
         List<List<byte[]>> groups = groupKeys(keys);
-        List<byte[]> result = new LinkedList<byte[]>();
-        List<Response<byte[]>> responses = new LinkedList<Response<byte[]>>();
+        List<byte[]> result = new LinkedList<>();
+        List<Response<byte[]>> responses = new LinkedList<>();
         for (List<byte[]> group : groups) {
             INaviMultiRedis multiRedis = getJedis().openPipeline(group.get(0));
             try {
@@ -240,8 +238,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public Long lInsert(byte[] key, Position where, byte[] pivot, byte[] value) {
-        return getJedis().linsert(key, NaviShardedJedisUtils.convertPosition(where),
-            pivot, value);
+        return getJedis().linsert(key, NaviShardedJedisUtils.convertPosition(where), pivot, value);
     }
 
     public String lSet(byte[] key, long index, byte[] value) {
@@ -316,7 +313,6 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
 
     public void sInterStore(byte[] destKey, byte[]... keys) {
         throw new UnsupportedOperationException();
-
     }
 
     public Set<byte[]> sUnion(byte[]... keys) {
@@ -372,8 +368,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public Set<Tuple> zRangeWithScores(byte[] key, long begin, long end) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrevrangeWithScores(key, (int) begin, (int) end));
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrevrangeWithScores(key, (int) begin, (int) end));
     }
 
     public Set<byte[]> zRangeByScore(byte[] key, double min, double max) {
@@ -381,20 +376,15 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public Set<Tuple> zRangeByScoreWithScores(byte[] key, double min, double max) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrangeByScoreWithScores(key, min, max));
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrangeByScoreWithScores(key, min, max));
     }
 
-    public Set<byte[]> zRangeByScore(byte[] key, double min, double max,
-                                     long offset, long count) {
+    public Set<byte[]> zRangeByScore(byte[] key, double min, double max, long offset, long count) {
         return getJedis().zrangeByScore(key, min, max, (int) offset, (int) count);
     }
 
-    public Set<Tuple> zRangeByScoreWithScores(byte[] key, double min,
-                                              double max, long offset, long count) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrangeByScoreWithScores(key, min, max, (int) offset,
-                (int) count));
+    public Set<Tuple> zRangeByScoreWithScores(byte[] key, double min, double max, long offset, long count) {
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrangeByScoreWithScores(key, min, max, (int) offset, (int) count));
     }
 
     public Set<byte[]> zRevRange(byte[] key, long begin, long end) {
@@ -402,30 +392,23 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public Set<Tuple> zRevRangeWithScores(byte[] key, long begin, long end) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrevrangeWithScores(key, (int) begin, (int) end));
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrevrangeWithScores(key, (int) begin, (int) end));
     }
 
     public Set<byte[]> zRevRangeByScore(byte[] key, double min, double max) {
         return getJedis().zrevrangeByScore(key, max, min);
     }
 
-    public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
-                                                 double max) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrevrangeByScoreWithScores(key, max, min));
+    public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min, double max) {
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrevrangeByScoreWithScores(key, max, min));
     }
 
-    public Set<byte[]> zRevRangeByScore(byte[] key, double min, double max,
-                                        long offset, long count) {
+    public Set<byte[]> zRevRangeByScore(byte[] key, double min, double max, long offset, long count) {
         return getJedis().zrevrangeByScore(key, max, min, (int) offset, (int) count);
     }
 
-    public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
-                                                 double max, long offset, long count) {
-        return NaviShardedJedisUtils.convertJedisTuple(getJedis()
-            .zrevrangeByScoreWithScores(key, max, min, (int) offset,
-                (int) count));
+    public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min, double max, long offset, long count) {
+        return NaviShardedJedisUtils.convertJedisTuple(getJedis().zrevrangeByScoreWithScores(key, max, min, (int) offset, (int) count));
     }
 
     public Long zCount(byte[] key, double min, double max) {
@@ -452,8 +435,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
         throw new UnsupportedOperationException();
     }
 
-    public Long zUnionStore(byte[] destKey, Aggregate aggregate, int[] weights,
-                            byte[]... sets) {
+    public Long zUnionStore(byte[] destKey, Aggregate aggregate, int[] weights, byte[]... sets) {
         throw new UnsupportedOperationException();
     }
 
@@ -461,8 +443,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
         throw new UnsupportedOperationException();
     }
 
-    public Long zInterStore(byte[] destKey, Aggregate aggregate, int[] weights,
-                            byte[]... sets) {
+    public Long zInterStore(byte[] destKey, Aggregate aggregate, int[] weights, byte[]... sets) {
         throw new UnsupportedOperationException();
     }
 
@@ -507,7 +488,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public List<byte[]> hVals(byte[] key) {
-        return new LinkedList<byte[]>(getJedis().hvals(key));
+        return new LinkedList<>(getJedis().hvals(key));
     }
 
     public Map<byte[], byte[]> hGetAll(byte[] key) {
@@ -548,7 +529,6 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
 
     public void subscribe(MessageListener listener, byte[]... channels) {
         throw new UnsupportedOperationException();
-
     }
 
     public void pSubscribe(MessageListener listener, byte[]... patterns) {
@@ -557,7 +537,6 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
 
     public void select(int dbIndex) {
         throw new UnsupportedOperationException();
-
     }
 
     public byte[] echo(byte[] message) {
@@ -610,7 +589,6 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
 
     public void setConfig(String param, String value) {
         throw new UnsupportedOperationException();
-
     }
 
     public void resetConfigStats() {
@@ -634,8 +612,7 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public List<Object> closePipeline() {
-        throw new UnsupportedOperationException(
-            "is not be surpported in the distributed envriment!");
+        throw new UnsupportedOperationException("is not be surpported in the distributed envriment!");
     }
 
     public INaviMultiRedis multi(byte[] key) {
@@ -657,4 +634,5 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     public List<List<byte[]>> groupKeys(byte[][] keys) {
         return getJedis().groupKeys(keys);
     }
+    
 }

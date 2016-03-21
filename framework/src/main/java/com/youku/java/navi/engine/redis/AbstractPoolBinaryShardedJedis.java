@@ -21,7 +21,7 @@ public abstract class AbstractPoolBinaryShardedJedis<R, S extends ShardInfo<R>> 
         log.error("Host:" + jedis.getClient().getHost() + ":" + jedis.getClient().getPort());
     }
 
-    abstract public Pool<Jedis> getPool(byte[] key);
+    public abstract Pool<Jedis> getPool(byte[] key);
 
     public Object doCommand(IRedisCommand command, byte[] key, Object... args) {
         Pool<Jedis> pool = getPool(key);
@@ -1122,7 +1122,7 @@ public abstract class AbstractPoolBinaryShardedJedis<R, S extends ShardInfo<R>> 
     }
 
 
-    abstract public List<List<byte[]>> groupKeys(byte[][] keys);
+    public abstract List<List<byte[]>> groupKeys(byte[][] keys);
 
 
     public INaviMultiRedis multi(byte[] key) {

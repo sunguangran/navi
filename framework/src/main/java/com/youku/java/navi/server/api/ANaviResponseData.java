@@ -58,23 +58,22 @@ public abstract class ANaviResponseData implements INaviResponseData {
             return toResponseNull();
         } else if (data instanceof NaviBusinessException) {
             return toResponseForBusinessException();
-        } else if (data instanceof Collection) {
-            return toResponseForList();
-        } else if (data.getClass().isArray()) {
-            return toResponseForArray();
         } else if (data instanceof JSONArray) {
             return toResponseForJsonArray();
         } else if (data instanceof JSONObject) {
             return toResponseForJsonObject();
+        } else if (data instanceof Collection) {
+            return toResponseForList();
+        } else if (data.getClass().isArray()) {
+            return toResponseForArray();
         }
+
         return toResponseForObject();
     }
 
-    protected abstract String toResponseForJsonObject()
-        throws NaviSystemException;
+    protected abstract String toResponseForJsonObject() throws NaviSystemException;
 
-    protected abstract String toResponseForJsonArray()
-        throws NaviSystemException;
+    protected abstract String toResponseForJsonArray() throws NaviSystemException;
 
     @Override
     public String toString() {

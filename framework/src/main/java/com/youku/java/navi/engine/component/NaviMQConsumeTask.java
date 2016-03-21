@@ -3,6 +3,8 @@ package com.youku.java.navi.engine.component;
 import com.youku.java.navi.engine.core.IBaseDataService;
 import com.youku.java.navi.engine.core.INaviMQConsumeStrategy;
 import com.youku.java.navi.engine.core.INaviMessageQueue;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
+@Setter
+@Getter
 public class NaviMQConsumeTask<T> implements Runnable, DisposableBean, InitializingBean {
 
     private IBaseDataService service;
@@ -19,21 +23,12 @@ public class NaviMQConsumeTask<T> implements Runnable, DisposableBean, Initializ
     private INaviMQConsumeStrategy<T> strategy;
     private NaviMQContext context;
     private String queueKey;
-
     private AtomicBoolean open = new AtomicBoolean(true);
-
-    public NaviMQContext getContext() {
-        return context;
-    }
-
-    public void setContext(NaviMQContext context) {
-        this.context = context;
-    }
 
     public void run() {
         while (open.get()) {
             try {
-                List<T> list = new LinkedList<T>();
+                List<T> list = new LinkedList<>();
                 if (context.getConsumeRate() > 1) {
                     int size = queue.drainTo(queueKey, list, context.getConsumeRate(), strategy.getClassNM());
                     if (size <= 0) {
@@ -68,35 +63,12 @@ public class NaviMQConsumeTask<T> implements Runnable, DisposableBean, Initializ
         if (context == null) {
             context = new NaviMQContext();
         }
+
         queue = new NaviMessageQueueFactory().createMQ(service, queueKey, context.getMqEnumType());
     }
 
     public void destroy() throws Exception {
         stop();
-    }
-
-    public void setService(IBaseDataService service) {
-        this.service = service;
-    }
-
-    public IBaseDataService getService() {
-        return service;
-    }
-
-    public INaviMQConsumeStrategy<T> getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(INaviMQConsumeStrategy<T> strategy) {
-        this.strategy = strategy;
-    }
-
-    public String getQueueKey() {
-        return queueKey;
-    }
-
-    public void setQueueKey(String queueKey) {
-        this.queueKey = queueKey;
     }
 
     public void setQueue(INaviMessageQueue queue) {

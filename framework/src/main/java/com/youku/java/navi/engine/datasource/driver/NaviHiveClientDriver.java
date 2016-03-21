@@ -2,6 +2,7 @@ package com.youku.java.navi.engine.datasource.driver;
 
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
+import lombok.Getter;
 import org.apache.hadoop.hive.service.HiveClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -12,6 +13,8 @@ import org.apache.thrift.transport.TTransportException;
 public class NaviHiveClientDriver extends AbstractNaviDriver {
 
     private TTransport transport;
+
+    @Getter
     private HiveClient client;
 
     public NaviHiveClientDriver(ServerUrlUtil.ServerUrl server, String auth,
@@ -25,10 +28,6 @@ public class NaviHiveClientDriver extends AbstractNaviDriver {
         } catch (TTransportException e) {
             e.printStackTrace();
         }
-    }
-
-    public HiveClient getClient() {
-        return client;
     }
 
     public void destroy() {

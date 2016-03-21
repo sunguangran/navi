@@ -36,35 +36,6 @@ public abstract class ANaviAction implements InitializingBean {
 
             Object[] args = new Object[]{request, response};
 
-//            for (int i = 0; i < method.getParameterCount(); i++) {
-//                Parameter param = method.getParameters()[i];
-//                if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpRequest.class)) {
-//                    args[i] = request;
-//                } else if (param.getType().equals(com.youku.java.navi.server.api.NaviHttpResponse.class)) {
-//                    args[i] = response;
-//                } else {
-//                    Param an = param.getAnnotation(Param.class);
-//                    boolean empty = StringUtils.isEmpty(request.getParameter(an.value()));
-//
-//                    Class<?> type = param.getType();
-//
-//                    Object value;
-//                    if (type.equals(Integer.class) || type.equals(int.class)) {
-//                        value = empty ? 0 : Integer.parseInt(request.getParameter(an.value()));
-//                    } else if (type.equals(Long.class) || type.equals(long.class)) {
-//                        value = empty ? 0L : Long.parseLong(request.getParameter(an.value()));
-//                    } else if (type.equals(Float.class) || type.equals(float.class)) {
-//                        value = empty ? 0F : Float.parseFloat(request.getParameter(an.value()));
-//                    } else if (type.equals(Double.class) || type.equals(double.class)) {
-//                        value = empty ? 0D : Double.parseDouble(request.getParameter(an.value()));
-//                    } else {
-//                        value = empty ? null : request.getParameter(an.value());
-//                    }
-//
-//                    args[i] = value;
-//                }
-//            }
-
             // action
             method.invoke(this, args);
 
@@ -116,7 +87,7 @@ public abstract class ANaviAction implements InitializingBean {
 
                     NaviModuleContextFactory.getInstance().addRestApi(uri, api);
 
-                    log.info("rest api found: " + uri);
+                    log.debug("rest api found: " + uri);
                 }
             }
         }

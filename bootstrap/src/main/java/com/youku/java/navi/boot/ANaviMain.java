@@ -24,7 +24,6 @@ public abstract class ANaviMain {
 
             // 初始化Logback
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-
             lc.reset();
 
             if (NaviDefine.NAVI_HOME != null) {
@@ -33,7 +32,6 @@ public abstract class ANaviMain {
                 configurator.doConfigure(NaviDefine.NAVI_LOGBACK_PATH);
             } else {
                 BasicConfigurator.configure(lc);
-                // configurator.doConfigure(Thread.currentThread().getContextClassLoader().getResourceAsStream("logback.xml"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,8 +81,9 @@ public abstract class ANaviMain {
      * 构建启动配置对象
      */
     public Properties parseServerConfig(String[] args) {
+        // 开发模式使用默认配置
         if (NaviDefine.NAVI_HOME == null) {
-            log.error("NAVI_HOME not defined, will use default config");
+            log.warn("NAVI_HOME not defined, will use default config");
 
             Properties serverCfg = new Properties();
             serverCfg.setProperty(NaviDefine.PORT, NaviDefine.DEFAULT_PORT);
@@ -103,17 +102,12 @@ public abstract class ANaviMain {
         final INaviServer server;
         if (NaviDefine.WORK_MODE.DEV == NaviDefine.WORK_MODE.toEnum(mode)) {
             server = (INaviServer) Class.forName(getStartClass(serverConfig), true, Thread.currentThread().getContextClassLoader()).newInstance();
-//			statCode = server.setupServer(serverConfig);
-//			Runtime.getRuntime().addShutdownHook(new NaviShutdownHook(server));
         } else {
-            NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread()
-                .getContextClassLoader());
+            NaviServerClassloader loader = new NaviServerClassloader(Thread.currentThread().getContextClassLoader());
             Thread.currentThread().setContextClassLoader(loader);
-            server = (INaviServer) Class.forName(
-                getStartClass(serverConfig),
-                true,
-                loader).newInstance();
+            server = (INaviServer) Class.forName(getStartClass(serverConfig), true, loader).newInstance();
         }
+
         statCode = server.setupServer(serverConfig);
         if (statCode == INaviServer.SUCCESS) {
             Runtime.getRuntime().addShutdownHook(new Thread() {

@@ -8,8 +8,7 @@ import java.net.MalformedURLException;
  */
 public class NaviServerClassloader extends NaviJarClassLoader {
 
-    public NaviServerClassloader() throws FileNotFoundException,
-        MalformedURLException {
+    public NaviServerClassloader() throws FileNotFoundException, MalformedURLException {
         super(NaviDefine.NAVI_LIBS);
         loadJarFiles();
     }

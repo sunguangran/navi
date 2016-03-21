@@ -51,6 +51,7 @@ public class PoolBinaryShardedJedis extends AbstractPoolBinaryShardedJedis<Jedis
             group.add(key);
             map.put(multiJedis, group);
         }
+        
         groups.addAll(map.values());
         return groups;
     }

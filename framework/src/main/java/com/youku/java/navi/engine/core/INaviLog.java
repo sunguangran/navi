@@ -5,37 +5,37 @@ import java.util.List;
 
 public interface INaviLog extends IBaseDataService {
 
-    public void setLevel(int level);
+    void setLevel(int level);
 
-    public boolean debug(String log, boolean asynchronous);
+    boolean debug(String log, boolean asynchronous);
 
-    public boolean debug(String log, Throwable t, boolean asynchronous);
+    boolean debug(String log, Throwable t, boolean asynchronous);
 
-    public boolean info(String log, boolean asynchronous);
+    boolean info(String log, boolean asynchronous);
 
-    public boolean info(String log, Throwable t, boolean asynchronous);
+    boolean info(String log, Throwable t, boolean asynchronous);
 
-    public boolean warn(String log, boolean asynchronous);
+    boolean warn(String log, boolean asynchronous);
 
-    public boolean warn(String log, Throwable t, boolean asynchronous);
+    boolean warn(String log, Throwable t, boolean asynchronous);
 
-    public boolean error(String log, boolean asynchronous);
+    boolean error(String log, boolean asynchronous);
 
-    public boolean error(String log, Throwable t, boolean asynchronous);
+    boolean error(String log, Throwable t, boolean asynchronous);
 
-    public boolean batchAppend(List<BatchLogEntry> logs);
+    boolean batchAppend(List<BatchLogEntry> logs);
 
-    public enum LogLevel {
+    enum LogLevel {
         DEBUG, INFO, WARN, ERROR
     }
 
-    public class BatchLogEntry {
+    class BatchLogEntry {
         private int level;
         private String log;
         private Throwable excpetion;
         private Date date;
 
-        public BatchLogEntry(int level, String log, Throwable excpetion) {
+        BatchLogEntry(int level, String log, Throwable excpetion) {
             this.level = level;
             this.log = log;
             this.excpetion = excpetion;

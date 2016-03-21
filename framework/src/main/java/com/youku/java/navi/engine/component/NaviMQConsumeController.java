@@ -1,5 +1,7 @@
 package com.youku.java.navi.engine.component;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -8,20 +10,11 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SuppressWarnings("rawtypes")
 public class NaviMQConsumeController implements DisposableBean, InitializingBean {
 
-
+    @Setter @Getter
     private List<NaviMQConsumeTask> tasks;
     private ExecutorService executor;
-
-    public List<NaviMQConsumeTask> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<NaviMQConsumeTask> tasks) {
-        this.tasks = tasks;
-    }
 
     public NaviMQConsumeController() {
         executor = Executors.newCachedThreadPool();

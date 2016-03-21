@@ -40,7 +40,9 @@ public abstract class AbstractNaviRequestDispatcher implements INaviHttpRequestD
                 log.warn("Navi Request is null!");
             }
         } catch (Exception e) {
+            // 反射异常
             if (e instanceof InvocationTargetException) {
+                // bussiness异常会经过反射异常封装抛出
                 if (((InvocationTargetException) e).getTargetException() instanceof NaviBusinessException) {
                     t = System.currentTimeMillis() - t;
                     NaviBusinessException ee = (NaviBusinessException) ((InvocationTargetException) e).getTargetException();

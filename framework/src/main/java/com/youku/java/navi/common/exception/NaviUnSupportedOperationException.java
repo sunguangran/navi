@@ -7,7 +7,7 @@ public class NaviUnSupportedOperationException extends NaviSystemException {
     private static final long serialVersionUID = 1L;
 
     public NaviUnSupportedOperationException() {
-        this("UnSupported Operation", NaviError.SYSERROR);
+        this("UnSupported Operation", NaviError.ACTION_NOT_SUPPORTED);
     }
 
     public NaviUnSupportedOperationException(String desc, int code) {

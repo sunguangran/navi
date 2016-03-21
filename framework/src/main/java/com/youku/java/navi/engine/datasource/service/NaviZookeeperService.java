@@ -14,8 +14,7 @@ import org.springframework.data.redis.serializer.SerializationException;
 
 import java.util.List;
 
-public class NaviZookeeperService extends AbstractNaviDataService implements
-    INaviZookeeper {
+public class NaviZookeeperService extends AbstractNaviDataService implements INaviZookeeper {
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
 

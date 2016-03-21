@@ -36,10 +36,8 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
         initConfFilesTime();
         // cfgLastModified = new File(confPath).lastModified();
         libsLastModified = new File(libsPath).lastModified();
-        cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:"
-            + confPath}, false);
-        cxt.setClassLoader(new NaviModuleClassLoader(getClass()
-            .getClassLoader(), moduleNm));
+        cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+        cxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
         cxt.refresh();
         cxt.registerShutdownHook();// jvm退出时，回收资源
         return this;
@@ -59,7 +57,6 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
         } else {
             log.warn("the module config dir isn't exist!");
         }
-        return;
     }
 
     public INaviModuleContext refresh() throws FileNotFoundException,
@@ -68,10 +65,8 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
         // long cfgCurrModified = new File(confPath).lastModified();
         long libsCurrModified = new File(libsPath).lastModified();
         if (confFileModified || libsLastModified < libsCurrModified) {
-            NaviClassPathXmlApplicationContext newCxt = new NaviClassPathXmlApplicationContext(
-                new String[]{"file:" + confPath}, false);
-            newCxt.setClassLoader(new NaviModuleClassLoader(getClass()
-                .getClassLoader(), moduleNm));
+            NaviClassPathXmlApplicationContext newCxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+            newCxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
             newCxt.refresh();
             newCxt.registerShutdownHook();// jvm退出时，回收资源
             // cfgLastModified = cfgCurrModified;
@@ -80,10 +75,11 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
             cxt = newCxt;
             tmpCxt.prepareClose();// 干掉过期的context,同时回收资源
             tmpCxt.setClassLoader(null);
-            tmpCxt = null;
+
             log.info("old spring container is closed!");
             return this;
         }
+        
         return null;
     }
 

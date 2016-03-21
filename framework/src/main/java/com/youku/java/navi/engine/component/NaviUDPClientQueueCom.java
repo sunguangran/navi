@@ -3,6 +3,8 @@ package com.youku.java.navi.engine.component;
 import com.youku.java.navi.engine.component.NaviMQContext.MessageQueueType;
 import com.youku.java.navi.engine.core.*;
 import com.youku.java.navi.server.api.INaviUDPResponseHandler;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.Serializable;
@@ -16,19 +18,42 @@ import java.util.List;
  */
 @SuppressWarnings("rawtypes")
 public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQueueCom {
+
+    @Setter @Getter
     private IBaseDataService service;
+
+    @Setter @Getter
     private String queueKey;
+
+    @Setter @Getter
     private INaviUDPClientService udpService;
     private INaviUDPResponseHandler handler;
+
+    @Setter @Getter
     private Serializable msgType;
 
+    @Setter
     private INaviMessageQueue queue;
+
+    @Setter @Getter
     private int mqType = 0;
+
+    @Setter @Getter
     private int consumeRate = 3;
+
+    @Setter @Getter
     private int consumeThread = 3;
+
+    @Setter
     private NaviMQContext mqContext;
+
+    @Setter
     private NaviMQConsumeController controller;
+
+    @Setter
     private List<NaviMQConsumeTask> tasks;
+
+    @Setter
     private INaviMQConsumeStrategy strategy;
 
 
@@ -77,10 +102,6 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
         }
     }
 
-    public void setStrategy(INaviMQConsumeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     public INaviMessageQueue getQueue() {
         if (null != queue) {
             return queue;
@@ -88,50 +109,6 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
             queue = new NaviMessageQueueFactory().createMQ(service, queueKey, MessageQueueType.values()[mqType]);
         }
         return queue;
-    }
-
-    public void setQueue(INaviMessageQueue queue) {
-        this.queue = queue;
-    }
-
-    public String getQueueKey() {
-        return queueKey;
-    }
-
-    public void setQueueKey(String queueKey) {
-        this.queueKey = queueKey;
-    }
-
-    public int getMqType() {
-        return mqType;
-    }
-
-    public void setMqType(int mqType) {
-        this.mqType = mqType;
-    }
-
-    public int getConsumeRate() {
-        return consumeRate;
-    }
-
-    public void setConsumeRate(int consumeRate) {
-        this.consumeRate = consumeRate;
-    }
-
-    public int getConsumeThread() {
-        return consumeThread;
-    }
-
-    public void setConsumeThread(int consumeThread) {
-        this.consumeThread = consumeThread;
-    }
-
-    public IBaseDataService getService() {
-        return service;
-    }
-
-    public void setService(IBaseDataService service) {
-        this.service = service;
     }
 
     public INaviUDPResponseHandler getHandler() {
@@ -153,10 +130,6 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
         return mqContext;
     }
 
-    public void setMqContext(NaviMQContext mqContext) {
-        this.mqContext = mqContext;
-    }
-
     public NaviMQConsumeController getController() {
         if (null != controller) {
             return controller;
@@ -168,16 +141,12 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
         return controller;
     }
 
-    public void setController(NaviMQConsumeController controller) {
-        this.controller = controller;
-    }
-
     @SuppressWarnings("unchecked")
     public List<NaviMQConsumeTask> getTasks() {
         if (null != tasks) {
             return tasks;
         } else {
-            List<NaviMQConsumeTask> list = new ArrayList<NaviMQConsumeTask>();
+            List<NaviMQConsumeTask> list = new ArrayList<>();
             for (int i = 0; i < consumeThread; i++) {
                 NaviMQConsumeTask task = new NaviMQConsumeTask();
                 task.setService(service);
@@ -189,26 +158,6 @@ public class NaviUDPClientQueueCom implements InitializingBean, INaviUDPClientQu
             }
             return list;
         }
-    }
-
-    public void setTasks(List<NaviMQConsumeTask> tasks) {
-        this.tasks = tasks;
-    }
-
-    public Serializable getMsgType() {
-        return msgType;
-    }
-
-    public void setMsgType(Serializable msgType) {
-        this.msgType = msgType;
-    }
-
-    public INaviUDPClientService getUdpService() {
-        return udpService;
-    }
-
-    public void setUdpService(INaviUDPClientService udpService) {
-        this.udpService = udpService;
     }
 
 }

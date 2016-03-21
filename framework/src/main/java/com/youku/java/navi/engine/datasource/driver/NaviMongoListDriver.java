@@ -9,32 +9,34 @@ import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 public class NaviMongoListDriver extends AbstractNaviDriver {
+
     private final int SLEEPTIME = 60000;// 1min
     private final int MAX_CLEARCOUNT = 3;
+
+    @Setter
     private Mongo mongo;
 
-    public NaviMongoListDriver(ServerUrlUtil.ServerUrl server, String auth,
-                               NaviPoolConfig poolConfig) throws NumberFormatException,
-        MongoException, UnknownHostException {
+    public NaviMongoListDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) throws NumberFormatException, MongoException, UnknownHostException {
         super(server, auth, poolConfig);
+
         String masterUrl = null;
         if (server.getHost() != null && server.getPort() != 0)
             masterUrl = server.getHost() + ":" + server.getPort();
-        List<ServerAddress> addresslist = new ArrayList<ServerAddress>();
+        List<ServerAddress> addresslist = new ArrayList<>();
         // 找到master
-        List<String> listHostPorts = new ArrayList<String>();
+        List<String> listHostPorts = new ArrayList<>();
         String[] hostPorts = server.getUrl().split(",");
-        for (String hostPort : hostPorts) {
-            listHostPorts.add(hostPort);
-        }
+        Collections.addAll(listHostPorts, hostPorts);
         for (int i = 0; i < listHostPorts.size(); i++) {
             if (listHostPorts.get(0).equals(masterUrl))
                 break;
@@ -43,6 +45,7 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
         for (String hostPort : listHostPorts) {
             addresslist.add(new ServerAddress(hostPort));
         }
+
         mongo = new Mongo(addresslist, getMongoOptions(poolConfig));
         // mongo.setReadPreference(ReadPreference.SECONDARY);
 
@@ -53,10 +56,12 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
         if (poolConfig instanceof NaviMongoPoolConfig) {
             return ((NaviMongoPoolConfig) poolConfig).getOptions();
         }
+
         MongoOptions options = new MongoOptions();
         options.connectionsPerHost = poolConfig.getMaxActive();
         options.connectTimeout = poolConfig.getConnectTimeout();
         options.safe = true;
+
         return options;
     }
 
@@ -76,6 +81,7 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
         } catch (Exception e) {
             log.warn("mongos instance is destoried failly!");
         }
+
         setClose(true);
     }
 
@@ -101,10 +107,6 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
         return mongo;
     }
 
-    public void setMongo(Mongo mongo) {
-        this.mongo = mongo;
-    }
-
     public boolean isAlive() throws NaviSystemException {
         // mongo..getConnector();
         return mongo.getConnector().isOpen();
@@ -126,7 +128,7 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
             while (true) {
                 try {
                     Thread.sleep(SLEEPTIME);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
 
                 }
                 try {
@@ -134,8 +136,9 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
                         initCount++;
                         close();
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
+
                 if (initCount > MAX_CLEARCOUNT) {
                     break;
                 }
@@ -145,12 +148,10 @@ public class NaviMongoListDriver extends AbstractNaviDriver {
     }
 
     public boolean open() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void afterPropertiesSet() throws Exception {
-        // TODO Auto-generated method stub
 
     }
 

@@ -8,9 +8,10 @@ import lombok.Setter;
 @Getter
 public class ServerAddress {
 
-    private static final String hostRegex = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
     private String host;
     private int port;
+
+    private static final String hostRegex = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
 
     public ServerAddress(String host, int port) throws NaviSystemException {
         validateHost(host);

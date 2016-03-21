@@ -136,7 +136,7 @@ public interface INaviCache extends IBaseDataService {
      * 删除键
      *
      * @param <K>
-     * @param key
+     * @param keys
      *     键
      * @return 返回成功个数
      */
@@ -148,7 +148,7 @@ public interface INaviCache extends IBaseDataService {
      * @param <K>
      * @param key
      *     键
-     * @param vals
+     * @param map
      *     String类型的list(score0,member0,score1,member1,....score[n],member[n]);
      * @return 插入成功返回 新增节点个数,如果失败返回小于0,如果该节点存在于sort_list中返回 0
      */
@@ -426,7 +426,8 @@ public interface INaviCache extends IBaseDataService {
      * @param <V>
      * @param key
      *     键
-     * @param 超时时间
+     * @param timeout
+     *     超时时间
      * @param classNm
      *     节点类型
      * @return 弹出的节点值
@@ -548,7 +549,8 @@ public interface INaviCache extends IBaseDataService {
      * @param <V>
      * @param key
      *     键
-     * @param val值
+     * @param val
+     *       值
      * @return 成功个数
      */
     <K, V> Long sAdd(K key, V val);

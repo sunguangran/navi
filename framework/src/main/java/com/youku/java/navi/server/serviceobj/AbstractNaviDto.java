@@ -19,7 +19,7 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
 
     private static final long serialVersionUID = -3983785947326217708L;
 
-    private int _null_;
+    private int _null_ = 0;
 
     public AbstractNaviDto() {
     }
@@ -60,12 +60,14 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
                             field.setAccessible(true);
                             Object val = field.get(this);
                             if (val != null) {
+                                String key = StringUtils.isNotEmpty(((Resp) an).value()) ? ((Resp) an).value() : field.getName();
+
                                 if (((Resp) an).ip()) {
-                                    json.put(((Resp) an).value(), StringUtils.longToIP((Long) val));
+                                    json.put(key, StringUtils.longToIP((Long) val));
                                 } else if (((Resp) an).encode()) {
-                                    json.put(((Resp) an).value(), StringUtils.encode((Long) val));
+                                    json.put(key, StringUtils.encode((Long) val));
                                 } else {
-                                    json.put(((Resp) an).value(), val);
+                                    json.put(key, val);
                                 }
                             }
                         } catch (IllegalAccessException e) {

@@ -5,8 +5,7 @@ import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
 
 public class NaviHiveJdbcDriver extends NaviJdbcDriver {
 
-    public NaviHiveJdbcDriver(ServerUrlUtil.ServerUrl server, String auth,
-                              NaviPoolConfig poolConfig) {
+    public NaviHiveJdbcDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }
 

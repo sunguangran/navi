@@ -8,13 +8,14 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface CommentDocument {
+public @interface CacheDocument {
+
     String key();
 
     String mq();
 
     int rate() default 15 * 60000;
 
-    int expire() default 864000;
+    int expire() default 60 * 60 * 24;
 
 }

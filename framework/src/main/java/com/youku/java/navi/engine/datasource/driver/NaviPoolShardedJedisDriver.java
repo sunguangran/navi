@@ -20,21 +20,20 @@ public class NaviPoolShardedJedisDriver extends AbstractNaviPoolJedisDriver {
     public NaviPoolShardedJedisDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.poolConfig = (ShardJedisPoolConfig) poolConfig;
-        this.jedis = new PoolBinaryShardedJedis(constructShardInfo(
-            server.getUrl(), this.poolConfig));
+        this.jedis = new PoolBinaryShardedJedis(constructShardInfo(server.getUrl(), this.poolConfig));
     }
 
-    private List<PoolJedisShardInfo> constructShardInfo(String servers,
-                                                        ShardJedisPoolConfig poolConfig) {
+    private List<PoolJedisShardInfo> constructShardInfo(String servers, ShardJedisPoolConfig poolConfig) {
         String[] hosts = servers.split(",");
-        List<PoolJedisShardInfo> list = new ArrayList<PoolJedisShardInfo>();
-        for (int i = 0; i < hosts.length; i++) {
-            String[] hostPairs = hosts[i].split(":");
-            JedisShardInfo shardInfo = new JedisShardInfo(hostPairs[0],
-                Integer.valueOf(hostPairs[1]),
-                poolConfig.getConnectTimeout());
+        List<PoolJedisShardInfo> list = new ArrayList<>();
+        for (String host : hosts) {
+            String[] hostPairs = host.split(":");
+            JedisShardInfo shardInfo = new JedisShardInfo(
+                hostPairs[0], Integer.valueOf(hostPairs[1]), poolConfig.getConnectTimeout()
+            );
             list.add(new PoolJedisShardInfo(shardInfo, poolConfig));
         }
+
         return list;
     }
 

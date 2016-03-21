@@ -23,7 +23,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
     protected void initConnPool() throws Exception {
         Class<?> handleClassNm = getContextClassLoader().loadClass(driverClass);
-        pool = new GenericObjectPool<INaviDriver>(
+        pool = new GenericObjectPool<>(
             new NaviPoolableObjectFactory(handleClassNm), poolConfig);
     }
 
@@ -107,7 +107,7 @@ public class NaviUDPClietnDataSource implements IUDPClientDataSource, Applicatio
 
         @Override
         public PooledObject<INaviDriver> wrap(INaviDriver obj) {
-            return new DefaultPooledObject<INaviDriver>(obj);
+            return new DefaultPooledObject<>(obj);
         }
     }
 

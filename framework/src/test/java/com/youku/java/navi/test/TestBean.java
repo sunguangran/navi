@@ -59,6 +59,11 @@ public class TestBean extends AbstractNaviDto {
         return String.valueOf(getUid());
     }
 
+    @Override
+    public void setOId(Long id) {
+
+    }
+
     public String getUsernm() {
         return usernm;
     }

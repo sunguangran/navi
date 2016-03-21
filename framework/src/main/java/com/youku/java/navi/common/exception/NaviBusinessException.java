@@ -38,15 +38,15 @@ public class NaviBusinessException extends NaviRuntimeException implements INavi
     }
 
     protected String toJsonString() {
-        JSONObject e = new JSONObject();
-        e.put("provider", provider);
-        e.put("desc", toString());
+        JSONObject e = new JSONObject(true);
         e.put("code", getCode());
+        e.put("desc", toString());
+        e.put("provider", provider);
 
-        JSONObject ret = new JSONObject();
-        ret.put("data", "");
-        ret.put("cost", cost * 0.001f);
+        JSONObject ret = new JSONObject(true);
         ret.put("e", e);
+        ret.put("data", "");
+        ret.put("cost", cost * 0.001F);
 
         return ret.toJSONString();
     }

@@ -17,285 +17,281 @@ import java.util.Set;
 
 public abstract class AbstractNaviJedisDriver extends AbstractNaviDriver {
 
-
     public AbstractNaviJedisDriver(ServerUrlUtil.ServerUrl server, String auth) {
         super(server, auth);
     }
 
-    public AbstractNaviJedisDriver(ServerUrlUtil.ServerUrl server, String auth,
-                                   NaviPoolConfig poolConfig) {
+    public AbstractNaviJedisDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
     }
 
-    abstract public Boolean exists(byte[] key);
+    public abstract Boolean exists(byte[] key);
 
-    abstract public Long del(byte[]... keys);
+    public abstract Long del(byte[]... keys);
 
-    abstract public DataType type(byte[] key);
+    public abstract DataType type(byte[] key);
 
-    abstract public Set<byte[]> keys(byte[] pattern);
+    public abstract Set<byte[]> keys(byte[] pattern);
 
-    abstract public byte[] randomKey();
+    public abstract byte[] randomKey();
 
-    abstract public void rename(byte[] oldName, byte[] newName);
+    public abstract void rename(byte[] oldName, byte[] newName);
 
+    public abstract Boolean renameNX(byte[] oldName, byte[] newName);
 
-    abstract public Boolean renameNX(byte[] oldName, byte[] newName);
+    public abstract Boolean expire(byte[] key, long seconds);
 
-    abstract public Boolean expire(byte[] key, long seconds);
+    public abstract Boolean expireAt(byte[] key, long unixTime);
 
-    abstract public Boolean expireAt(byte[] key, long unixTime);
+    public abstract Boolean persist(byte[] key);
 
-    abstract public Boolean persist(byte[] key);
+    public abstract Boolean move(byte[] key, int dbIndex);
 
+    public abstract Long ttl(byte[] key);
 
-    abstract public Boolean move(byte[] key, int dbIndex);
+    public abstract List<byte[]> sort(byte[] key, SortParameters params);
 
-    abstract public Long ttl(byte[] key);
+    public abstract byte[] get(byte[] key);
 
-    abstract public List<byte[]> sort(byte[] key, SortParameters params);
+    public abstract byte[] getSet(byte[] key, byte[] value);
 
-    abstract public byte[] get(byte[] key);
+    public abstract List<byte[]> mGet(byte[]... keys);
 
-    abstract public byte[] getSet(byte[] key, byte[] value);
+    public abstract String set(byte[] key, byte[] value);
 
-    abstract public List<byte[]> mGet(byte[]... keys);
+    public abstract Long setNX(byte[] key, byte[] value);
 
-    abstract public String set(byte[] key, byte[] value);
+    public abstract String setEx(byte[] key, long seconds, byte[] value);
 
-    abstract public Long setNX(byte[] key, byte[] value);
+    public abstract void mSet(Map<byte[], byte[]> tuple);
 
-    abstract public String setEx(byte[] key, long seconds, byte[] value);
+    public abstract void mSetNX(Map<byte[], byte[]> tuple);
 
-    abstract public void mSet(Map<byte[], byte[]> tuple);
+    public abstract Long incr(byte[] key);
 
-    abstract public void mSetNX(Map<byte[], byte[]> tuple);
+    public abstract Long incrBy(byte[] key, long value);
 
-    abstract public Long incr(byte[] key);
+    public abstract Long decr(byte[] key);
 
-    abstract public Long incrBy(byte[] key, long value);
+    public abstract Long decrBy(byte[] key, long value);
 
-    abstract public Long decr(byte[] key);
+    public abstract Long append(byte[] key, byte[] value);
 
-    abstract public Long decrBy(byte[] key, long value);
+    public abstract byte[] getRange(byte[] key, long begin, long end);
 
-    abstract public Long append(byte[] key, byte[] value);
+    public abstract Long setRange(byte[] key, byte[] value, long offset);
 
-    abstract public byte[] getRange(byte[] key, long begin, long end);
+    public abstract Boolean getBit(byte[] key, long offset);
 
-    abstract public Long setRange(byte[] key, byte[] value, long offset);
+    public abstract Boolean setBit(byte[] key, long offset, boolean value);
 
-    abstract public Boolean getBit(byte[] key, long offset);
+    public abstract Long strLen(byte[] key);
 
-    abstract public Boolean setBit(byte[] key, long offset, boolean value);
+    public abstract Long rPush(byte[] key, byte[]... values);
 
-    abstract public Long strLen(byte[] key);
+    public abstract Long lPush(byte[] key, byte[]... values);
 
-    abstract public Long rPush(byte[] key, byte[]... values);
+    public abstract Long rPushX(byte[] key, byte[] value);
 
-    abstract public Long lPush(byte[] key, byte[]... values);
+    public abstract Long lPushX(byte[] key, byte[] value);
 
-    abstract public Long rPushX(byte[] key, byte[] value);
+    public abstract Long lLen(byte[] key);
 
-    abstract public Long lPushX(byte[] key, byte[] value);
+    public abstract List<byte[]> lRange(byte[] key, long begin, long end);
 
-    abstract public Long lLen(byte[] key);
+    public abstract String lTrim(byte[] key, long begin, long end);
 
-    abstract public List<byte[]> lRange(byte[] key, long begin, long end);
+    public abstract byte[] lIndex(byte[] key, long index);
 
-    abstract public String lTrim(byte[] key, long begin, long end);
+    public abstract Long lInsert(byte[] key, Position where, byte[] pivot, byte[] value);
 
-    abstract public byte[] lIndex(byte[] key, long index);
+    public abstract String lSet(byte[] key, long index, byte[] value);
 
-    abstract public Long lInsert(byte[] key, Position where, byte[] pivot, byte[] value);
+    public abstract Long lRem(byte[] key, long count, byte[] value);
 
-    abstract public String lSet(byte[] key, long index, byte[] value);
+    public abstract byte[] lPop(byte[] key);
 
-    abstract public Long lRem(byte[] key, long count, byte[] value);
+    public abstract byte[] rPop(byte[] key);
 
-    abstract public byte[] lPop(byte[] key);
+    public abstract byte[] bLPop(int timeout, byte[] key);
 
-    abstract public byte[] rPop(byte[] key);
+    public abstract byte[] bRPop(int timeout, byte[] key);
 
-    abstract public byte[] bLPop(int timeout, byte[] key);
+    public abstract byte[] rPopLPush(byte[] srcKey, byte[] dstKey);
 
-    abstract public byte[] bRPop(int timeout, byte[] key);
+    public abstract byte[] bRPopLPush(int timeout, byte[] srcKey, byte[] dstKey);
 
-    abstract public byte[] rPopLPush(byte[] srcKey, byte[] dstKey);
+    public abstract Long sAdd(byte[] key, byte[]... value);
 
-    abstract public byte[] bRPopLPush(int timeout, byte[] srcKey, byte[] dstKey);
+    public abstract Long sRem(byte[] key, byte[] value);
 
-    abstract public Long sAdd(byte[] key, byte[]... value);
+    public abstract byte[] sPop(byte[] key);
 
-    abstract public Long sRem(byte[] key, byte[] value);
+    public abstract Boolean sMove(byte[] srcKey, byte[] destKey, byte[] value);
 
-    abstract public byte[] sPop(byte[] key);
+    public abstract Long sCard(byte[] key);
 
-    abstract public Boolean sMove(byte[] srcKey, byte[] destKey, byte[] value);
+    public abstract Boolean sIsMember(byte[] key, byte[] value);
 
-    abstract public Long sCard(byte[] key);
+    public abstract Set<byte[]> sInter(byte[]... keys);
 
-    abstract public Boolean sIsMember(byte[] key, byte[] value);
+    public abstract void sInterStore(byte[] destKey, byte[]... keys);
 
-    abstract public Set<byte[]> sInter(byte[]... keys);
+    public abstract Set<byte[]> sUnion(byte[]... keys);
 
-    abstract public void sInterStore(byte[] destKey, byte[]... keys);
+    public abstract void sUnionStore(byte[] destKey, byte[]... keys);
 
-    abstract public Set<byte[]> sUnion(byte[]... keys);
+    public abstract Set<byte[]> sDiff(byte[]... keys);
 
-    abstract public void sUnionStore(byte[] destKey, byte[]... keys);
+    public abstract void sDiffStore(byte[] destKey, byte[]... keys);
 
-    abstract public Set<byte[]> sDiff(byte[]... keys);
+    public abstract Set<byte[]> sMembers(byte[] key);
 
-    abstract public void sDiffStore(byte[] destKey, byte[]... keys);
+    public abstract byte[] sRandMember(byte[] key);
 
-    abstract public Set<byte[]> sMembers(byte[] key);
+    public abstract Long zAdd(byte[] key, double score, byte[] value);
 
-    abstract public byte[] sRandMember(byte[] key);
+    public abstract Long zBatchAdd(byte[] key, Map<byte[], Double> scoreMembers);
 
-    abstract public Long zAdd(byte[] key, double score, byte[] value);
+    public abstract Boolean zRem(byte[] key, byte[] value);
 
-    abstract public Long zBatchAdd(byte[] key, Map<byte[], Double> scoreMembers);
+    public abstract Double zIncrBy(byte[] key, double increment, byte[] value);
 
-    abstract public Boolean zRem(byte[] key, byte[] value);
+    public abstract Long zRank(byte[] key, byte[] value);
 
-    abstract public Double zIncrBy(byte[] key, double increment, byte[] value);
+    public abstract Long zRevRank(byte[] key, byte[] value);
 
-    abstract public Long zRank(byte[] key, byte[] value);
+    public abstract Set<byte[]> zRange(byte[] key, long begin, long end);
 
-    abstract public Long zRevRank(byte[] key, byte[] value);
+    public abstract Set<Tuple> zRangeWithScores(byte[] key, long begin, long end);
 
-    abstract public Set<byte[]> zRange(byte[] key, long begin, long end);
+    public abstract Set<byte[]> zRangeByScore(byte[] key, double min, double max);
 
-    abstract public Set<Tuple> zRangeWithScores(byte[] key, long begin, long end);
+    public abstract Set<Tuple> zRangeByScoreWithScores(byte[] key, double min, double max);
 
-    abstract public Set<byte[]> zRangeByScore(byte[] key, double min, double max);
-
-    abstract public Set<Tuple> zRangeByScoreWithScores(byte[] key, double min, double max);
-
-    abstract public Set<byte[]> zRangeByScore(byte[] key, double min, double max,
+    public abstract Set<byte[]> zRangeByScore(byte[] key, double min, double max,
                                               long offset, long count);
 
-    abstract public Set<Tuple> zRangeByScoreWithScores(byte[] key, double min,
+    public abstract Set<Tuple> zRangeByScoreWithScores(byte[] key, double min,
                                                        double max, long offset, long count);
 
-    abstract public Set<byte[]> zRevRange(byte[] key, long begin, long end);
+    public abstract Set<byte[]> zRevRange(byte[] key, long begin, long end);
 
-    abstract public Set<Tuple> zRevRangeWithScores(byte[] key, long begin, long end);
+    public abstract Set<Tuple> zRevRangeWithScores(byte[] key, long begin, long end);
 
-    abstract public Set<byte[]> zRevRangeByScore(byte[] key, double min, double max);
+    public abstract Set<byte[]> zRevRangeByScore(byte[] key, double min, double max);
 
-    abstract public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
+    public abstract Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
                                                           double max);
 
-    abstract public Set<byte[]> zRevRangeByScore(byte[] key, double min, double max,
+    public abstract Set<byte[]> zRevRangeByScore(byte[] key, double min, double max,
                                                  long offset, long count);
 
-    abstract public Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
+    public abstract Set<Tuple> zRevRangeByScoreWithScores(byte[] key, double min,
                                                           double max, long offset, long count);
 
-    abstract public Long zCount(byte[] key, double min, double max);
+    public abstract Long zCount(byte[] key, double min, double max);
 
-    abstract public Long zCard(byte[] key);
+    public abstract Long zCard(byte[] key);
 
-    abstract public Double zScore(byte[] key, byte[] value);
+    public abstract Double zScore(byte[] key, byte[] value);
 
-    abstract public Long zRemRange(byte[] key, long begin, long end);
+    public abstract Long zRemRange(byte[] key, long begin, long end);
 
-    abstract public Long zRemRangeByScore(byte[] key, double min, double max);
+    public abstract Long zRemRangeByScore(byte[] key, double min, double max);
 
-    abstract public Long zUnionStore(byte[] destKey, byte[]... sets);
+    public abstract Long zUnionStore(byte[] destKey, byte[]... sets);
 
-    abstract public Long zUnionStore(byte[] destKey, Aggregate aggregate, int[] weights,
+    public abstract Long zUnionStore(byte[] destKey, Aggregate aggregate, int[] weights,
                                      byte[]... sets);
 
-    abstract public Long zInterStore(byte[] destKey, byte[]... sets);
+    public abstract Long zInterStore(byte[] destKey, byte[]... sets);
 
-    abstract public Long zInterStore(byte[] destKey, Aggregate aggregate, int[] weights,
+    public abstract Long zInterStore(byte[] destKey, Aggregate aggregate, int[] weights,
                                      byte[]... sets);
 
-    abstract public Long hSet(byte[] key, byte[] field, byte[] value);
+    public abstract Long hSet(byte[] key, byte[] field, byte[] value);
 
-    abstract public Long hSetNX(byte[] key, byte[] field, byte[] value);
+    public abstract Long hSetNX(byte[] key, byte[] field, byte[] value);
 
-    abstract public byte[] hGet(byte[] key, byte[] field);
+    public abstract byte[] hGet(byte[] key, byte[] field);
 
-    abstract public List<byte[]> hMGet(byte[] key, byte[]... fields);
+    public abstract List<byte[]> hMGet(byte[] key, byte[]... fields);
 
-    abstract public String hMSet(byte[] key, Map<byte[], byte[]> hashes);
+    public abstract String hMSet(byte[] key, Map<byte[], byte[]> hashes);
 
-    abstract public Long hIncrBy(byte[] key, byte[] field, long delta);
+    public abstract Long hIncrBy(byte[] key, byte[] field, long delta);
 
-    abstract public Boolean hExists(byte[] key, byte[] field);
+    public abstract Boolean hExists(byte[] key, byte[] field);
 
-    abstract public Long hDel(byte[] key, byte[]... fields);
+    public abstract Long hDel(byte[] key, byte[]... fields);
 
-    abstract public Long hLen(byte[] key);
+    public abstract Long hLen(byte[] key);
 
-    abstract public Set<byte[]> hKeys(byte[] key);
+    public abstract Set<byte[]> hKeys(byte[] key);
 
-    abstract public List<byte[]> hVals(byte[] key);
+    public abstract List<byte[]> hVals(byte[] key);
 
-    abstract public Map<byte[], byte[]> hGetAll(byte[] key);
+    public abstract Map<byte[], byte[]> hGetAll(byte[] key);
 
-    abstract public void multi();
+    public abstract void multi();
 
-    abstract public List<Object> exec();
+    public abstract List<Object> exec();
 
-    abstract public void discard();
+    public abstract void discard();
 
-    abstract public void watch(byte[]... keys);
+    public abstract void watch(byte[]... keys);
 
-    abstract public void unwatch();
+    public abstract void unwatch();
 
-    abstract public boolean isSubscribed();
+    public abstract boolean isSubscribed();
 
-    abstract public Subscription getSubscription();
+    public abstract Subscription getSubscription();
 
-    abstract public Long publish(byte[] channel, byte[] message);
+    public abstract Long publish(byte[] channel, byte[] message);
 
-    abstract public void subscribe(MessageListener listener, byte[]... channels);
+    public abstract void subscribe(MessageListener listener, byte[]... channels);
 
-    abstract public void pSubscribe(MessageListener listener, byte[]... patterns);
+    public abstract void pSubscribe(MessageListener listener, byte[]... patterns);
 
-    abstract public void select(int dbIndex);
+    public abstract void select(int dbIndex);
 
-    abstract public byte[] echo(byte[] message);
+    public abstract byte[] echo(byte[] message);
 
-    abstract public String ping();
+    public abstract String ping();
 
-    abstract public void bgWriteAof();
+    public abstract void bgWriteAof();
 
-    abstract public void bgSave();
+    public abstract void bgSave();
 
-    abstract public Long lastSave();
+    public abstract Long lastSave();
 
-    abstract public void save();
+    public abstract void save();
 
-    abstract public Long dbSize();
+    public abstract Long dbSize();
 
-    abstract public void flushDb();
+    public abstract void flushDb();
 
-    abstract public void flushAll();
+    public abstract void flushAll();
 
-    abstract public Properties info();
+    public abstract Properties info();
 
-    abstract public void shutdown();
+    public abstract void shutdown();
 
-    abstract public List<String> getConfig(String pattern);
+    public abstract List<String> getConfig(String pattern);
 
-    abstract public void setConfig(String param, String value);
+    public abstract void setConfig(String param, String value);
 
-    abstract public void resetConfigStats();
+    public abstract void resetConfigStats();
 
-    abstract public Object getNativeConnection();
+    public abstract Object getNativeConnection();
 
-    abstract public boolean isQueueing();
+    public abstract boolean isQueueing();
 
-    abstract public boolean isPipelined();
+    public abstract boolean isPipelined();
 
-    abstract public void openPipeline();
+    public abstract void openPipeline();
 
-    abstract public List<Object> closePipeline();
+    public abstract List<Object> closePipeline();
 
 }

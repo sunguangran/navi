@@ -26,7 +26,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         if (isSafeMode()) {
             return;
         }
-        poolDrivers = new ArrayList<INaviDriver>();
+        poolDrivers = new ArrayList<>();
         random = new Random();
         Class<?> handleClassNm = getContextClassLoader().loadClass(
             getDriverClass());

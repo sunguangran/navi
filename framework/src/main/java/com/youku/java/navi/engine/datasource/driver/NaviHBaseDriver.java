@@ -3,6 +3,8 @@ package com.youku.java.navi.engine.datasource.driver;
 import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.engine.datasource.pool.NaviHBasePoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
@@ -15,7 +17,10 @@ import java.io.IOException;
 import java.util.*;
 
 @Slf4j
+@Setter
+@Getter
 public class NaviHBaseDriver extends AbstractNaviDriver {
+
     private HConnection connection;
     private HBaseAdmin admin;
     private NamespaceDescriptor nd;
@@ -26,6 +31,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
 
     public NaviHBaseDriver(String url, String auth, NaviPoolConfig poolConfig) {
         super(new ServerUrlUtil.ServerUrl(url), auth, poolConfig);
+
         if (poolConfig instanceof NaviHBasePoolConfig) {
             Configuration configuration = ((NaviHBasePoolConfig) poolConfig)
                 .getConfig();
@@ -38,12 +44,11 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
         }
     }
 
-    public NaviHBaseDriver(ServerUrlUtil.ServerUrl server, String auth,
-                           NaviPoolConfig poolConfig) {
+    public NaviHBaseDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
+
         if (poolConfig instanceof NaviHBasePoolConfig) {
-            Configuration configuration = ((NaviHBasePoolConfig) poolConfig)
-                .getConfig();
+            Configuration configuration = ((NaviHBasePoolConfig) poolConfig).getConfig();
             try {
                 connection = HConnectionManager.createConnection(configuration);
                 admin = new HBaseAdmin(configuration);
@@ -78,19 +83,17 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
     }
 
     public boolean open() {
-        boolean flag = false;
         if (connection == null) {
             try {
-                Configuration configuration = ((NaviHBasePoolConfig) this
-                    .getPoolConfig()).getConfig();
+                Configuration configuration = ((NaviHBasePoolConfig) this.getPoolConfig()).getConfig();
                 connection = HConnectionManager.createConnection(configuration);
                 admin = new HBaseAdmin(configuration);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
-        flag = this.isAlive();
-        return flag;
+
+        return this.isAlive();
     }
 
     /**
@@ -107,11 +110,10 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
      * @return increment前的值
      * @throws IOException
      */
-    public long increment(String tableName, String row, String family,
-                          String qualifier, long amount) {
+    public long increment(String tableName, String row, String family, String qualifier, long amount) {
         // HTable hTable= HbaseUtils.getHTable(tmpt.getTableFactory(),
         // tmpt.getCharset(), tmpt.getConfiguration(), this.tableName);
-        long result = 0l;
+        long result = 0L;
         HTableInterface hTable = null;
         try {
             hTable = connection.getTable(tableName);
@@ -133,9 +135,8 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
         return result;
     }
 
-    public long increment(String tableName, String row, String family,
-                          String qualifier) throws IOException {
-        return this.increment(tableName, row, family, qualifier, 1l);
+    public long increment(String tableName, String row, String family, String qualifier) throws IOException {
+        return this.increment(tableName, row, family, qualifier, 1L);
     }
 
     /**
@@ -152,8 +153,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
      * @return true 操作成功<br/>
      * false 操作失败
      */
-    public boolean put(String tableName, String row, String family,
-                       String qualifier, byte[] value) {
+    public boolean put(String tableName, String row, String family, String qualifier, byte[] value) {
         boolean flag = false;
         HTableInterface hTable = null;
         try {
@@ -194,8 +194,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
      * @return true 操作成功<br/>
      * false 操作失败
      */
-    public boolean put(String tableName, String row, String family,
-                       String qualifier, byte[] value, long timestamp) {
+    public boolean put(String tableName, String row, String family, String qualifier, byte[] value, long timestamp) {
         boolean flag = false;
         HTableInterface hTable = null;
         try {
@@ -242,7 +241,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
                 scan.setFilter(filter);
                 scanner = hTable.getScanner(scan);
                 if (null != scanner) {
-                    List<Delete> list = new ArrayList<Delete>();
+                    List<Delete> list = new ArrayList<>();
                     for (Result rs : scanner) {
                         Delete delete = new Delete(rs.getRow());
                         delete.deleteFamily(family.getBytes());
@@ -281,8 +280,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
      * @return true 操作成功<br/>
      * false 操作失败
      */
-    public boolean deleteColumn(String tableName, String family,
-                                String qualifier, long timestamp) {
+    public boolean deleteColumn(String tableName, String family, String qualifier, long timestamp) {
         // HTable hTable= HbaseUtils.getHTable(tmpt.getTableFactory(),
         // tmpt.getCharset(), tmpt.getConfiguration(), this.tableName);
         boolean flag = false;
@@ -340,8 +338,7 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
      * @return true 操作成功<br/>
      * false 操作失败
      */
-    public boolean deleteColumn(String tableName, String family,
-                                String qualifier) {
+    public boolean deleteColumn(String tableName, String family, String qualifier) {
         // HTable hTable= HbaseUtils.getHTable(tmpt.getTableFactory(),
         // tmpt.getCharset(), tmpt.getConfiguration(), this.tableName);
         boolean flag = false;
@@ -884,29 +881,4 @@ public class NaviHBaseDriver extends AbstractNaviDriver {
         }
         return result;
     }
-
-    public HConnection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(HConnection connection) {
-        this.connection = connection;
-    }
-
-    public HBaseAdmin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(HBaseAdmin admin) {
-        this.admin = admin;
-    }
-
-    public NamespaceDescriptor getNd() {
-        return nd;
-    }
-
-    public void setNd(NamespaceDescriptor nd) {
-        this.nd = nd;
-    }
-
 }

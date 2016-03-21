@@ -25,4 +25,5 @@ public interface INaviMQConsumeStrategy<T> extends InitializingBean, DisposableB
      * @return
      */
     Class<T> getClassNM();
+
 }

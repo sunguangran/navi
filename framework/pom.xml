@@ -12,6 +12,13 @@
     <artifactId>framework</artifactId>
 
     <dependencies>
+
+        <!-- JAVANAVI MODULE -->
+        <dependency>
+            <groupId>com.youku.java.navi</groupId>
+            <artifactId>bootstrap</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
@@ -84,10 +91,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.youku.java.navi</groupId>
-            <artifactId>bootstrap</artifactId>
         </dependency>
         <dependency>
             <groupId>com.youku.java.navi.engine</groupId>

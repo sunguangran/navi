@@ -11,24 +11,21 @@ import com.youku.java.navi.engine.redis.MultiPoolBinaryShardedJedis;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NaviMultiPoolShardedJedisDriver extends
-    AbstractNaviPoolJedisDriver {
+public class NaviMultiPoolShardedJedisDriver extends AbstractNaviPoolJedisDriver {
 
     private MultiPoolBinaryShardedJedis jedis;
     private ShardJedisPoolConfig poolConfig;
 
-    public NaviMultiPoolShardedJedisDriver(ServerUrlUtil.ServerUrl server, String auth,
-                                           NaviPoolConfig poolConfig) {
+    public NaviMultiPoolShardedJedisDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         super(server, auth, poolConfig);
         this.poolConfig = (ShardJedisPoolConfig) poolConfig;
         this.jedis = new MultiPoolBinaryShardedJedis(constructShardInfo(
             server.getUrl(), this.poolConfig));
     }
 
-    private List<MultiJedisPoolInfo> constructShardInfo(String servers,
-                                                        ShardJedisPoolConfig poolConfig) {
+    private List<MultiJedisPoolInfo> constructShardInfo(String servers, ShardJedisPoolConfig poolConfig) {
         String[] hosts = servers.split(",");
-        List<MultiJedisPoolInfo> list = new ArrayList<MultiJedisPoolInfo>();
+        List<MultiJedisPoolInfo> list = new ArrayList<>();
         for (int i = 0; i < hosts.length; i++) {
             list.add(new MultiJedisPoolInfo(hosts[i], poolConfig));
         }

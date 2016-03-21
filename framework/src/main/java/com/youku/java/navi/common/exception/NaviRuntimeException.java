@@ -1,9 +1,13 @@
 package com.youku.java.navi.common.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class NaviRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -5821255308346220789L;
 
+    @Setter @Getter
     private int code;
 
     public NaviRuntimeException(String desc, int code) {
@@ -13,20 +17,11 @@ public class NaviRuntimeException extends RuntimeException {
     public NaviRuntimeException(String desc, int code, Throwable t) {
         super(desc, t);
         this.code = code;
-
     }
 
     @Override
     public String toString() {
         return getMessage();
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
     }
 
 }

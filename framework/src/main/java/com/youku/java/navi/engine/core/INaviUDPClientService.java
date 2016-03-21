@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public interface INaviUDPClientService {
+
     <T extends Serializable> void send(byte[] packet);
 
     void sendBytes(String host, int port, byte[] packet);
@@ -28,4 +29,5 @@ public interface INaviUDPClientService {
     byte[] sendAndReceive(String host, int port, byte[] packet) throws IOException;
 
     <T extends Serializable> void sendAndHandle(final String host, final int port, final byte[] packet, final INaviUDPResponseHandler handler) throws IOException;
+
 }

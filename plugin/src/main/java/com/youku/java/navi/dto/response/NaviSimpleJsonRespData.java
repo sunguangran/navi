@@ -85,17 +85,19 @@ public class NaviSimpleJsonRespData extends NaviJsonResponseData {
             putData(dataKey, data);
         }
 
-        JSONObject json = new JSONObject();
+        JSONObject e = new JSONObject(true);
+        e.put("code", code);
+        e.put("desc", desc);
+        e.put("provider", provider);
+
+        JSONObject json = new JSONObject(true);
+        json.put("e", e);
+
         if (filterMap != null) {
             for (String key : filterMap.keySet()) {
                 json.put(key, filterMap.get(key));
             }
         }
-        JSONObject e = new JSONObject();
-        e.put("code", code);
-        e.put("desc", desc);
-        e.put("provider", provider);
-        json.put("e", e);
 
         return json.toString();
     }

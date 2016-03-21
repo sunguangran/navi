@@ -9,6 +9,7 @@ import com.youku.java.navi.common.ServerUrlUtil;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.UnknownHostException;
@@ -18,14 +19,16 @@ public class NaviMongoDriver extends AbstractNaviDriver {
 
     private final int SLEEPTIME = 60000;// 1min
     private final int MAX_CLEARCOUNT = 3;
+
+    @Setter
     private Mongo mongo;
 
-    public NaviMongoDriver(ServerUrlUtil.ServerUrl server, String auth,
-                           NaviPoolConfig poolConfig) throws NumberFormatException,
-        MongoException, UnknownHostException {
+    public NaviMongoDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) throws NumberFormatException, MongoException, UnknownHostException {
         super(server, auth, poolConfig);
-        this.mongo = new Mongo(new ServerAddress(server.getHost(),
-            server.getPort()), getMongoOptions(poolConfig));
+        this.mongo = new Mongo(
+            new ServerAddress(server.getHost(), server.getPort()), getMongoOptions(poolConfig)
+        );
+
         startIdleConnCheck();
     }
 
@@ -37,10 +40,12 @@ public class NaviMongoDriver extends AbstractNaviDriver {
         if (poolConfig instanceof NaviMongoPoolConfig) {
             return ((NaviMongoPoolConfig) poolConfig).getOptions();
         }
+
         MongoOptions options = new MongoOptions();
         options.connectionsPerHost = poolConfig.getMaxActive();
         options.connectTimeout = poolConfig.getConnectTimeout();
         options.safe = true;
+
         return options;
     }
 
@@ -56,6 +61,7 @@ public class NaviMongoDriver extends AbstractNaviDriver {
         } catch (Exception e) {
             log.warn("mongos instance is destoried failly!");
         }
+
         setClose(true);
     }
 
@@ -64,11 +70,8 @@ public class NaviMongoDriver extends AbstractNaviDriver {
             throw new NaviSystemException("the driver has been closed!",
                 NaviError.SYSERROR);
         }
-        return mongo;
-    }
 
-    public void setMongo(Mongo mongo) {
-        this.mongo = mongo;
+        return mongo;
     }
 
     public boolean isAlive() throws NaviSystemException {
@@ -81,6 +84,7 @@ public class NaviMongoDriver extends AbstractNaviDriver {
      * 数据库，导致连接泄露，所以开此线程，在driver关闭情况下仍在1min内重复关闭2次，已确保 连接确实均被关闭
      */
     class MongoIdleCleaner extends Thread {
+
         private int initCount = 0;
 
         public MongoIdleCleaner() {
@@ -111,16 +115,15 @@ public class NaviMongoDriver extends AbstractNaviDriver {
     }
 
     public boolean open() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void afterPropertiesSet() throws Exception {
-        // TODO Auto-generated method stub
 
     }
 
     public Mongo getDriver() {
         return getMongo();
     }
+    
 }

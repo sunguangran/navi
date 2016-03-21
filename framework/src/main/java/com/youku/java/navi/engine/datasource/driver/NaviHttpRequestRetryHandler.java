@@ -15,14 +15,12 @@ import java.net.UnknownHostException;
 
 public class NaviHttpRequestRetryHandler extends DefaultHttpRequestRetryHandler {
 
-    public NaviHttpRequestRetryHandler(int retryCount,
-                                       boolean requestSentRetryEnabled) {
+    public NaviHttpRequestRetryHandler(int retryCount, boolean requestSentRetryEnabled) {
         super(retryCount, requestSentRetryEnabled);
     }
 
     @Override
-    public boolean retryRequest(IOException exception, int executionCount,
-                                HttpContext context) {
+    public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
         if (exception == null) {
             throw new IllegalArgumentException(
                 "Exception parameter may not be null");
@@ -73,15 +71,15 @@ public class NaviHttpRequestRetryHandler extends DefaultHttpRequestRetryHandler 
             return true;
         }
 
-        Boolean b = (Boolean) context
-            .getAttribute(ExecutionContext.HTTP_REQ_SENT);
-        boolean sent = (b != null && b.booleanValue());
+        Boolean b = (Boolean) context.getAttribute(ExecutionContext.HTTP_REQ_SENT);
+        boolean sent = (b != null && b);
 
         if (!sent || isRequestSentRetryEnabled()) {
             // Retry if the request has not been sent fully or
             // if it's OK to retry methods that have been sent
             return true;
         }
+
         // otherwise do not retry
         return false;
     }

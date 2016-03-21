@@ -11,4 +11,5 @@ public class NaviSystemException extends NaviRuntimeException {
     public NaviSystemException(String desc, int code, Throwable t) {
         super(desc, code, t);
     }
+
 }

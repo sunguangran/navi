@@ -3,27 +3,33 @@ package com.youku.java.navi.engine.component;
 import com.youku.java.navi.common.exception.NaviUnSupportedOperationException;
 import com.youku.java.navi.engine.core.*;
 import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class MongoDataObjectCom implements IMongoDataObjectCom {
+
     private INaviCache cacheService;
     private INaviDB dbService;
-    private int expire_time = 900;
+    private int expireTime = 900;
 
     public <T extends AbstractNaviDto> IDataObjectCom<T> getDataObjectCom(
         Query query, String cacheKey, Class<T> dtoClass) {
-        return new DataObjectCom<T>(query, cacheKey, dtoClass);
+        return new DataObjectCom<>(query, cacheKey, dtoClass);
     }
 
     public <T extends AbstractNaviDto> IListDataObjectCom<T> getListDataObjectCom(
         Query query, Class<T> dtoClass, String cacheKey) {
-        return new ListDataObjectCom<T>(query, dtoClass, cacheKey);
+        return new ListDataObjectCom<>(query, dtoClass, cacheKey);
     }
 
     protected class DataObjectCom<T extends AbstractNaviDto> implements IDataObjectCom<T> {
+
         protected Query query;
         protected Class<T> dtoClass;
         protected String cacheKey;
@@ -38,11 +44,11 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
             String nullKey = getNullKey();
             if (null == cacheKey && cacheService.exists(nullKey)) {
                 //存在nullkey(已经查询过)，并且 cachekey 为空，说明没数据。
-                cacheService.expire(nullKey, expire_time);
+                cacheService.expire(nullKey, expireTime);
                 return null;
             }
             if (cacheService.exists(cacheKey)) {
-                cacheService.expire(cacheKey, expire_time);
+                cacheService.expire(cacheKey, expireTime);
                 return cacheService.get(cacheKey, dtoClass);
             } else {
                 return loadFromDB();
@@ -53,10 +59,10 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
             T dto = dbService.findOne(query, dtoClass);
             if (null == dto) {
                 String nullKey = getNullKey();
-                cacheService.setex(nullKey, 1, expire_time);
+                cacheService.setex(nullKey, 1, expireTime);
                 return null;
             } else {
-                cacheService.setex(cacheKey, dto, expire_time);
+                cacheService.setex(cacheKey, dto, expireTime);
                 return dto;
             }
 
@@ -96,11 +102,11 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         public List<T> getListData() {
             String nullKey = getNullKey();
             if (null != nullKey && cacheService.exists(nullKey)) {
-                cacheService.expire(nullKey, expire_time);
+                cacheService.expire(nullKey, expireTime);
                 return null;
             }
             if (cacheService.exists(cacheKey)) {
-                cacheService.expire(cacheKey, expire_time);
+                cacheService.expire(cacheKey, expireTime);
                 return cacheService.lGetRange(cacheKey, 0, -1, dtoClass);
             } else {
                 return loadFromDB();
@@ -111,11 +117,11 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
             List<T> list = dbService.find(query, dtoClass);
             if (null == list || list.size() == 0) {
                 String nullKey = getNullKey();
-                cacheService.setex(nullKey, 1, expire_time);
+                cacheService.setex(nullKey, 1, expireTime);
                 return null;
             }
             cacheService.rPush(cacheKey, list.toArray());
-            cacheService.expire(cacheKey, expire_time);
+            cacheService.expire(cacheKey, expireTime);
             return list;
         }
 
@@ -137,11 +143,11 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         public int size() {
             String nullKey = getNullKey();
             if (null != nullKey && cacheService.exists(nullKey)) {
-                cacheService.expire(nullKey, expire_time);
+                cacheService.expire(nullKey, expireTime);
                 return 0;
             }
             if (cacheService.exists(cacheKey)) {
-                cacheService.expire(cacheKey, expire_time);
+                cacheService.expire(cacheKey, expireTime);
                 return cacheService.lSize(cacheKey).intValue();
             } else {
                 loadFromDB();
@@ -152,7 +158,7 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         public List<T> getIndex(int... indexs) {
             String nullKey = getNullKey();
             if (null != nullKey && cacheService.exists(nullKey)) {
-                cacheService.expire(nullKey, expire_time);
+                cacheService.expire(nullKey, expireTime);
                 return null;
             }
             List<T> list = null;
@@ -160,7 +166,7 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
                 loadFromDB();
             }
             if (cacheService.lSize(cacheKey) > 0) {
-                list = new ArrayList<T>();
+                list = new ArrayList<>();
                 for (int i = 0; i < indexs.length; i++) {
                     T dto = cacheService.lIndex(cacheKey, indexs[i], dtoClass);
                     list.add(dto);
@@ -180,29 +186,5 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         public T refresh() {
             throw new NaviUnSupportedOperationException();
         }
-    }
-
-    public INaviCache getCacheService() {
-        return cacheService;
-    }
-
-    public void setCacheService(INaviCache cacheService) {
-        this.cacheService = cacheService;
-    }
-
-    public INaviDB getDbService() {
-        return dbService;
-    }
-
-    public void setDbService(INaviDB dbService) {
-        this.dbService = dbService;
-    }
-
-    public int getExpire_time() {
-        return expire_time;
-    }
-
-    public void setExpire_time(int expire_time) {
-        this.expire_time = expire_time;
     }
 }

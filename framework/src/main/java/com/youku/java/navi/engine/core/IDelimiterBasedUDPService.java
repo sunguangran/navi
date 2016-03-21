@@ -1,6 +1,7 @@
 package com.youku.java.navi.engine.core;
 
 public interface IDelimiterBasedUDPService extends INaviUDPClientService {
+
     /**
      * 所有的分隔符必须为1个byte大小，否则为无效分隔符。
      *
@@ -13,5 +14,6 @@ public interface IDelimiterBasedUDPService extends INaviUDPClientService {
      * @param packetDemlimiter
      * @return
      */
-    public String parseUDPPacket(String service, String module, String api, String extra, String msg, String headerDelimiter, String msgDelimiter, String packetDemlimiter);
+    String parseUDPPacket(String service, String module, String api, String extra, String msg, String headerDelimiter, String msgDelimiter, String packetDemlimiter);
+
 }

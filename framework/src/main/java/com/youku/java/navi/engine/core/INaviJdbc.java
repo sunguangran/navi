@@ -6,16 +6,16 @@ import java.sql.SQLException;
 
 public interface INaviJdbc {
 
-    public interface IPSCallback {
+    interface IPSCallback {
         void doPs(PreparedStatement pst);
     }
 
-    public ResultSet doQuery(String sql) throws SQLException;
+    ResultSet doQuery(String sql) throws SQLException;
 
-    public ResultSet doQuery(String sql, IPSCallback p) throws SQLException;
+    ResultSet doQuery(String sql, IPSCallback p) throws SQLException;
 
-    public int doUpdate(String sql) throws SQLException;
+    int doUpdate(String sql) throws SQLException;
 
-    public int doUpdate(String sql, IPSCallback p) throws SQLException;
+    int doUpdate(String sql, IPSCallback p) throws SQLException;
 
 }

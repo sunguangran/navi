@@ -9,7 +9,7 @@ public interface IBaseDataService extends InitializingBean {
      *
      * @param dataSource
      */
-    public void setDataSource(INaviDataSource dataSource);
+    void setDataSource(INaviDataSource dataSource);
 
-    public INaviDataSource getDataSource();
+    INaviDataSource getDataSource();
 }

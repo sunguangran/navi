@@ -1,25 +1,32 @@
 package com.youku.java.navi.engine.component;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class NaviMQContext {
 
     /**
      * 启动线程数
      */
+    @Getter
     private int threadRate = 3;
 
     /**
      * 每次消费个数
      */
+    @Getter
     private int consumeRate = 1;
 
     /**
      * 线程阻塞时间，单位毫秒
      */
+    @Getter
     private int blockTime = 10;
 
     /**
      * 发生异常后线程睡眠时间，单位毫秒
      */
+    @Setter @Getter
     private int exceptionSleepTime = 1000;
 
     /**
@@ -27,18 +34,10 @@ public class NaviMQContext {
      */
     private MessageQueueType mqType = MessageQueueType.REDIS;
 
-    public int getConsumeRate() {
-        return consumeRate;
-    }
-
     public void setConsumeRate(int consumeRate) {
         if (consumeRate > 0) {
             this.consumeRate = consumeRate;
         }
-    }
-
-    public int getBlockTime() {
-        return blockTime;
     }
 
     public void setBlockTime(int blockTime) {
@@ -61,25 +60,14 @@ public class NaviMQContext {
         return mqType;
     }
 
-    public int getThreadRate() {
-        return threadRate;
-    }
-
     public void setThreadRate(int threadRate) {
         if (threadRate > 0) {
             this.threadRate = threadRate;
         }
     }
 
-    public void setExceptionSleepTime(int exceptionSleepTime) {
-        this.exceptionSleepTime = exceptionSleepTime;
-    }
-
-    public int getExceptionSleepTime() {
-        return exceptionSleepTime;
-    }
-
     public enum MessageQueueType {
         REDIS, MUTIREDIS, OLDMUTIREDIS, ZOOKEEPER
     }
+    
 }

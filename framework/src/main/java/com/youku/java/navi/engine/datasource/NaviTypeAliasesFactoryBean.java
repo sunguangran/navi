@@ -35,7 +35,7 @@ public class NaviTypeAliasesFactoryBean implements FactoryBean<List<Class<?>>>,
     }
 
     public List<Class<?>> getObject() throws Exception {
-        List<Class<?>> list = new ArrayList<Class<?>>();
+        List<Class<?>> list = new ArrayList<>();
         for (String type : types) {
             list.add(context.getClassLoader().loadClass(type));
         }

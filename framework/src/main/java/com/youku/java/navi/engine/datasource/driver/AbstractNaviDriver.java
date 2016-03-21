@@ -6,25 +6,33 @@ import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.engine.core.INaviDriver;
 import com.youku.java.navi.engine.datasource.pool.NaviPoolConfig;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractNaviDriver implements INaviDriver {
 
+    @Setter @Getter
     private ServerUrlUtil.ServerUrl server;
+
+    @Setter @Getter
     private String auth;
+
+    @Setter @Getter
     private GenericObjectPool<INaviDriver> pool;
     private AtomicBoolean close = new AtomicBoolean();
     private AtomicBoolean broken = new AtomicBoolean();
+
+    @Setter @Getter
     private NaviPoolConfig poolConfig;
 
     public AbstractNaviDriver(ServerUrlUtil.ServerUrl server, String auth) {
         this(server, auth, null);
     }
 
-    public AbstractNaviDriver(ServerUrlUtil.ServerUrl server, String auth,
-                              NaviPoolConfig poolConfig) {
+    public AbstractNaviDriver(ServerUrlUtil.ServerUrl server, String auth, NaviPoolConfig poolConfig) {
         this.server = server;
         this.auth = auth;
         this.poolConfig = poolConfig;
@@ -53,30 +61,6 @@ public abstract class AbstractNaviDriver implements INaviDriver {
         }
     }
 
-    public ServerUrlUtil.ServerUrl getServer() {
-        return server;
-    }
-
-    public void setServer(ServerUrlUtil.ServerUrl server) {
-        this.server = server;
-    }
-
-    public String getAuth() {
-        return auth;
-    }
-
-    public void setAuth(String auth) {
-        this.auth = auth;
-    }
-
-    public GenericObjectPool<INaviDriver> getPool() {
-        return pool;
-    }
-
-    public void setPool(GenericObjectPool<INaviDriver> pool) {
-        this.pool = pool;
-    }
-
     public boolean isClose() {
         return close.get();
     }
@@ -91,14 +75,6 @@ public abstract class AbstractNaviDriver implements INaviDriver {
 
     public void setBroken(boolean broken) {
         this.broken.set(broken);
-    }
-
-    public NaviPoolConfig getPoolConfig() {
-        return poolConfig;
-    }
-
-    public void setPoolConfig(NaviPoolConfig poolConfig) {
-        this.poolConfig = poolConfig;
     }
 
     public void afterPropertiesSet() throws Exception {
