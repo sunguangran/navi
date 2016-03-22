@@ -98,16 +98,16 @@ public abstract class AbstractNaviPoolJedisDriver extends AbstractNaviJedisDrive
     }
 
     public List<byte[]> mGet(byte[]... keys) {
-        // 保证返回顺序
+        // 保证按key值顺序返回
         Map<byte[], byte[]> datas = new LinkedHashMap<>();
         for (byte[] tmp : keys) {
             datas.put(tmp, null);
         }
 
-        List<List<byte[]>> groups = groupKeys(keys);
-
         // 分组查询，结果放入responses
+        List<List<byte[]>> groups = this.groupKeys(keys);
         Map<byte[], Response<byte[]>> responses = new LinkedHashMap<>();
+
         for (List<byte[]> group : groups) {
             INaviMultiRedis multiRedis = getJedis().openPipeline(group.get(0));
             try {

@@ -26,6 +26,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         if (isSafeMode()) {
             return;
         }
+
         poolDrivers = new ArrayList<>();
         random = new Random();
         Class<?> handleClassNm = getContextClassLoader().loadClass(getDriverClass());
@@ -60,7 +61,7 @@ public class NaviLinearDataSource extends DefaultNaviDataSource {
         if (isSafeMode()) {
             // 安全模式
             throw new NaviSystemException(
-                "the dataSource " + getNamespace() + " is the safemode.", NaviError.SYSERROR
+                "the dataSource " + getNamespace() + " is safemode.", NaviError.SYSERROR
             );
         }
 

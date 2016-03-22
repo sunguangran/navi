@@ -1,6 +1,8 @@
 package com.youku.java.navi.server.module;
 
 import com.youku.java.navi.boot.NaviJarClassLoader;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.net.URLConnection;
  */
 public class NaviModuleClassLoader extends NaviJarClassLoader {
 
+    @Getter @Setter
     private String moduleNm;
 
     public NaviModuleClassLoader(ClassLoader parenter, String moduleNm)
@@ -21,14 +24,6 @@ public class NaviModuleClassLoader extends NaviJarClassLoader {
         super(parenter, NaviModulesUtil.getModuleLibsPath(moduleNm));
         this.moduleNm = moduleNm;
         loadJarFiles();
-    }
-
-    public String getModuleNm() {
-        return moduleNm;
-    }
-
-    public void setModuleNm(String moduleNm) {
-        this.moduleNm = moduleNm;
     }
 
     /**
@@ -39,6 +34,7 @@ public class NaviModuleClassLoader extends NaviJarClassLoader {
         if (url == null) {
             return null;
         }
+
         try {
             URLConnection uc = url.openConnection();
             uc.setUseCaches(false);

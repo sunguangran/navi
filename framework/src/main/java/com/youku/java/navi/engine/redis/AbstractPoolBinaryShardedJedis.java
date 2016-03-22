@@ -100,8 +100,7 @@ public abstract class AbstractPoolBinaryShardedJedis<R, S extends ShardInfo<R>> 
         try {
             return command.doCommand(j, key, args);
         } catch (JedisConnectionException e) {
-            if (e.getCause() == null
-                || e.getCause() instanceof JedisConnectionException) {
+            if (e.getCause() == null || e.getCause() instanceof JedisConnectionException) {
                 try {
                     j.disconnect();
                     return command.doCommand(j, key, args);
@@ -1166,7 +1165,6 @@ public abstract class AbstractPoolBinaryShardedJedis<R, S extends ShardInfo<R>> 
     }
 
     public INaviMultiRedis openPipeline(byte[] key) {
-
         Pool<Jedis> pool = getPool(key);
         Jedis j = pool.getResource();
         Pipeline pipe = null;

@@ -14,6 +14,7 @@ public class ServerUrlUtil {
         if (serverUrl == null) {
             return null;
         }
+
         List<ServerUrl> list = new ArrayList<>();
         if (serverUrl.startsWith(JDBC_PREFIX)) {
             list.add(new ServerUrl(serverUrl));
@@ -30,6 +31,7 @@ public class ServerUrlUtil {
                 }
             }
         }
+        
         return list;
     }
 

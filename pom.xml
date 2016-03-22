@@ -19,6 +19,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- JAVANAVI -->
             <dependency>
                 <groupId>com.youku.java.navi</groupId>
                 <artifactId>bootstrap</artifactId>
@@ -165,7 +166,7 @@
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
-                <version>3.3.5-cdh3u5</version>
+                <version>3.4.5-cdh5.2.0</version>
             </dependency>
 
             <dependency>
@@ -194,11 +195,6 @@
                 <version>2.1_3</version>
             </dependency>
 
-            <dependency>
-                <groupId>jdk.tools</groupId>
-                <artifactId>jdk.tools</artifactId>
-                <version>1.7</version>
-            </dependency>
             <dependency>
                 <groupId>com.codahale.metrics</groupId>
                 <artifactId>metrics-core</artifactId>

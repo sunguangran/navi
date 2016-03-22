@@ -32,7 +32,7 @@ public class NaviClassPathXmlApplicationContext extends ClassPathXmlApplicationC
         Thread.currentThread().setContextClassLoader(loader);
     }
 
-    //支持"navi:"类型的resource
+    // 支持"navi:"类型的resource
     @Override
     public Resource getResource(String location) {
         Assert.notNull(location, "Location must not be null");

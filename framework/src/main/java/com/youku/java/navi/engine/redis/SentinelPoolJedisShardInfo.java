@@ -18,9 +18,7 @@ public class SentinelPoolJedisShardInfo extends ShardInfo<JedisSentinelPool> {
     private String master;
 
     public SentinelPoolJedisShardInfo(String master, ShardJedisPoolConfig poolConfig) {
-        super(Sharded.DEFAULT_WEIGHT);
-        this.poolConfig = poolConfig;
-        this.master = master;
+        this(master, poolConfig, Sharded.DEFAULT_WEIGHT);
     }
 
     public SentinelPoolJedisShardInfo(String master, ShardJedisPoolConfig poolConfig, int weight) {
