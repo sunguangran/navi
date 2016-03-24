@@ -54,7 +54,7 @@ public interface NaviDefine {
 
     //default setting
     String DEFAULT_PORT = "8080";
-    String DEFAULT_SERVER = "navi";
+    String DEFAULT_SERVER = "javanavi";
     String DEFAULT_CHUNK_SIZE = "307200";
 
     String DEFAULT_HEADER_DELIMITER = "\2";

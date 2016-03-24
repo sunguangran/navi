@@ -21,6 +21,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Slf4j
 public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNewDao<T> {
 
+    protected static final int DEFAULT_PAGE_LENGTH = 20;
+
     protected String SEQ_ID_NAME = "SEQ_DEFAULT";
 
     private AutoIncrDao autoIncrDao;
@@ -135,7 +137,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
 
     public List<T> mget(List<Long> ids) throws NaviSystemException {
         if (ids == null || ids.size() == 0) {
-            new ArrayList<>(0);
+            return null;
         }
 
         // map存放，保证返回顺序
@@ -199,7 +201,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         }
 
         if (counter == 0) {
-            return new ArrayList<>(0);
+            return null;
         }
 
         List<T> list = new LinkedList<>();

@@ -35,10 +35,6 @@ public class BaseResponse {
         return this;
     }
 
-    public boolean success() {
-        return this.code == NaviError.ACTION_SUCCED;
-    }
-
     public int code() {
         return this.code;
     }
@@ -50,5 +46,9 @@ public class BaseResponse {
 
     public String msg() {
         return this.msg;
+    }
+
+    public boolean success() {
+        return this.code == NaviError.ACTION_SUCCED;
     }
 }

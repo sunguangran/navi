@@ -129,11 +129,11 @@ public class NaviHttpResponse extends DefaultHttpResponse {
         }
     }
 
-    public void setJsonData(Object data, String dataFieldNm, long total, int page, int pageLength) {
+    public void setJsonData(Object data, String dataFieldNm, int page, int count, long total) {
         if (responseData != null && responseData instanceof NaviJsonResponseData) {
             responseData.setData(data);
         } else {
-            responseData = new NaviJsonResponseData(data, dataFieldNm, total, page, pageLength);
+            responseData = new NaviJsonResponseData(data, dataFieldNm, page, count, total);
         }
     }
 

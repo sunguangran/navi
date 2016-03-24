@@ -4,6 +4,7 @@ import com.youku.java.navi.common.Rest;
 import com.youku.java.navi.server.api.ANaviAction;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
+import com.youku.java.navi.server.api.NaviJsonResponseData;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,12 +15,12 @@ public class EchoAction extends ANaviAction {
 
     @Rest("/do.json")
     public void echo(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
-        response.setResponseData(NaviSimpleJsonRespData.createInstance(0, request.getParameter("msg")));
+        response.setResponseData(new NaviJsonResponseData(0, request.getParameter("msg")));
     }
 
     @Rest("/do1.json")
     public void echo2(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
-        response.setResponseData(NaviSimpleJsonRespData.createInstance(0, request.getParameter("count") + ".."));
+        response.setResponseData(new NaviJsonResponseData(0, request.getParameter("count") + ".."));
     }
 
 }

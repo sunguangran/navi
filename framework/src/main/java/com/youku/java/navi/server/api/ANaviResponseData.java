@@ -2,51 +2,60 @@ package com.youku.java.navi.server.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.exception.NaviSystemException;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
+@Setter
 public abstract class ANaviResponseData implements INaviResponseData {
 
-    protected Object data;
+    protected int code = NaviError.ACTION_SUCCED;
+    protected String desc = "";
+    protected String provider = "cloudservice";
+
     protected int page;
-    protected int pageLength;
+    protected int count;
     protected long cost;
     protected long total;
-    protected String dataFieldNm;
+
+    protected String dataFieldNm = "data";
+    protected Object data;
+
+    protected Map<String, Object> filterMap;
+
+    public ANaviResponseData(int code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
 
     public ANaviResponseData(Object data) {
         this.data = data;
     }
 
-    public ANaviResponseData(Object data, String dataFieldNm, long total, int page, int pageLength) {
+    public ANaviResponseData(Object data, String dataFieldNm, int page, int count, long total) {
         this.data = data;
         this.page = page;
         this.total = total;
-        this.pageLength = pageLength;
+        this.count = count;
         this.dataFieldNm = dataFieldNm;
     }
 
-    public void setData(Object data) {
-        this.data = data;
-    }
+    public void putData(String key, Object value) {
+        if (filterMap == null) {
+            filterMap = new HashMap<>();
+        }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public void setPageLength(int pageLength) {
-        this.pageLength = pageLength;
-    }
-
-    public void setCost(long cost) {
-        this.cost = cost;
+        filterMap.put(key, value);
     }
 
     public ChannelBuffer getResponseData() throws Exception {

@@ -54,6 +54,6 @@ public class NaviBusinessException extends NaviRuntimeException implements INavi
     public void setPage(int page) {
     }
 
-    public void setPageLength(int pageLength) {
+    public void setCount(int count) {
     }
 }

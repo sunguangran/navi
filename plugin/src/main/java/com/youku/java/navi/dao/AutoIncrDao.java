@@ -33,7 +33,6 @@ public class AutoIncrDao extends AbstractNaviNewDao<AutoIncrDTO> {
     }
 
     public long getSid(String id) {
-
         return getSid(id, 1000000);
     }
 

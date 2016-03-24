@@ -14,6 +14,6 @@ public interface INaviResponseData {
 
     void setPage(int page);
 
-    void setPageLength(int pageLength);
+    void setCount(int count);
 
 }
