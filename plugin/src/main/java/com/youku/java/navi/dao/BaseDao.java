@@ -2,6 +2,7 @@ package com.youku.java.navi.dao;
 
 import com.youku.java.navi.common.CacheComponent;
 import com.youku.java.navi.common.NaviError;
+import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.dto.BaseResult;
 import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
 import com.youku.java.navi.server.serviceobj.AbstractNaviNewDao;
@@ -12,10 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -31,167 +29,113 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         super(classNm);
     }
 
-    public BaseResult<T> create(T dto) {
-        BaseResult<T> ret = new BaseResult<>();
+    public T create(T dto) throws NaviSystemException {
+        if (StringUtils.isEmpty(dto.getOId()) || dto.getOId().equals("0")) {
+            // 获取当前序列唯一序列id
+            long sid = autoIncrDao.getSid(SEQ_ID_NAME);
+            if (sid == -1) {
+                throw new NaviSystemException("get seq id failed", NaviError.ERR_DBS);
+            }
+            dto.setOId(sid);
+        }
 
-        try {
+        dbService.insert(dto);
+        this.updateCache(buildKey(dto.getOId()), dto);
+
+        return dto;
+    }
+
+    public List<T> batchCreate(List<T> dtos) throws NaviSystemException {
+        for (T dto : dtos) {
             if (StringUtils.isEmpty(dto.getOId()) || dto.getOId().equals("0")) {
                 // 获取当前序列唯一序列id
                 long sid = autoIncrDao.getSid(SEQ_ID_NAME);
                 if (sid == -1) {
-                    ret.setCode(NaviError.ERR_DBS);
-                    ret.setMsg("get section tmpl seq id failed");
-                    return ret;
+                    throw new NaviSystemException("get seq id failed", NaviError.ERR_DBS);
                 }
+
                 dto.setOId(sid);
             }
+        }
 
-            dbService.insert(dto);
+        dbService.insertAll(dtos);
+
+        for (T dto : dtos) {
             this.updateCache(buildKey(dto.getOId()), dto);
-
-            ret.makeSuccess();
-            ret.setData(dto);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DUPLICATE_KEY);
-            ret.setMsg("duplicate check error, " + e.getMessage());
         }
 
-        return ret;
+        return dtos;
     }
 
-    public BaseResult<List<T>> batchCreate(List<T> dtos) {
-        BaseResult<List<T>> ret = new BaseResult<>();
-
-        try {
-            for (T dto : dtos) {
-                if (StringUtils.isEmpty(dto.getOId()) || dto.getOId().equals("0")) {
-                    // 获取当前序列唯一序列id
-                    long sid = autoIncrDao.getSid(SEQ_ID_NAME);
-                    if (sid == -1) {
-                        ret.setCode(NaviError.ERR_DBS);
-                        ret.setMsg("get module tmpl field seq id failed");
-                        return ret;
-                    }
-
-                    dto.setOId(sid);
-                }
-            }
-
-            dbService.insertAll(dtos);
-
-            for (T dto : dtos) {
-                this.updateCache(buildKey(dto.getOId()), dto);
-            }
-
-            ret.makeSuccess();
-            ret.setData(dtos);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DUPLICATE_KEY);
-            ret.setMsg("duplicate check error, " + e.getMessage());
+    public T update(long id, Map<String, Object> paramMap) throws NaviSystemException {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        Update update = new Update();
+        for (String key : paramMap.keySet()) {
+            update.set(key, paramMap.get(key));
         }
 
-        return ret;
-    }
-
-    public BaseResult<T> update(long id, Map<String, Object> paramMap) {
-        BaseResult<T> ret = new BaseResult<>();
-
-        try {
-            Query query = new Query();
-            query.addCriteria(Criteria.where("_id").is(id));
-            Update update = new Update();
-            for (String key : paramMap.keySet()) {
-                update.set(key, paramMap.get(key));
-            }
-
-            T dto = dbService.findAndModify(query, update, classNm);
-            if (dto == null) {
-                ret.setCode(NaviError.ERR_NO_DATA);
-                ret.setMsg("no data found");
-                return ret;
-            }
-
-            String key = this.buildKey(dto.getOId());
-            if (CacheComponent.existsInCache(cacheService, key)) {
-                this.updateCache(key, dto);
-            }
-
-            ret.makeSuccess();
-            ret.setData(dto);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DBS);
-            ret.setMsg(e.getMessage());
+        T dto = dbService.findAndModify(query, update, classNm);
+        if (dto == null) {
+            return null;
         }
 
-        return ret;
+        String key = this.buildKey(dto.getOId());
+        if (CacheComponent.existsInCache(cacheService, key)) {
+            this.updateCache(key, dto);
+        }
+
+        return dto;
     }
 
-    public boolean exists(long id) {
-        try {
-            // 先查缓存是否存在
-            String key = this.buildKey(String.valueOf(id));
-            if (cacheService.exists(key)) {
-                return true;
-            }
+    public boolean exists(long id) throws NaviSystemException {
+        // 先查缓存是否存在
+        String key = this.buildKey(String.valueOf(id));
+        if (cacheService.exists(key)) {
+            return true;
+        }
 
-            T dto = dbService.findOne(new Query(where("_id").is(id)), classNm);
-            if (dto == null) {
-                return false;
-            } else {
-                updateCache(key, dto);
-                return true;
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        T dto = dbService.findOne(new Query(where("_id").is(id)), classNm);
+        if (dto == null) {
             return false;
+        } else {
+            updateCache(key, dto);
+            return true;
         }
     }
 
-    public BaseResult<T> get(long id) {
-        BaseResult<T> ret = new BaseResult<>();
-
-        try {
-            String key = this.buildKey(String.valueOf(id));
-            T dto = cacheService.get(key, classNm);
-            if (dto != null) {
-                if (dto.isNull()) {
-                    ret.setCode(NaviError.ERR_NO_DATA);
-                    ret.setMsg("no data found");
-                } else {
-                    ret.makeSuccess();
-                    ret.setData(dto);
-                }
-                return ret;
+    public T get(long id) throws NaviSystemException {
+        String key = this.buildKey(String.valueOf(id));
+        T dto = cacheService.get(key, classNm);
+        if (dto != null) {
+            if (dto.isNull()) {
+                return null;
+            } else {
+                return dto;
             }
+        }
 
-            Query query = new Query(where("_id").is(id));
-            dto = dbService.findOne(query, classNm);
-            if (dto == null) {
+        Query query = new Query(where("_id").is(id));
+        dto = dbService.findOne(query, classNm);
+        if (dto == null) {
+            try {
                 T nullDto = classNm.newInstance();
                 nullDto.setNull();
                 this.updateCache(key, nullDto);
-
-                ret.setCode(NaviError.ERR_NO_DATA);
-                ret.setMsg("no data found");
-            } else {
-                updateCache(key, dto);
-                ret.makeSuccess();
-                ret.setData(dto);
+            } catch (Exception e) {
+                log.error("{}", e.getMessage());
             }
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DBS);
-            ret.setMsg(e.getMessage());
-        }
 
-        return ret;
+            return null;
+        } else {
+            updateCache(key, dto);
+            return dto;
+        }
     }
 
-    public BaseResult<List<T>> mget(List<Long> ids) {
-        BaseResult<List<T>> ret = new BaseResult<>();
+    public List<T> mget(List<Long> ids) throws NaviSystemException {
         if (ids == null || ids.size() == 0) {
-            ret.setCode(NaviError.ERR_NO_DATA);
-            ret.setMsg("no data found");
-            return ret;
+            new ArrayList<>(0);
         }
 
         // map存放，保证返回顺序
@@ -200,144 +144,110 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             datas.put(tmp, null);
         }
 
-        try {
-            int counter = 0; // 记录查询到的数据条数
+        int counter = 0; // 记录查询到的数据条数
 
-            // 查询缓存
-            List<T> tmpls;
-            if (cacheService != null) {
-                try {
-                    List<String> keys = new LinkedList<>();
-                    for (Long id : ids) {
-                        keys.add(this.buildKey(id + ""));
-                    }
+        // 查询缓存
+        List<T> tmpls;
+        if (cacheService != null) {
+            try {
+                List<String> keys = new LinkedList<>();
+                for (Long id : ids) {
+                    keys.add(this.buildKey(id + ""));
+                }
 
-                    tmpls = cacheService.MGet(classNm, keys.toArray(new String[keys.size()]));
-                    if (tmpls != null) {
-                        for (T tmp : tmpls) {
-                            if (tmp != null) {
-                                datas.put(Long.parseLong(tmp.getOId()), tmp);
-                                counter++;
-                            }
+                tmpls = cacheService.MGet(classNm, keys.toArray(new String[keys.size()]));
+                if (tmpls != null) {
+                    for (T tmp : tmpls) {
+                        if (tmp != null) {
+                            datas.put(Long.parseLong(tmp.getOId()), tmp);
+                            counter++;
                         }
                     }
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
                 }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
+        }
 
-            // 全部命中缓存
-            if (counter == ids.size()) {
-                List<T> list = new LinkedList<>();
-                list.addAll(datas.values());
-
-                ret.makeSuccess();
-                ret.setData(list);
-                return ret;
-            }
-
-            // 计算未命中缓存的id列表
-            List<Long> unhited = new LinkedList<>();
-            for (Long key : datas.keySet()) {
-                if (datas.get(key) == null) {
-                    unhited.add(key);
-                }
-            }
-
-            // 查询数据库
-            Query query = new Query(where("id").in(unhited));
-            List<T> res = dbService.find(query, classNm);
-            if (res != null && res.size() != 0) {
-                for (T tmp : res) {
-                    if (tmp != null) {
-                        datas.put(Long.parseLong(tmp.getOId()), tmp);
-                        this.updateCache(Long.parseLong(tmp.getOId()), tmp);
-                        counter++;
-                    }
-                }
-            }
-
-            if (counter ==  0) {
-                ret.setCode(NaviError.ERR_NO_DATA);
-                ret.setMsg("no data found");
-                return ret;
-            }
-
+        // 全部命中缓存
+        if (counter == ids.size()) {
             List<T> list = new LinkedList<>();
             list.addAll(datas.values());
 
-            ret.makeSuccess();
-            ret.setData(list);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DBS);
-            ret.setMsg(e.getMessage());
+            return list;
         }
 
-        return ret;
-    }
-
-    public BaseResult<T> delete(long id) {
-        BaseResult<T> ret = new BaseResult<>();
-
-        try {
-            // 更新数据库
-            Query query = new Query(where("id").is(id));
-            T tmpl = dbService.findAndRemove(query, classNm);
-            if (tmpl == null) {
-                ret.setCode(NaviError.ERR_NO_DATA);
-                ret.setMsg("no data found");
-                return ret;
+        // 计算未命中缓存的id列表
+        List<Long> unhited = new LinkedList<>();
+        for (Long key : datas.keySet()) {
+            if (datas.get(key) == null) {
+                unhited.add(key);
             }
+        }
 
-            // 更新缓存
-            if (cacheService != null) {
-                try {
-                    this.deleteFromCache(id, true);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
+        // 查询数据库
+        Query query = new Query(where("id").in(unhited));
+        List<T> res = dbService.find(query, classNm);
+        if (res != null && res.size() != 0) {
+            for (T tmp : res) {
+                if (tmp != null) {
+                    datas.put(Long.parseLong(tmp.getOId()), tmp);
+                    this.updateCache(Long.parseLong(tmp.getOId()), tmp);
+                    counter++;
                 }
             }
-
-            ret.makeSuccess();
-            ret.setData(tmpl);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DBS);
-            ret.setMsg(e.getMessage());
         }
 
-        return ret;
+        if (counter == 0) {
+            return new ArrayList<>(0);
+        }
+
+        List<T> list = new LinkedList<>();
+        list.addAll(datas.values());
+
+        return list;
     }
 
-    public BaseResult<T> mdelete(List<Long> ids) {
-        BaseResult<T> ret = new BaseResult<>();
-
-        try {
-            // 更新数据库
-            Query query = new Query(where("id").in(ids));
-            T tmpl = dbService.findAndRemove(query, classNm);
-            if (tmpl == null) {
-                ret.setCode(NaviError.ERR_NO_DATA);
-                ret.setMsg("no data found");
-                return ret;
-            }
-
-            // 更新缓存
-            if (cacheService != null) {
-                try {
-                    this.deleteFromCache(ids);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                }
-            }
-
-            ret.makeSuccess();
-            ret.setData(tmpl);
-        } catch (Exception e) {
-            ret.setCode(NaviError.ERR_DBS);
-            ret.setMsg(e.getMessage());
+    public T delete(long id) throws NaviSystemException {
+        // 更新数据库
+        Query query = new Query(where("id").is(id));
+        T tmpl = dbService.findAndRemove(query, classNm);
+        if (tmpl == null) {
+            return null;
         }
 
-        return ret;
+        // 更新缓存
+        if (cacheService != null) {
+            try {
+                this.deleteFromCache(id, true);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        return tmpl;
+    }
+
+    public boolean mdelete(List<Long> ids) throws NaviSystemException {
+        BaseResult<T> ret = new BaseResult<>();
+
+        // 更新数据库
+        Query query = new Query(where("id").in(ids));
+        T tmpl = dbService.findAndRemove(query, classNm);
+        if (tmpl == null) {
+            return false;
+        }
+
+        // 更新缓存
+        if (cacheService != null) {
+            try {
+                this.deleteFromCache(ids, true);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        return true;
     }
 
     public void updateCache(long id, T dto) {
@@ -366,7 +276,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             if (!setNull) {
                 cacheService.delete(this.buildKey(String.valueOf(id)));
             } else {
-                cacheService.set(this.buildKey(String.valueOf(id)), "{\"_null_\":1}");
+                cacheService.set(this.buildKey(String.valueOf(id)), T.createNullInstance(classNm));
             }
 
             return true;
@@ -387,7 +297,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             if (!setNull) {
                 cacheService.delete(keys);
             } else {
-                cacheService.set(keys, "{\"_null_\":1}");
+                cacheService.set(keys, T.createNullInstance(classNm));
             }
 
             return true;
@@ -399,9 +309,19 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     }
 
     @Override
-    public String buildKey(String... strings) {
-        String attach = (null == strings || strings.length == 0) ? "" : strings[0];
-        return CacheComponent.getCacheKey(this.classNm, attach);
+    public String buildKey(Object... strings) {
+        if (strings == null) {
+            return "";
+        }
+
+        List<String> list = new LinkedList<>();
+        for (Object str : strings) {
+            if (str != null) {
+                list.add(String.valueOf(str));
+            }
+        }
+
+        return CacheComponent.getCacheKey(this.classNm, list.toArray(new String[list.size()]));
     }
 
     @Override

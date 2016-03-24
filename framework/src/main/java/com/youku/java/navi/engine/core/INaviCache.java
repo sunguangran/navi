@@ -856,8 +856,7 @@ public interface INaviCache extends IBaseDataService {
      * @param keys
      * @return
      */
-    <K> List<List<K>> groupKey(Class<K> classNm, K... keys);
-
+    <K> List<List<K>> groupKeys(Class<K> classNm, K... keys);
 
     <K> INaviMultiRedis multi(K key);
 

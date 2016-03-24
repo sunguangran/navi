@@ -31,9 +31,9 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         if (poolConfig instanceof RedisProxyPoolConfig) {
             path = ((RedisProxyPoolConfig) poolConfig).getPath();
         }
+
         this.proxy = new JavaRedisProxy(path);
     }
-
 
     public boolean isAlive() {
         return true;
@@ -42,7 +42,6 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
     public boolean open() {
         return true;
     }
-
 
     public RedisProxyResult execmd(String serverGroup, String serverName, String host, int port, String cmd, String key, CmdParam... params) throws RedisProxyException {
         return proxy.execmd(serverGroup, serverName, host, port, cmd, key, params);
@@ -217,8 +216,8 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         if (keys == null || keys.length == 0) {
             return null;
         }
-        try {
 
+        try {
             String key = keys[0];
             String[] values = keys.length > 1 ? Arrays.copyOfRange(keys, 1, keys.length) : new String[0];
             CmdParam[] params = CmdParamFactory.buildListParam(values);
@@ -269,13 +268,13 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         }
     }
 
-    public List<String> zRevRangeByScore(String key, double min, double max,
-                                         long limit, long skip, boolean withscore) {
+    public List<String> zRevRangeByScore(String key, double min, double max, long limit, long skip, boolean withscore) {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
+
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(max)));
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(min)));
             if (limit > 0) {
@@ -293,13 +292,13 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         }
     }
 
-    public List<String> zRangeByScore(String key, double min, double max,
-                                      long limit, long skip, boolean withscore) {
+    public List<String> zRangeByScore(String key, double min, double max, long limit, long skip, boolean withscore) {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
+
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(min)));
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(max)));
             if (limit > 0) {
@@ -321,8 +320,9 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
+
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(min)));
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(max)));
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZCOUNT", key, params.toArray(new CmdParam[0]));
@@ -349,7 +349,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return null;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildIntParam(start));
             params.add(CmdParamFactory.buildIntParam(end));
             if (withscore) {
@@ -362,13 +362,12 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
         }
     }
 
-    public List<String> zReverseRange(String key, long start, long end,
-                                      boolean withscore) {
+    public List<String> zReverseRange(String key, long start, long end, boolean withscore) {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildIntParam(start));
             params.add(CmdParamFactory.buildIntParam(end));
             if (withscore) {
@@ -399,7 +398,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return null;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(start)));
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(end)));
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREMRANGEBYRANK", key, params.toArray(new CmdParam[0]));
@@ -414,7 +413,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return null;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(min)));
             params.add(CmdParamFactory.buildArrayParam(String.valueOf(max)));
             RedisProxyResult rs = proxy.execmd(serverGroup, "ZREMRANGEBYSCORE", key, params.toArray(new CmdParam[0]));
@@ -493,7 +492,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return null;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildIntParam(start));
             params.add(CmdParamFactory.buildIntParam(end));
             RedisProxyResult rs = proxy.execmd(serverGroup, "LRANGE", key, params.toArray(new CmdParam[0]));
@@ -508,7 +507,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return false;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             params.add(CmdParamFactory.buildIntParam(start));
             params.add(CmdParamFactory.buildIntParam(end));
             RedisProxyResult rs = proxy.execmd(serverGroup, "LTRIM", key, params.toArray(new CmdParam[0]));
@@ -649,7 +648,7 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
             return false;
         }
         try {
-            List<CmdParam> params = new ArrayList<CmdParam>();
+            List<CmdParam> params = new ArrayList<>();
             for (String hashKey : hash.keySet()) {
                 params.add(CmdParamFactory.buildArrayParam(hashKey));
                 params.add(CmdParamFactory.buildArrayParam(hash.get(hashKey)));
@@ -852,7 +851,6 @@ public class NaviRedisProxyDriver extends AbstractNaviDriver {
     public void afterPropertiesSet() throws Exception {
 
     }
-
 
     private Long returnLong(RedisProxyResult rs) {
         return StringUtils.isEmpty(rs.getStringResult()) ? null : Long.valueOf(rs.getStringResult());

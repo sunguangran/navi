@@ -38,7 +38,7 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
      *     构建key元素
      * @return
      */
-    public abstract String buildKey(String... keyComponents);
+    public abstract String buildKey(Object... keyComponents);
 
     /**
      * 获得缓存过期时间

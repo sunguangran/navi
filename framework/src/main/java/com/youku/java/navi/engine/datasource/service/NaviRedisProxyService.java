@@ -16,6 +16,8 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements IN
 
     private AlibabaJsonSerializer jsonSerializer = new AlibabaJsonSerializer();
 
+    private IHash hash = null;
+
     protected NaviRedisProxyDriver getDriver() {
         INaviDriver driver = dataSource.getHandle();
         if (driver instanceof NaviRedisProxyDriver) {
@@ -677,8 +679,10 @@ public class NaviRedisProxyService extends AbstractNaviDataService implements IN
         throw new UnsupportedOperationException();
     }
 
-    public <K> List<List<K>> groupKey(Class<K> classNm, K... keys) {
-        throw new UnsupportedOperationException();
+    @Override
+    public <K> List<List<K>> groupKeys(Class<K> classNm, K... keys) {
+        // hash.groupKeys();
+        return null;
     }
 
 }

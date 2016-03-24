@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.Resp;
 import com.youku.java.navi.utils.AlibabaJsonSerializer;
 import com.youku.java.navi.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * navi下dto需继承该超类 该类提供辅助性工具
  */
+@Slf4j
 public abstract class AbstractNaviDto implements Cloneable, Serializable {
 
     private static final long serialVersionUID = -3983785947326217708L;
@@ -22,6 +24,18 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
     private int _null_ = 0;
 
     public AbstractNaviDto() {
+    }
+
+    public static <T extends AbstractNaviDto> T createNullInstance(Class<T> clazz) {
+        try {
+            T dto = clazz.newInstance();
+            dto.setNull();
+            return dto;
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return null;
     }
 
     public boolean isNull() {

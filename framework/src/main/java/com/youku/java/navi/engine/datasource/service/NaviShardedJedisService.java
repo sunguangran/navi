@@ -755,7 +755,7 @@ public class NaviShardedJedisService extends AbstractNaviDataService implements 
 
     }
 
-    public <K> List<List<K>> groupKey(Class<K> classNm, K... keys) {
+    public <K> List<List<K>> groupKeys(Class<K> classNm, K... keys) {
         throw new UnsupportedOperationException();
     }
 

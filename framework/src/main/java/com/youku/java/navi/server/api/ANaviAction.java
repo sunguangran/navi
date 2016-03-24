@@ -59,15 +59,11 @@ public abstract class ANaviAction implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Rest typeAn = this.getClass().getAnnotation(Rest.class);
         if (typeAn != null) {
-            String[] typeAns = typeAn.value().split("/");
-            if (typeAns.length < 2) {
-                return;
-            }
-
+            String typeRest = com.youku.java.navi.utils.StringUtils.isEmpty(typeAn.value()) ? this.getClass().getSimpleName().toLowerCase() : typeAn.value();
             for (Method method : this.getClass().getDeclaredMethods()) {
-                Rest methodAn = method.getAnnotation(Rest.class);
-                if (methodAn != null) {
-                    String uri = "/" + typeAn.value() + (StringUtils.isEmpty(methodAn.value()) ? "/" + method.getName() + ".json" : "/" + methodAn.value()).trim();
+                Rest methodRest = method.getAnnotation(Rest.class);
+                if (methodRest != null) {
+                    String uri = "/" + typeRest + (StringUtils.isEmpty(methodRest.value()) ? "/" + method.getName() + ".json" : "/" + methodRest.value()).trim();
                     if (!uri.endsWith(".json")) {
                         uri += ".json";
                     }

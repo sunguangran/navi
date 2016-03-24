@@ -24,7 +24,7 @@ public class AutoIncrDao extends AbstractNaviNewDao<AutoIncrDTO> {
     }
 
     @Override
-    public String buildKey(String... keyComponents) {
+    public String buildKey(Object... keyComponents) {
         return null;
     }
 

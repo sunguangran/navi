@@ -43,7 +43,7 @@ public class AlibabaJsonSerializer extends JSON {
     }
 
     public <T> T getObjectFromJsonStr(String jsonStr, Class<T> clazz) {
-        return parseObject(jsonStr, (Type) clazz, parseConfig, DEFAULT_PARSER_FEATURE, new Feature[0]);
+        return parseObject(jsonStr, clazz, parseConfig, DEFAULT_PARSER_FEATURE, new Feature[0]);
     }
 
     private <T> T toParseObject(byte[] input, int off, int len, CharsetDecoder charsetDecoder, Type clazz) {

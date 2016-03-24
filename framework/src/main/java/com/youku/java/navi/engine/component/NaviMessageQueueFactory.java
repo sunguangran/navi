@@ -9,7 +9,7 @@ import com.youku.java.navi.engine.core.INaviMessageQueue;
 
 public class NaviMessageQueueFactory {
 
-    public INaviMessageQueue createMQ(IBaseDataService service, String queueKey, MessageQueueType mqType) {
+    public INaviMessageQueue createMQ(IBaseDataService service, String key, MessageQueueType mqType) {
         switch (mqType) {
             case REDIS:
                 if (service instanceof INaviCache) {
@@ -19,13 +19,13 @@ public class NaviMessageQueueFactory {
                 }
             case OLDMUTIREDIS:
                 if (service instanceof INaviCache) {
-                    return new NaviRedisMutiKeyMessageQueue(queueKey, (INaviCache) service);
+                    return new NaviRedisMutiKeyMessageQueue(key, (INaviCache) service);
                 } else {
                     throw new NaviSystemException("The service is invalid!!", NaviError.SYSERROR);
                 }
             case MUTIREDIS:
                 if (service instanceof INaviCache) {
-                    return new NaviNewRedisMutiKeyMessageQueue(queueKey, (INaviCache) service);
+                    return new NaviNewRedisMutiKeyMessageQueue(key, (INaviCache) service);
                 } else {
                     throw new NaviSystemException("The service is invalid!!", NaviError.SYSERROR);
                 }

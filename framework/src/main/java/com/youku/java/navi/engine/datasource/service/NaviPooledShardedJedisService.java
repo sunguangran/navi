@@ -463,7 +463,7 @@ public class NaviPooledShardedJedisService extends AbstractNaviDataService imple
 
     }
 
-    public <K> List<List<K>> groupKey(Class<K> classNm, K... keys) {
+    public <K> List<List<K>> groupKeys(Class<K> classNm, K... keys) {
         AbstractNaviPoolJedisDriver driver = getDriver();
         List<List<byte[]>> groups = driver.groupKeys(objArray2BytesArray(keys));
         List<List<K>> results = new LinkedList<List<K>>();

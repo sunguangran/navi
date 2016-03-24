@@ -25,7 +25,7 @@ public class NaviNewRedisMutiKeyMessageQueue implements INaviMessageQueue {
     }
 
     public <T> boolean offer(String key, T... t) {
-        spushAndrpush(setKey, key, t);
+        spushAndRpush(setKey, key, t);
         return true;
     }
 
@@ -33,14 +33,17 @@ public class NaviNewRedisMutiKeyMessageQueue implements INaviMessageQueue {
         if (StringUtils.isEmpty(key)) {
             key = setKey;
         }
+
         String listKey = service.sRandMember(key, String.class);
         if (StringUtils.isEmpty(listKey)) {
             return null;
         }
+
         T t = service.lPop(listKey, classNm);
         if (t == null) {
             removeKey(key, listKey);
         }
+
         return t;
     }
 
@@ -128,27 +131,41 @@ public class NaviNewRedisMutiKeyMessageQueue implements INaviMessageQueue {
         }
     }
 
-    private <T> void spushAndrpush(String setKey, String key, T... ts) {
-        String script = "for i,arg in ipairs(ARGV) do redis.call('RPUSH', KEYS[3],arg) end redis.call('SADD',KEYS[1],KEYS[3]) if redis.call('LLEN',KEYS[2]) < redis.call('SCARD',KEYS[1]) then return redis.call('LPUSH',KEYS[2],KEYS[2]) end";
-        String help = setKey + ":help";
-        String[] params = new String[ts.length + 3];
+    private <T> void spushAndRpush(String setKey, String key, T... objs) {
+        String script =
+            "for i, arg in ipairs(ARGV)                                             " +
+            "    do redis.call('RPUSH', KEYS[3], arg)                               " +
+            "end                                                                    " +
+            "                                                                       " +
+            "redis.call('SADD', KEYS[1], KEYS[3])                                   " +
+            "                                                                       " +
+            "if redis.call('LLEN', KEYS[2]) < redis.call('SCARD', KEYS[1]) then     " +
+            "    return redis.call('LPUSH', KEYS[2], KEYS[2])                       " +
+            "end                                                                    ";
+
+        String[] params = new String[objs.length + 3];
         int i = 0;
         params[i++] = setKey;
-        params[i++] = help;
+        params[i++] = setKey + ":help";
         params[i++] = key;
-        for (T t : ts) {
-            if (t instanceof String) {
-                params[i++] = (String) t;
+
+        for (T obj : objs) {
+            if (obj instanceof String) {
+                params[i++] = (String) obj;
             } else {
-                params[i++] = jsonSerializer.getJSONString(t);
+                params[i++] = jsonSerializer.getJSONString(obj);
             }
         }
+
         service.eval(key, script, 3, params);
     }
 
-    private void removeKey(String setKey, String key) {
-        String script = "if redis.call('LLEN',KEYS[2]) == 0 then return redis.call('SREM',KEYS[1],KEYS[2]) end";
-        service.eval(setKey, script, 2, setKey, key);
+    private void removeKey(String setKey, String listKey) {
+        String script =
+            "if redis.call('LLEN', KEYS[2]) == 0 then                               " +
+            "    return redis.call('SREM', KEYS[1], KEYS[2])                        " +
+            "end                                                                    ";
+        service.eval(setKey, script, 2, setKey, listKey);
     }
 
     private String bspop(String key, long timeout) {
@@ -158,6 +175,7 @@ public class NaviNewRedisMutiKeyMessageQueue implements INaviMessageQueue {
             service.blPop(help, (int) timeout, String.class);
             listKey = service.sRandMember(key, String.class);
         }
+
         return listKey;
     }
 
