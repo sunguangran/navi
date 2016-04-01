@@ -24,13 +24,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         String uri = request.getUri();
 
         // 过滤　"//"
-        while (true) {
-            if (uri.contains("//")) {
-                uri = uri.replace("//", "/");
-            } else {
-                break;
-            }
-        }
+        uri = uri.replaceAll("/(/)+", "/");
 
         // 重定向
         uri = redirect(uri);
