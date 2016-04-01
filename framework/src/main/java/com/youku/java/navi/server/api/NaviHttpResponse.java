@@ -31,6 +31,10 @@ public class NaviHttpResponse extends DefaultHttpResponse {
         map = new HashMap<>();
     }
 
+    public void setResponseData(int code, String desc) {
+        this.setResponseData(new NaviJsonResponseData(code, desc));
+    }
+
     @Override
     public void addHeader(String name, Object value) {
         if (response != null) {

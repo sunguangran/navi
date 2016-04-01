@@ -36,6 +36,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
         super(data, dataFieldNm, page, count, total);
     }
 
+    @Override
     protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
         JSONObject re = new JSONObject(true);
 
@@ -62,7 +63,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
             }
         }
 
-        re.put("cost", cost * 0.001f);
+        re.put("cost", cost * 0.001F);
 
         if (data != null) {
             re.put(dataFieldNm, data);
@@ -78,7 +79,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     @Override
     public String toResponseNull() throws NaviSystemException {
         try {
-            return toJsonData("", "", "no data found", NaviError.ERR_NO_DATA);
+            return toJsonData(null, "", "no data found", NaviError.ERR_NO_DATA);
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
@@ -88,7 +89,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     public String toResponseForBusinessException() throws NaviSystemException {
         try {
             NaviBusinessException ex = (NaviBusinessException) data;
-            return toJsonData("", ex.getProvider(), ex.toString(), ex.getCode());
+            return toJsonData(null, ex.getProvider(), ex.toString(), ex.getCode());
         } catch (JSONException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }

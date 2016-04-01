@@ -7,9 +7,20 @@ public class NaviFrameWorkContext implements INaviModuleContext {
 
     private String confPath;
     private NaviClassPathXmlApplicationContext cxt;
+    protected ContextStatus status = ContextStatus.INITIAL;
 
     public NaviFrameWorkContext(String file) {
         confPath = NaviDefine.NAVI_HOME + "/conf/" + file + ".xml";
+    }
+
+    @Override
+    public String getModuleName() {
+        return "framework";
+    }
+
+    @Override
+    public ContextStatus getContextStatus() {
+        return status;
     }
 
     public Object getBean(String name) throws Exception {
@@ -17,22 +28,34 @@ public class NaviFrameWorkContext implements INaviModuleContext {
     }
 
     public INaviModuleContext initModule() throws Exception {
-        cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-        cxt.refresh();
-        cxt.registerShutdownHook();
+        try {
+            status = ContextStatus.PREPARING;
+            cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+            cxt.refresh();
+            cxt.registerShutdownHook();
+        } finally {
+            status = ContextStatus.NORMAL;
+        }
+
         return this;
     }
 
     public INaviModuleContext refresh() throws Exception {
-        NaviClassPathXmlApplicationContext ncxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-        ncxt.setClassLoader(new NaviServerClassloader());
-        ncxt.refresh();
-        ncxt.registerShutdownHook();
-        NaviClassPathXmlApplicationContext tcxt = cxt;
-        cxt = ncxt;
-        tcxt.prepareClose();
-        tcxt.setClassLoader(null);
-        tcxt = null;
+        try {
+            status = ContextStatus.REFRESHING;
+            NaviClassPathXmlApplicationContext ncxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+            ncxt.setClassLoader(new NaviServerClassloader());
+            ncxt.refresh();
+            ncxt.registerShutdownHook();
+            NaviClassPathXmlApplicationContext tcxt = cxt;
+            cxt = ncxt;
+            tcxt.prepareClose();
+            tcxt.setClassLoader(null);
+            tcxt = null;
+        } finally {
+            status = ContextStatus.NORMAL;
+        }
+
         return this;
     }
 

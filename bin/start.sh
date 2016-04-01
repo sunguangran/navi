@@ -24,7 +24,6 @@ then
   mkdir "${MODULESDIR}"
 fi
 
-
 JVMOPTS="-server -Xmx1024m -Xms1024m -XX:NewSize=384m -Xss512k -XX:+UseConcMarkSweepGC -XX:+UseParNewGC"
 JVMARGS="-DNAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8 "
 

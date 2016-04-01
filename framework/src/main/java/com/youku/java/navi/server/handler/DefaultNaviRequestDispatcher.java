@@ -32,7 +32,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
             }
         }
 
-        //重定向
+        // 重定向
         uri = redirect(uri);
         if (uri == null || uri.length() == 0) {
             throw new NaviSystemException("malformed URL!", NaviError.SYSERROR);
@@ -43,7 +43,7 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
         }
 
         String[] uriSplits = uri.split("/");
-        if (uriSplits.length < 4) {
+        if (uriSplits.length < 2) {
             throw new NaviSystemException("malformed URL!", NaviError.SYSERROR);
         }
 
@@ -58,20 +58,20 @@ public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher 
     public void callApi(NaviHttpRequest request, NaviHttpResponse response) throws Exception {
         INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance().getNaviModuleContext(request.getModuleNm());
         if (moduleCtx == null) {
-            throw new NaviSystemException("module " + request.getModuleNm() + " not found!", NaviError.SYSERROR);
+            throw new NaviBusinessException("module " + request.getModuleNm() + " not found!", NaviError.ACTION_NOT_SUPPORTED);
         }
 
         String uri = request.getUri();
         uri = uri.substring(uri.indexOf(request.getModuleNm()) + request.getModuleNm().length());
 
-        RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(uri);
+        RestApi restApi = NaviModuleContextFactory.getInstance().getRestApi(request.getModuleNm(), uri);
         if (restApi == null) {
             throw new NaviBusinessException("'" + request.getUri() + "' not found!", NaviError.ACTION_NOT_SUPPORTED);
         }
 
         ANaviAction bean = (ANaviAction) moduleCtx.getBean(NaviModuleContextFactory.getInstance().getBeanId(request.getModuleNm(), restApi.getClazz()));
         if (bean == null) {
-            throw new NaviSystemException("'" + request.getUri() + "' not found!", NaviError.SYSERROR);
+            throw new NaviBusinessException("'" + request.getUri() + "' not found!", NaviError.ACTION_NOT_SUPPORTED);
         }
 
         bean.action(request, response, restApi.getMethod());

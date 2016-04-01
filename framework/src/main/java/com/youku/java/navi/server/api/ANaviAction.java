@@ -6,10 +6,10 @@ import com.youku.java.navi.common.exception.NaviRuntimeException;
 import com.youku.java.navi.engine.core.INaviMonitorCollector;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
 import com.youku.java.navi.server.serviceobj.MonitorReportObject;
+import com.youku.java.navi.utils.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.lang.reflect.Method;
@@ -59,7 +59,7 @@ public abstract class ANaviAction implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Rest typeAn = this.getClass().getAnnotation(Rest.class);
         if (typeAn != null) {
-            String typeRest = com.youku.java.navi.utils.StringUtils.isEmpty(typeAn.value()) ? this.getClass().getSimpleName().toLowerCase() : typeAn.value();
+            String typeRest = StringUtils.isEmpty(typeAn.value()) ? this.getClass().getSimpleName().toLowerCase() : typeAn.value();
             for (Method method : this.getClass().getDeclaredMethods()) {
                 Rest methodRest = method.getAnnotation(Rest.class);
                 if (methodRest != null) {
@@ -68,13 +68,7 @@ public abstract class ANaviAction implements InitializingBean {
                         uri += ".json";
                     }
 
-                    while (true) {
-                        if (uri.contains("//")) {
-                            uri = uri.replace("//", "/");
-                        } else {
-                            break;
-                        }
-                    }
+                    uri = uri.replaceAll("/(/)+", "/");
 
                     RestApi api = new RestApi();
                     api.setUri(uri);
@@ -89,7 +83,7 @@ public abstract class ANaviAction implements InitializingBean {
         }
     }
 
-    private void monitor(com.youku.java.navi.server.api.NaviHttpRequest request, com.youku.java.navi.server.api.NaviHttpResponse response, long start, int code) {
+    private void monitor(NaviHttpRequest request, NaviHttpResponse response, long start, int code) {
         if (collector == null) {
             return;
         }

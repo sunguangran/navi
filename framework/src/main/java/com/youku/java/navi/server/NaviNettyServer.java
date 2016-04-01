@@ -53,6 +53,8 @@ public class NaviNettyServer extends ANaviTCPServer {
             public ChannelPipeline getPipeline() throws Exception {
                 ChannelPipeline pipeline = Channels.pipeline();
                 pipeline.addLast("httpCodec", new NaviHttpServerCodec());
+                // pipeline.addLast("inflater", new HttpContentDecompressor());
+
                 pipeline.addLast("GLOBAL_TRAFFIC_SHAPING", globalTcHandler);
 
                 String chunkSize = ServerConfigure.get(NaviDefine.CHUNK_AGGR_SIZE);

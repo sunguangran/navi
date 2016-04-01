@@ -23,6 +23,8 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
     private String libsPath = null;
     private Map<String, Long> confTimeMap;
 
+    protected ContextStatus status = ContextStatus.INITIAL;
+
     public NaviAsyncModuleContext(String moduleNm) {
         this.moduleNm = moduleNm;
         confPath = NaviModulesUtil.getModuleConfDir(moduleNm) + moduleNm + "-async.xml";
@@ -31,15 +33,32 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
         confTimeMap = new HashMap<>();
     }
 
-    public INaviModuleContext initModule() throws FileNotFoundException,
-        MalformedURLException {
-        initConfFilesTime();
-        // cfgLastModified = new File(confPath).lastModified();
-        libsLastModified = new File(libsPath).lastModified();
-        cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-        cxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
-        cxt.refresh();
-        cxt.registerShutdownHook();// jvm退出时，回收资源
+    @Override
+    public String getModuleName() {
+        return this.moduleNm;
+    }
+
+    @Override
+    public ContextStatus getContextStatus() {
+        return status;
+    }
+
+    public INaviModuleContext initModule() throws FileNotFoundException, MalformedURLException {
+        try {
+            status = ContextStatus.PREPARING;
+            initConfFilesTime();
+            // cfgLastModified = new File(confPath).lastModified();
+            libsLastModified = new File(libsPath).lastModified();
+            cxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+            cxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
+            status = ContextStatus.PREPARING;
+            cxt.refresh();
+            status = ContextStatus.NORMAL;
+            cxt.registerShutdownHook();// jvm退出时，回收资源
+        } finally {
+            status = ContextStatus.NORMAL;
+        }
+
         return this;
     }
 
@@ -59,25 +78,32 @@ public class NaviAsyncModuleContext implements INaviModuleContext {
         }
     }
 
-    public INaviModuleContext refresh() throws FileNotFoundException,
-        MalformedURLException {
-        boolean confFileModified = isConfFilesModified();
-        // long cfgCurrModified = new File(confPath).lastModified();
-        long libsCurrModified = new File(libsPath).lastModified();
-        if (confFileModified || libsLastModified < libsCurrModified) {
-            NaviClassPathXmlApplicationContext newCxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
-            newCxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
-            newCxt.refresh();
-            newCxt.registerShutdownHook();// jvm退出时，回收资源
-            // cfgLastModified = cfgCurrModified;
-            libsLastModified = libsCurrModified;
-            NaviClassPathXmlApplicationContext tmpCxt = cxt;
-            cxt = newCxt;
-            tmpCxt.prepareClose();// 干掉过期的context,同时回收资源
-            tmpCxt.setClassLoader(null);
+    public INaviModuleContext refresh() throws FileNotFoundException, MalformedURLException {
+        try {
+            status = ContextStatus.REFRESHING;
 
-            log.info("old spring container is closed!");
-            return this;
+            boolean confFileModified = isConfFilesModified();
+            // long cfgCurrModified = new File(confPath).lastModified();
+            long libsCurrModified = new File(libsPath).lastModified();
+            if (confFileModified || libsLastModified < libsCurrModified) {
+                NaviClassPathXmlApplicationContext newCxt = new NaviClassPathXmlApplicationContext(new String[]{"file:" + confPath}, false);
+                newCxt.setClassLoader(new NaviModuleClassLoader(getClass().getClassLoader(), moduleNm));
+                status = ContextStatus.PREPARING;
+                newCxt.refresh();
+                status = ContextStatus.NORMAL;
+                newCxt.registerShutdownHook();// jvm退出时，回收资源
+                // cfgLastModified = cfgCurrModified;
+                libsLastModified = libsCurrModified;
+                NaviClassPathXmlApplicationContext tmpCxt = cxt;
+                cxt = newCxt;
+                tmpCxt.prepareClose();// 干掉过期的context,同时回收资源
+                tmpCxt.setClassLoader(null);
+
+                log.info("old spring container is closed!");
+                return this;
+            }
+        } finally {
+            status = ContextStatus.NORMAL;
         }
         
         return null;

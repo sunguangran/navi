@@ -2,6 +2,8 @@ package com.youku.java.navi.server.module;
 
 public interface INaviModuleContext {
 
+    String getModuleName();
+
     /**
      * 从模块中获取Bean对象
      *
@@ -34,5 +36,11 @@ public interface INaviModuleContext {
      * @throws Exception
      */
     void close() throws Exception;
+
+    ContextStatus getContextStatus();
+
+    enum ContextStatus {
+        INITIAL, NORMAL, PREPARING, REFRESHING
+    }
 
 }

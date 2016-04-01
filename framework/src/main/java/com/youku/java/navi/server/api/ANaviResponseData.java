@@ -1,6 +1,7 @@
 package com.youku.java.navi.server.api;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
@@ -63,22 +64,27 @@ public abstract class ANaviResponseData implements INaviResponseData {
     }
 
     protected String toResponse() throws NaviSystemException {
-        if (data == null) {
-            return toResponseNull();
-        } else if (data instanceof NaviBusinessException) {
-            return toResponseForBusinessException();
-        } else if (data instanceof JSONArray) {
-            return toResponseForJsonArray();
-        } else if (data instanceof JSONObject) {
-            return toResponseForJsonObject();
-        } else if (data instanceof Collection) {
-            return toResponseForList();
-        } else if (data.getClass().isArray()) {
-            return toResponseForArray();
+        if (data != null) {
+            if (data == null) {
+                return toResponseNull();
+            } else if (data instanceof NaviBusinessException) {
+                return toResponseForBusinessException();
+            } else if (data instanceof JSONArray) {
+                return toResponseForJsonArray();
+            } else if (data instanceof JSONObject) {
+                return toResponseForJsonObject();
+            } else if (data instanceof Collection) {
+                return toResponseForList();
+            } else if (data.getClass().isArray()) {
+                return toResponseForArray();
+            }
+            return toResponseForObject();
         }
 
-        return toResponseForObject();
+        return  toJsonData(null, "", desc, code);
     }
+
+    protected abstract String toJsonData(Object data, String provider, String desc, int code) throws JSONException;
 
     protected abstract String toResponseForJsonObject() throws NaviSystemException;
 

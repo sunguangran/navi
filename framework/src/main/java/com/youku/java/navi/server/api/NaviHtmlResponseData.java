@@ -1,5 +1,6 @@
 package com.youku.java.navi.server.api;
 
+import com.alibaba.fastjson.JSONException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 
 
@@ -7,6 +8,11 @@ public class NaviHtmlResponseData extends ANaviResponseData {
 
     public NaviHtmlResponseData(Object data) {
         super(data);
+    }
+
+    @Override
+    protected String toJsonData(Object data, String provider, String desc, int code) throws JSONException {
+        return null;
     }
 
     public String getResponseType() {

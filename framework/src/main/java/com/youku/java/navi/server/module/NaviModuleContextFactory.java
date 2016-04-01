@@ -16,12 +16,20 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class NaviModuleContextFactory {
 
-    private final static NaviModuleContextFactory instance = new NaviModuleContextFactory();
+    private NaviModuleContextFactory() {
+    }
 
-    private final static int DELAY = 0;// 0s延迟
+    /**
+     * 静态初始化器，由JVM来保证线程安全
+     */
+    private static class SingletonHolder {
+        public static final NaviModuleContextFactory instance = new NaviModuleContextFactory();
+    }
+
+    private final static int DELAY = 0; // 0s延迟
 
     private Map<String, INaviModuleContext> map = new HashMap<>();
-    private Map<String, RestApi> restMap = new HashMap<>();
+    private Map<String, Map<String, RestApi>> restMap = new HashMap<>();  // <module_name, <uri, rest>>
 
     public String getBeanId(String moduleNm, Class clazz) {
         INaviModuleContext context = map.get(moduleNm);
@@ -38,11 +46,27 @@ public class NaviModuleContextFactory {
     }
 
     public void addRestApi(String uri, RestApi api) {
-        restMap.put(uri, api);
+        for (INaviModuleContext context : map.values()) {
+            String moduleNm = context.getModuleName();
+            if (context.getContextStatus().equals(INaviModuleContext.ContextStatus.REFRESHING) || context.getContextStatus().equals(INaviModuleContext.ContextStatus.PREPARING)) {
+                if (!restMap.containsKey(moduleNm)) {
+                    restMap.put(moduleNm, new HashMap<String, RestApi>());
+                }
+
+                restMap.get(moduleNm).put(uri.toLowerCase(), api);
+                return;
+            }
+        }
+
+        log.error("rest map module not found, " + uri);
     }
 
-    public RestApi getRestApi(String uri) {
-        return restMap.get(uri);
+    public RestApi getRestApi(String moduleNm, String uri) {
+        if (!restMap.containsKey(moduleNm)) {
+            return null;
+        }
+
+        return restMap.get(moduleNm).get(uri.toLowerCase());
     }
 
     public void startCheckModuleProccess() {
@@ -54,12 +78,22 @@ public class NaviModuleContextFactory {
 
     public INaviModuleContext getNaviModuleContext(String module) throws Exception {
         if (!map.containsKey(module)) {
+            INaviModuleContext context;
             if (ServerConfigure.isDevEnv()) {
-                map.put(module, new NaviDevModuleContext(module).initModule());
+                context = new NaviDevModuleContext(module);
             } else if (ServerConfigure.isDaemonEnv()) {
-                map.put(module, new NaviDaemonModuleContext(module).initModule());
+                context = new NaviDaemonModuleContext(module);
             } else {
                 throw new FileNotFoundException("no module file:" + module);
+            }
+
+            map.put(module, context);
+
+            try {
+                context.initModule();
+            } catch (Exception e) {
+                log.error("{}", e.getMessage());
+                map.remove(module);
             }
         }
 
@@ -67,7 +101,7 @@ public class NaviModuleContextFactory {
     }
 
     public static NaviModuleContextFactory getInstance() {
-        return instance;
+        return SingletonHolder.instance;
     }
 
     private class CheckModuleVersion implements Runnable {
@@ -97,8 +131,15 @@ public class NaviModuleContextFactory {
                     }
 
                     if (!map.containsKey(module.getName())) {
-                        map.put(module.getName(), new NaviModuleContext(module.getName()).initModule());
-                        log.info("module " + module.getName() + " has been loaded.");
+                        NaviModuleContext ctx = new NaviModuleContext(module.getName());
+                        try {
+                            map.put(module.getName(), ctx);
+                            ctx.initModule();
+                            log.info("module " + module.getName() + " has been loaded.");
+                        } catch (Exception e) {
+                            map.remove(module.getName());
+                            log.info("module " + module.getName() + " init failed, " + e.getMessage());
+                        }
                     } else {
                         INaviModuleContext mdl = map.get(module.getName()).refresh();
                         if (mdl != null) {

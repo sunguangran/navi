@@ -2238,7 +2238,7 @@ public class NaviShardJedisDriver extends AbstractNaviDriver {
             server.append(jedis.getClient().getPort());
         }
         if (ex instanceof JedisException) {
-            // check connection flag
+            // check connection status
             if (ex instanceof JedisConnectionException) {
                 setBroken(true);
             }

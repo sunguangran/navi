@@ -13,7 +13,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -235,10 +238,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
 
         // 更新数据库
         Query query = new Query(where("id").in(ids));
-        T tmpl = dbService.findAndRemove(query, classNm);
-        if (tmpl == null) {
-            return false;
-        }
+        dbService.delete(query, classNm);
 
         // 更新缓存
         if (cacheService != null) {
@@ -330,5 +330,4 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     public int getExpire() {
         return CacheComponent.getExpire(this.classNm);
     }
-
 }
