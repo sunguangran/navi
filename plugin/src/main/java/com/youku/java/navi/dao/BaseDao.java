@@ -299,7 +299,10 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             if (!setNull) {
                 cacheService.delete(keys);
             } else {
-                cacheService.set(keys, T.createNullInstance(classNm));
+                T nullInstance = T.createNullInstance(classNm);
+                if (nullInstance != null) {
+                    cacheService.set(keys, nullInstance);
+                }
             }
 
             return true;
