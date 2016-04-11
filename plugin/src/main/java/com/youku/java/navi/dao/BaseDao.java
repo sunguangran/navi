@@ -191,7 +191,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         }
 
         // 查询数据库
-        Query query = new Query(where("id").in(unhited));
+        Query query = new Query(where("_id").in(unhited));
         List<T> res = dbService.find(query, classNm);
         if (res != null && res.size() != 0) {
             for (T tmp : res) {
@@ -215,7 +215,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
 
     public T delete(long id) throws NaviSystemException {
         // 更新数据库
-        Query query = new Query(where("id").is(id));
+        Query query = new Query(where("_id").is(id));
         T tmpl = dbService.findAndRemove(query, classNm);
         if (tmpl == null) {
             return null;
@@ -237,7 +237,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         BaseResult<T> ret = new BaseResult<>();
 
         // 更新数据库
-        Query query = new Query(where("id").in(ids));
+        Query query = new Query(where("_id").in(ids));
         dbService.delete(query, classNm);
 
         // 更新缓存

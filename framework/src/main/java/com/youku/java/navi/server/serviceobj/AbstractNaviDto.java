@@ -21,7 +21,7 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
 
     private static final long serialVersionUID = -3983785947326217708L;
 
-    private int _null_ = 0;
+    private Integer _null_ = null;
 
     public AbstractNaviDto() {
     }
@@ -39,7 +39,7 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
     }
 
     public boolean isNull() {
-        return (1 == _null_);
+        return _null_ != null && (1 == _null_);
     }
 
     public void setNull() {
@@ -59,8 +59,7 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
     }
 
     public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-
+        JSONObject json = new JSONObject(true);
         if (this.isNull()) {
             return null;
         }

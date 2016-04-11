@@ -3,7 +3,9 @@ package com.youku.java.navi.dto.request;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
+import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.api.NaviHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -16,7 +18,7 @@ import java.util.Set;
 @Slf4j
 public class HttpRequestUtil {
 
-    public static <T> T createBeanFromRequest(NaviHttpRequest request, Class<? extends T> clazz) {
+    public static <T> T createBeanFromRequest(NaviHttpRequest request, Class<? extends T> clazz) throws NaviSystemException {
         try {
             T bean = clazz.newInstance();
             Field[] fields = bean.getClass().getDeclaredFields();
@@ -39,10 +41,8 @@ public class HttpRequestUtil {
 
             return bean;
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            throw new NaviSystemException("system, error, " + e.getMessage(), NaviError.SYSERROR);
         }
-
-        return null;
     }
 
     public static <T> T createBeanFromJSONObject(JSONObject object, Class<? extends T> clazz) {
