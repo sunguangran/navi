@@ -11,6 +11,7 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
 import org.jboss.netty.handler.codec.http.HttpContentCompressor;
+import org.jboss.netty.handler.codec.http.HttpContentDecompressor;
 import org.jboss.netty.handler.timeout.IdleStateHandler;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
@@ -53,7 +54,7 @@ public class NaviNettyServer extends ANaviTCPServer {
             public ChannelPipeline getPipeline() throws Exception {
                 ChannelPipeline pipeline = Channels.pipeline();
                 pipeline.addLast("httpCodec", new NaviHttpServerCodec());
-                // pipeline.addLast("decompressor", new HttpContentDecompressor());
+                pipeline.addLast("inflater", new HttpContentDecompressor());
 
                 pipeline.addLast("GLOBAL_TRAFFIC_SHAPING", globalTcHandler);
 
