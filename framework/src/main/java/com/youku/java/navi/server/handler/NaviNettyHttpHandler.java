@@ -10,6 +10,7 @@ import org.jboss.netty.handler.codec.http.*;
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names;
 import org.jboss.netty.util.CharsetUtil;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,14 @@ public class NaviNettyHttpHandler extends AbstractNaviNettyHttpHandler {
 
     @Override
     public void handle(HttpRequest request, Channel channel) throws Exception {
+        // 设置调用方ip，X-Forwarded-For 是使用了代理（如nginx）会附加在HTTP头域上的
+        if (request.headers().contains("X-Forwarded-For")) {
+            request.headers().set(Names.HOST, request.headers().get("X-Forwarded-For"));
+        } else {
+            InetSocketAddress insocket = (InetSocketAddress) channel.getRemoteAddress();
+            request.headers().set(Names.HOST, insocket.getAddress().getHostAddress());
+        }
+
         HttpResponse response = new NaviHttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK);
 
         for (INaviHttpRequestListener listener : listeners) {

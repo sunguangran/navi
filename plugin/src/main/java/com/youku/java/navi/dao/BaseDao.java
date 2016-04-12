@@ -122,7 +122,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
 
         Query query = new Query(where("_id").is(id));
         dto = dbService.findOne(query, classNm);
-        if (dto == null) {
+        if (dto == null || dto.isNull()) {
             try {
                 T nullDto = classNm.newInstance();
                 nullDto.setNull();
