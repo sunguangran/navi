@@ -51,6 +51,8 @@ public interface NaviDefine {
     String SERVERCLASS = "com.youku.java.navi.server.NaviNettyServer";
     String SERVERCLASS_UDP = "com.youku.java.navi.server.NaviNettyUDPServer";
     String SERVERCLASS_TCP = "com.youku.java.navi.server.NaviNettyTCPServer";
+    String DAEMON_SERVERCLASS = "com.youku.java.navi.server.NaviDaemonServer";
+    String ASYNC_SERVERCLASS = "com.youku.java.navi.server.NaviAsyncServer";
 
     //default setting
     String DEFAULT_PORT = "8080";

@@ -29,6 +29,10 @@ public final class ServerConfigure implements NaviDefine {
         return serverCfg.getProperty(name);
     }
 
+    public static String[] getClassArgs() {
+        return (String[]) serverCfg.get(DAEMON_CLASS_ARGS);
+    }
+
     public static WORK_MODE getWorkMode() {
         return WORK_MODE.toEnum(get(MODE));
     }
