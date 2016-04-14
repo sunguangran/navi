@@ -28,12 +28,12 @@ public abstract class AbstractNaviAsynchronousMethod implements INaviAsynchronou
         if (classNm.equals(String.class)) {
             return classNm.cast(str);
         }
+
         return jsonSerializer.getObjectFromJsonStr(str, classNm);
     }
 
     public boolean getBatch() {
         return false;
     }
-
 
 }

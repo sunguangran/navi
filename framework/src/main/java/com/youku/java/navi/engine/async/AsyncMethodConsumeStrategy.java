@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.engine.core.INaviMQConsumeStrategy;
 import com.youku.java.navi.server.module.INaviModuleContext;
 import com.youku.java.navi.server.module.NaviAsyncModuleContextFactory;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class AsyncMethodConsumeStrategy implements INaviMQConsumeStrategy<String> {
 
+    @Getter @Setter
     private ThreadPoolExecutor executor;
 
     private Logger log = Logger.getLogger(AsyncMethodConsumeStrategy.class);
@@ -33,15 +36,14 @@ public class AsyncMethodConsumeStrategy implements INaviMQConsumeStrategy<String
     }
 
     public void consume(List<String> list) {
-        Map<INaviAsynchronousMethod, List<String[]>> map = new HashMap<INaviAsynchronousMethod, List<String[]>>();
+        Map<INaviAsynchronousMethod, List<String[]>> map = new HashMap<>();
         for (String node : list) {
             try {
                 JSONObject obj = JSON.parseObject(node);
                 String module = obj.getString("module");
                 String method = obj.getString("method");
                 JSONArray jsonParams = obj.getJSONArray("params");
-                INaviModuleContext moduleCtx = NaviAsyncModuleContextFactory.getInstance()
-                    .getNaviAsyncModuleContext(module);
+                INaviModuleContext moduleCtx = NaviAsyncModuleContextFactory.getInstance().getNaviAsyncModuleContext(module);
                 INaviAsynchronousMethod asynMethod = (INaviAsynchronousMethod) moduleCtx.getBean(method);
                 String[] params = parseParams(jsonParams);
                 if (map.containsKey(asynMethod)) {
@@ -79,14 +81,6 @@ public class AsyncMethodConsumeStrategy implements INaviMQConsumeStrategy<String
         return strs;
     }
 
-    public ThreadPoolExecutor getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(ThreadPoolExecutor executor) {
-        this.executor = executor;
-    }
-
     class AsyncRunner implements Runnable {
 
         private List<String[]> params;
@@ -94,7 +88,7 @@ public class AsyncMethodConsumeStrategy implements INaviMQConsumeStrategy<String
 
         public AsyncRunner(INaviAsynchronousMethod method, String[] param) {
             this.method = method;
-            this.params = new ArrayList<String[]>();
+            this.params = new ArrayList<>();
             this.params.add(param);
         }
 
@@ -118,6 +112,5 @@ public class AsyncMethodConsumeStrategy implements INaviMQConsumeStrategy<String
             } while (tryTime++ < retry);
 
         }
-
     }
 }

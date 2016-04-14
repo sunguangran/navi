@@ -2,13 +2,12 @@ package com.youku.java.navi.server;
 
 import com.youku.java.navi.boot.NaviDefine;
 import com.youku.java.navi.server.handler.NaviDaemonJobRunner;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+@Slf4j
 public class NaviDaemonServer extends ANaviServer {
-
-    private Logger log = Logger.getLogger(NaviDaemonServer.class);
 
     @Override
     protected boolean preStartServer(Properties serverCfg) {
@@ -26,8 +25,8 @@ public class NaviDaemonServer extends ANaviServer {
             return FAIL;
         }
 
-        Set<String> opts = new HashSet<String>();
-        List<String> params = new ArrayList<String>();
+        Set<String> opts = new HashSet<>();
+        List<String> params = new ArrayList<>();
         String jobNm = classArgs[0];
         for (String arg : classArgs) {
             if (arg.startsWith("-")) {
@@ -42,7 +41,7 @@ public class NaviDaemonServer extends ANaviServer {
             NaviDaemonJobRunner jonRunner = new NaviDaemonJobRunner();
             return jonRunner.start(moduleNm, jobNm, parameters, opts);
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getMessage(), e);
             return FAIL;
         }
     }

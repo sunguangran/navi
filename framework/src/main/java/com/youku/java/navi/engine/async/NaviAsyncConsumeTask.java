@@ -10,6 +10,7 @@ public class NaviAsyncConsumeTask<T> extends NaviMQConsumeTask<T> {
         if (getQueueKey() == null) {
             setQueueKey(buildQueueKey());
         }
+
         super.afterPropertiesSet();
     }
 

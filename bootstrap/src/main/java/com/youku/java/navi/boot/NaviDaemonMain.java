@@ -13,13 +13,13 @@ public class NaviDaemonMain extends ANaviMain {
             log.error("the parameter is invalid");
             return;
         }
-        NaviDaemonMain mainClass = new NaviDaemonMain();
+
         try {
+            NaviDaemonMain mainClass = new NaviDaemonMain();
             mainClass.doMain(mainClass.parseServerConfig(args));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
     }
 
     @Override
@@ -35,15 +35,16 @@ public class NaviDaemonMain extends ANaviMain {
             serverConfig.put(NaviDefine.MODE, NaviDefine.WORK_MODE.DEV.toString());
         } else {
             serverConfig = parseConfig(NaviDefine.NAVI_CONF_PATH);
-            log.info("the current mode is "
-                + serverConfig.getProperty(NaviDefine.MODE));
+            log.info("the current mode is " + serverConfig.getProperty(NaviDefine.MODE));
         }
+
         serverConfig.put(NaviDefine.DAEMON_MODULE_NAME, args[0]);
         if (args.length > 1) {
             String[] newArgs = new String[args.length - 1];
             System.arraycopy(args, 1, newArgs, 0, args.length - 1);
             serverConfig.put(NaviDefine.DAEMON_CLASS_ARGS, newArgs);
         }
+
         return serverConfig;
     }
 

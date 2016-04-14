@@ -6,22 +6,22 @@ import com.youku.java.navi.server.module.INaviModuleContext;
 import com.youku.java.navi.server.module.NaviAsyncModuleContextFactory;
 import com.youku.java.navi.server.module.NaviDevFrameWorkContext;
 import com.youku.java.navi.server.module.NaviFrameWorkContext;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Properties;
 
+@Slf4j
 public class NaviAsyncServer extends ANaviServer {
 
     private NaviMQConsumeController controller;
-    private Logger logger = Logger.getLogger(NaviAsyncServer.class);
 
     public void stopServer() {
         if (controller != null) {
             try {
                 controller.destroy();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -33,7 +33,7 @@ public class NaviAsyncServer extends ANaviServer {
         try {
             NaviAsyncModuleContextFactory.getInstance().loadNaviAsyncModuleContext();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return false;
         }
         return true;
@@ -55,6 +55,7 @@ public class NaviAsyncServer extends ANaviServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return 0;
     }
 

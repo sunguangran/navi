@@ -26,9 +26,13 @@ public class NaviAsyncModuleContextFactory {
 
     public INaviModuleContext getNaviAsyncModuleContext(String module) throws Exception {
         if (!map.containsKey(module)) {
-            throw new FileNotFoundException("no async module file:" + module + "-async");
+            if (ServerConfigure.isDevEnv()) {
+                //本地开发环境，测试环境和deploy环境，该文件已经在启动的时候加载
+                map.put(module, new NaviDevModuleContext(module + "-async").initModule());
+            } else {
+                throw new FileNotFoundException("no async module file:" + module + "-async");
+            }
         }
-
         return map.get(module);
     }
 

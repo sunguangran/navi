@@ -31,9 +31,9 @@ public class NaviAsyncMain extends ANaviMain {
             serverConfig.put(NaviDefine.MODE, NaviDefine.WORK_MODE.DEV.toString());
         } else {
             serverConfig = parseConfig(NaviDefine.NAVI_CONF_PATH);
-            log.info("the current mode is "
-                + serverConfig.getProperty(NaviDefine.MODE));
+            log.info("the current mode is " + serverConfig.getProperty(NaviDefine.MODE));
         }
+
         return serverConfig;
     }
 

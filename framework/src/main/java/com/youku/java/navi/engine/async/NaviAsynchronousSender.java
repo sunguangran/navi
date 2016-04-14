@@ -10,11 +10,14 @@ import com.youku.java.navi.server.module.INaviModuleContext;
 import com.youku.java.navi.server.module.NaviAsyncModuleContextFactory;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
 import com.youku.java.navi.utils.AlibabaJsonSerializer;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Setter
+@Getter
 public class NaviAsynchronousSender {
 
     private INaviMessageQueue queue;
@@ -35,19 +38,17 @@ public class NaviAsynchronousSender {
             queue.offer(buildKey(server), json.toString());
         } else {
             if (ServerConfigure.isDevEnv()) {
-                //临时修改--等贺群斐确认---同步消费应该也是读取module-asyn.xml文件而不是module.xml？
-                INaviModuleContext moduleCtx = NaviAsyncModuleContextFactory.getInstance()
-                    .getNaviAsyncModuleContext(module);
+                //TODO 临时修改--等贺群斐确认---同步消费应该也是读取module-asyn.xml文件而不是module.xml？
+                INaviModuleContext moduleCtx = NaviAsyncModuleContextFactory.getInstance().getNaviAsyncModuleContext(module);
                 INaviAsynchronousMethod asynMethod = (INaviAsynchronousMethod) moduleCtx.getBean(method);
-                List<String[]> paramsList = new ArrayList<String[]>();
+                List<String[]> paramsList = new ArrayList<>();
                 paramsList.add(objArray2StringArray(params));
                 asynMethod.invoke(paramsList);
                 return;
             }
-            INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance()
-                .getNaviModuleContext(module);
+            INaviModuleContext moduleCtx = NaviModuleContextFactory.getInstance().getNaviModuleContext(module);
             INaviAsynchronousMethod asynMethod = (INaviAsynchronousMethod) moduleCtx.getBean(method);
-            List<String[]> paramsList = new ArrayList<String[]>();
+            List<String[]> paramsList = new ArrayList<>();
             paramsList.add(objArray2StringArray(params));
             asynMethod.invoke(paramsList);
         }
@@ -68,12 +69,12 @@ public class NaviAsynchronousSender {
 
     private JSONArray objArray2JSONArray(Object[] objs) {
         JSONArray array = new JSONArray();
-        for (int i = 0; i < objs.length; i++) {
-            if (objs[i] != null) {
-                if (objs[i] instanceof String) {
-                    array.add(objs[i]);
+        for (Object obj : objs) {
+            if (obj != null) {
+                if (obj instanceof String) {
+                    array.add(obj);
                 } else {
-                    String str = jsonSerializer.getJSONString(objs[i]);
+                    String str = jsonSerializer.getJSONString(obj);
                     try {
                         array.add(JSON.parseObject(str));
                     } catch (JSONException e) {
@@ -89,23 +90,6 @@ public class NaviAsynchronousSender {
 
     private String buildKey(String service) {
         return "JavaNavi:AsyncMQ:" + service;
-    }
-
-
-    public INaviMessageQueue getQueue() {
-        return queue;
-    }
-
-    public void setQueue(INaviMessageQueue queue) {
-        this.queue = queue;
-    }
-
-    public boolean isAsync() {
-        return async;
-    }
-
-    public void setAsync(boolean async) {
-        this.async = async;
     }
 
 }

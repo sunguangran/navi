@@ -1,5 +1,7 @@
 package com.youku.java.navi.engine.async;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.util.concurrent.RejectedExecutionHandler;
@@ -7,8 +9,9 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class NaviAsyncExecutorFactoryBean implements
-    FactoryBean<ThreadPoolExecutor> {
+@Setter
+@Getter
+public class NaviAsyncExecutorFactoryBean implements FactoryBean<ThreadPoolExecutor> {
 
     private int corePoolSize = 0;
     private long keepAliveTime = 60L;
@@ -29,9 +32,9 @@ public class NaviAsyncExecutorFactoryBean implements
             }
         };
 
-        return new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-            keepAliveTime, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), handler);
+        return new ThreadPoolExecutor(
+            corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), handler
+        );
     }
 
     public Class<?> getObjectType() {
@@ -40,30 +43,6 @@ public class NaviAsyncExecutorFactoryBean implements
 
     public boolean isSingleton() {
         return true;
-    }
-
-    public int getCorePoolSize() {
-        return corePoolSize;
-    }
-
-    public void setCorePoolSize(int corePoolSize) {
-        this.corePoolSize = corePoolSize;
-    }
-
-    public long getKeepAliveTime() {
-        return keepAliveTime;
-    }
-
-    public void setKeepAliveTime(long keepAliveTime) {
-        this.keepAliveTime = keepAliveTime;
-    }
-
-    public int getMaximumPoolSize() {
-        return maximumPoolSize;
-    }
-
-    public void setMaximumPoolSize(int maximumPoolSize) {
-        this.maximumPoolSize = maximumPoolSize;
     }
 
 }
