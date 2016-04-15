@@ -1,5 +1,6 @@
 package com.youku.java.navi.server.api;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -31,8 +32,16 @@ public class NaviHttpResponse extends DefaultHttpResponse {
         map = new HashMap<>();
     }
 
+    public void setResponseData(INaviResponseData data) {
+        this.responseData = data;
+    }
+
     public void setResponseData(int code, String desc) {
         this.setResponseData(new NaviJsonResponseData(code, desc));
+    }
+
+    public void setResponseData(JSON data) {
+        this.setResponseData(new NaviJsonResponseData(data));
     }
 
     @Override
