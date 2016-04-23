@@ -1,0 +1,450 @@
+#!/bin/sh
+. /etc/init.d/functions
+
+NAVI_BIN=`dirname "$0"`
+cd ${NAVI_BIN}
+cd ..
+
+CURRENT_HOME=`pwd`
+
+NAVIUSER=`whoami`
+NAVI_HOME=/opt/navi/javanavi
+LOGSDIR=${NAVI_HOME}/logs
+PIDSDIR=${NAVI_HOME}/pids
+
+if [ "${NAVI_BIN}" != "/etc/init.d" ]; then
+    NAVI_HOME=${CURRENT_HOME}
+    LOGSDIR="${NAVI_HOME}/logs"
+    PIDSDIR="${NAVI_HOME}/pids"
+else
+    chown ${NAVIUSER} "${NAVI_HOME}" || exit $?
+    chown ${NAVIUSER} "${LOGSDIR}"   || exit $?
+    chown ${NAVIUSER} "${PIDSDIR}"   || exit $?
+fi
+
+if [ ! -d "${NAVI_HOME}" ]; then
+    echo "navi home not found."
+    exit 1
+fi
+
+if [ ! -d "${LOGSDIR}" ]; then
+    mkdir -p "${LOGSDIR}"
+fi
+
+if [ ! -d "${PIDSDIR}" ]; then
+    mkdir -p "${PIDSDIR}"
+fi
+
+MODULESDIR="${NAVI_HOME}/modules"
+
+JVMOPTS="-server -Xmx1024m -Xms1024m -XX:NewSize=384m -Xss512k -XX:+UseConcMarkSweepGC -XX:+UseParNewGC"
+JVMARGS="-DNAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8"
+
+NAVIMAINCLASS="com.youku.java.navi.boot.NaviMain"
+DAEMONMAINCLASS="com.youku.java.navi.boot.NaviDaemonMain"
+ASYNCMAINCLASS="com.youku.java.navi.boot.NaviAsyncMain"
+
+BOOTPATH="${NAVI_HOME}/libs/bootstrap-1.0.0-release.jar:${NAVI_HOME}/libs/logback-core-1.1.2.jar:${NAVI_HOME}/libs/logback-classic-1.1.2.jar:${NAVI_HOME}/libs/logback-access-1.1.2.jar:${NAVI_HOME}/libs/slf4j-api-1.7.5.jar:${NAVI_HOME}/libs/slf4j-log4j12-1.7.5.jar:${NAVI_HOME}/libs/commons-lang-2.6.jar"
+CONFIGPATH="${NAVI_HOME}/conf/server.conf"
+
+function pre_kill_process() {
+    cd ${PIDSDIR}
+    RESTATUS=0
+    if [ ! $# -eq 0 ]; then
+        echo "navi server with port $1 is stopping..."
+
+        PID_FILE=$1.pid
+        if [ ! -f "${PID_FILE}" ];then
+            echo "the pid file not found, navi server stop failed."
+            RESTATUS=1
+            return
+        fi
+
+        kill_process `cat $1.pid`
+        if [ ${RESTATUS} -eq 0 ]; then
+            rm ${PID_FILE}
+        fi
+
+        return
+    fi
+
+    for PID_FILE in `ls .`
+    do
+        PID=`cat ${PID_FILE}`
+        PORT=`echo ${PID_FILE} | cut -d"." -f1`
+        echo "navi server with port ${PORT} is stopping..."
+        kill_process ${PID}
+        if [ ${RESTATUS} -eq 1 ]; then
+            continue
+        fi
+        rm ${PID_FILE}
+    done
+}
+
+function kill_process() {
+    PID=$1
+    if checkpid ${PID}; then
+        kill ${PID} > /dev/null 2>&1
+
+        # TODO 有可能kill失败
+        if [ $? -eq 0 ];then
+            echo "kill process ${PID}, stop navi server successed."
+            RESTATUS=0
+        else
+            RESTATUS=1
+            echo "can't kill process ${PID}, stop navi server failed."
+        fi
+    else
+        echo "process ${PID} doesn't exist, stop navi server failed."
+    fi
+}
+
+function getPort_array() {
+    PORTS=`egrep ^listen.port= ${CONFIGPATH} | cut -d"=" -f2`
+    OLD_IFS=$IFS
+    IFS=","
+    PORT_ARRAY=(${PORTS})
+    IFS=${OLD_IFS}
+}
+
+function find_port() {
+    CANFINDPORT=`netstat -vatn|grep LISTEN|grep $1|wc -l`
+}
+
+function start() {
+    if [ $# -eq 0 ];then
+        getPort_array
+        for PORT in ${PORT_ARRAY[@]}
+        do
+            start_navi ${PORT}
+        done
+    else
+        start_navi $1
+    fi
+}
+
+function start_navi() {
+    PORT=$1
+
+    find_port ${PORT}
+    if [ ${CANFINDPORT} -ne 0 ]; then
+        echo "the port $PORT has already been used, navi server start failed."
+        return
+    fi
+    
+    JMXPORT=$[${PORT} + 300]
+    find_port ${JMXPORT}
+    if [ ${CANFINDPORT} -ne 0 ];then
+        echo "the jmx port $JMXPORT has already been used, navi server with port ${PORT} start failed."
+        return
+    fi
+
+    LOG_DIR="${LOGSDIR}/$PORT"
+
+    if [ ! -d "${LOG_DIR}" ]
+    then
+        su -l ${NAVIUSER} -c "mkdir ${LOG_DIR}"
+    fi
+
+    LOG_FILE="${LOG_DIR}/${PORT}"
+    ERR_LOG_FILE="${LOG_DIR}/${PORT}.err"
+    PID_FILE="${PIDSDIR}/${PORT}.pid"
+    TJVMARGS="${JVMARGS} -Dfile.log.path=${LOG_FILE} -Dlisten.PORT=${PORT}"
+    TJVMARGS="${TJVMARGS} -Dcom.sun.management.jmxremote.port=${JMXPORT} -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+
+    NAVI_TEMP_SH=${NAVI_HOME}/bin/navi_temp.sh
+
+    echo "navi server with port ${PORT} is starting..."
+    echo "exec java $JVMOPTS $TJVMARGS -cp $BOOTPATH $NAVIMAINCLASS  2>$ERR_LOG_FILE &" > ${NAVI_TEMP_SH}
+    echo "echo \$! > ${PID_FILE}" >> ${NAVI_TEMP_SH}
+    echo "exit \$?" >> ${NAVI_TEMP_SH}
+    
+    su -l ${NAVIUSER} -c "sh $NAVI_TEMP_SH"
+    
+    if [ $? -ne 0 ];then
+        echo "navi server with port $PORT starte failed, please check the log."
+        rm ${PID_FILE}
+        rm ${NAVI_TEMP_SH}
+        return
+    fi
+
+    rm ${NAVI_TEMP_SH}
+
+    find_port ${PORT}
+    seconds=3
+    while [ ${CANFINDPORT} -eq 0 ] && [ ${seconds} -lt 10 ];
+    do
+        sleep 1
+        let "seconds = $seconds + 1"
+        find_port ${PORT}
+    done
+    
+    if [ ${CANFINDPORT} -eq 0 ]; then
+        echo "can't start navi server with port ${PORT} in 10 seconds, please check the log."
+        return
+    fi
+
+    echo "navi server with port ${PORT} started successfully.";
+}
+
+function stop() {
+    pre_kill_process $1
+    exit ${RESTATUS}
+}
+
+function daemon_start() {
+    if [ $# -lt 3 ]; then
+        echo "Pealse input the module name,the job name,the operation option and the job parameters."
+        echo "Notice: the operation includes -start,-stop,-restart and -next.The job parameters's formation are"
+        echo "key-value pairs like as 'rundata(date)=2013-01-22'."
+        exit 1
+    fi
+
+    MODULE_NM=$1
+    JOB_NM=$2
+    
+    DAEMON_LOG_DIR="${LOGSDIR}/${MODULE_NM}-$3"
+    if [ ! -d "${DAEMON_LOG_DIR}" ]; then
+        su -l ${NAVIUSER} -c "mkdir $DAEMON_LOG_DIR"
+    fi
+
+    JVMOPTS="${JVMOPTS} -XX:HeapDumpPath=${DAEMON_LOG_DIR}/${MODULE_NM}-$3.dump"
+    JVMARGS="${JVMARGS} -Dfile.log.path=${DAEMON_LOG_DIR}/${MODULE_NM}-$3.log"
+
+    if [ $# -eq 4 ];then
+        JMXPORT=$4
+        find_port ${JMXPORT}
+        if [ ${CANFINDPORT} -ne 0 ];then
+            echo "the jmx port $JMXPORT has already been used, navi daemon job start failed."
+            return
+        fi
+
+        JVMARGS="$JVMARGS -Dcom.sun.management.jmxremote.port=$JMXPORT -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+    fi
+
+    nohup java ${JVMOPTS} ${JVMARGS} -cp ${BOOTPATH} ${DAEMONMAINCLASS} ${MODULE_NM} ${JOB_NM} -start $3 2>${DAEMON_LOG_DIR}/${MODULE_NM}-$3.err 1>${DAEMON_LOG_DIR}/${MODULE_NM}-$3.std &
+    
+    if [ $? -eq 0 ]; then
+        PID=$!
+        if test $( ps -p ${PID} | wc -l ) -ne 0
+        then
+            echo ${PID} > ${PIDSDIR}/${MODULE_NM}-${JOB_NM}-$3.dpid
+            echo "navi daemon job has been started successfully.";
+            exit 0
+        else
+            echo "navi daemon job can't be started, please see the error log.";
+            exit 1;
+        fi
+    else 
+         echo "navi daemon job can't be started, please see the error log.";
+        exit 1
+    fi
+}
+
+function daemon_stop() {
+    cd ${PIDSDIR}
+    RESTATUS=0
+
+    if [ ! $# -lt 3 ];then
+        echo "navi daemon job is stopping..."
+        PID_FILE=$1-$2-$3.dpid
+        if [ ! -f "${PID_FILE}" ]; then
+            echo "can't find the pid file, stop navi daemon job failed."
+            RESTATUS=1
+            return
+        fi
+
+        kill_process `cat ${PID_FILE}`
+        if [ ${RESTATUS} -eq 0 ];then
+            rm ${PID_FILE}
+        fi
+        return
+    else
+        echo "please input the stop parameters!"
+    fi
+
+    exit ${RESTATUS}
+}
+
+function async_start() {
+    if [ $# -eq 0 ];then
+        echo "please input the start parameter."
+        return
+    fi
+
+    LOG_FILE=$1
+    
+    LOG_DIR="${LOGSDIR}/async"
+               
+    if [ ! -d "${LOG_DIR}" ]; then
+        mkdir "${LOG_DIR}"
+    fi
+
+    LOG_FILE="${LOG_DIR}/${LOG_FILE}"
+    ERR_LOG_FILE="${LOG_DIR}/${LOG_FILE}.err"
+    PID_FILE="${PIDSDIR}/$LOG_FILE.apid"
+    JVMARGS="$JVMARGS -Dfile.log.path=$LOG_FILE"
+
+    if [ $# -eq 2 ]; then
+        JMXPORT=$2
+        find_port ${JMXPORT}
+        if [ ${CANFINDPORT} -ne 0 ]; then
+            echo "the jmx port $JMXPORT has already been used, start navi async server failed."
+            return
+        fi
+        JVMARGS="$JVMARGS -Dcom.sun.management.jmxremote.port=$JMXPORT -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+    fi
+
+    JVMOPTS="${JVMOPTS} -XX:HeapDumpPath=${LOG_DIR}/${LOG_FILE}.dump"
+
+    nohup "java" ${JVMOPTS} ${JVMARGS} -cp ${BOOTPATH} ${ASYNCMAINCLASS} 2>${ERR_LOG_FILE} 1>${LOG_DIR}/${LOG_FILE} &
+    
+    if [ $? -eq 0 ]; then
+        PID=$!
+        if test $( ps -p ${PID} | wc -l ) -ne 0
+        then
+            echo ${PID} > ${PID_FILE}
+            echo "navi async server has been started successfully.";
+            exit 0
+        else
+            echo "navi async server can't be started, please see the error log.";
+            exit 1;
+        fi
+    else 
+        echo "navi async server can't be started, please see the error log.";
+        exit 1
+    fi
+}
+
+function async_stop() {
+    cd ${PIDSDIR}
+
+    if [ ! $# -eq 0 ];then
+        echo "the navi async server is stopping..."
+        PID_FILE=$1.apid
+        if [ ! -f "${PID_FILE}" ];then
+            echo "can't find the pid file, stop navi async server failed."
+            exit 1
+        fi
+
+        kill_process `cat ${PID_FILE}`
+        if [ ${RESTATUS} -eq 0 ]; then
+            rm ${PID_FILE}
+        fi
+    else
+        echo "please input the stop parameter."
+    fi
+
+    exit ${RESTATUS}
+}
+
+function deploy() {
+    if [ $# -lt 3 ];then
+        echo "usage: deploy groupId artifactId version"
+        exit 1;
+    fi
+
+    GROUPID=$1
+    ARTIFACTID=$2
+    VERSION=$3
+
+    if [ ! -n "$4" ];then
+        MODE=release
+    else
+        MODE=$4
+    fi
+
+    GROUP=${GROUPID//\./\/}
+    FILE_NM=${ARTIFACTID}-${VERSION}.tar.gz
+    URL=http://10.105.13.86/artifactory/youku-java-private-${MODE}/${GROUP}/${ARTIFACTID}/${VERSION}/${FILE_NM}
+    
+    su -l ${NAVIUSER} -c "wget -P ${MODULESDIR} -N ${URL}"
+    if [ $? -ne 0 ]; then
+        exit 1;
+    fi
+
+    echo "begin deploy the ${ARTIFACTID}..."
+    su -l ${NAVIUSER} -c "tar -zxf ${MODULESDIR}/${FILE_NM} -C ${MODULESDIR}"
+    echo "deploy $FILE_NM sucessed."
+            
+    exit 0
+}
+
+function status() {
+    echo "NAVIUSER : ${NAVIUSER}"
+    echo "NAVI_HOME: ${NAVI_HOME}"
+    echo "LOGDIR   : ${LOGSDIR}"
+    echo "PIDSDIR  : ${PIDSDIR}"
+    echo -e "\E(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\E(B"
+    echo -e "PORT\tPID\tLOG_FILE"
+    
+    for PID_FILE in `ls ${PIDSDIR}`
+    do    
+        PID=`cat ${PIDSDIR}/${PID_FILE}`
+        PORT=`echo ${PID_FILE} | cut -d"." -f1`
+        
+        find_port ${PORT}
+        if [ ${CANFINDPORT} -eq 0 ]; then
+            rm ${PIDSDIR}/${PID_FILE}
+        else
+            echo -e "${PORT}\t${PID}\t${LOGSDIR}/${PORT}/${PORT}"
+        fi    
+    done
+}
+
+case $1 in
+    start)
+        start $2
+        ;;
+    stop)
+        stop $2
+        ;;
+        daemon-start)
+        daemon_start $2 $3 $4 $5
+        ;;
+    daemon-stop)
+        daemon_stop $2 $3 $4
+        ;;
+    async-start)
+        async_start $2 $3
+        ;;
+    async-stop)
+        async_stop $2
+        ;;
+    deploy)
+        deploy $2 $3 $4 $5
+        ;;
+    home)
+        echo ${NAVI_HOME}
+        ;;
+    status)
+        status
+        ;;
+    *)
+
+    echo "------------------------------------------------------------------------"
+    echo "Usage: $0 {start|stop|daemon-start|daemon-stop|async-start|async-stop|deploy|home}"
+    echo "------------------------------------------------------------------------"
+    echo "where options include:"
+    echo "     start <PORT>"
+    echo "        --start JavaNavi process with default PORT,you could assign a PORT."
+    echo "     stop <PORT>  "
+    echo "        --stop JavaNavi process "
+    echo "     daemon-start [moduleName] [jobName] [jobParameter] <jmxport>"
+    echo "        --start a JavaNavi-daemon process"
+    echo "          Notice: job parameters's formation are key-value pairs like as 'rundate=2013-01-22'."
+    echo "   daemon-stop [moduleName] [jobName] [jobParameter]"
+    echo "       --stop a JavaNavi-daemon process"
+    echo "   async-start [parameter] <jmxport>"
+    echo "       --start a JavaNavi Async Server"
+    echo "   async-stop [parameter] <jmxport>"
+    echo "       --stop a JavaNavi Async Server"
+    echo "     deploy [groupId] [artifactId] [version] <test>"
+    echo "        --deploy a JavaNavi Module use the params in the artifactory."
+    echo "   home"
+    echo "       --print the navi home."
+    echo "     status "
+    echo "        --show the status of JavaNavi progress,include pid, PORT and logpath."
+    echo "     mark:parameter '[]' is Required, '<>' could not fill."
+    exit 2
+esac    

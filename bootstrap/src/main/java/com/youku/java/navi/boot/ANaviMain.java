@@ -22,6 +22,10 @@ public abstract class ANaviMain {
                 System.setProperty("NAVI_HOME", System.getenv("NAVI_HOME"));
             }
 
+            if (StringUtils.isEmpty(System.getProperty("PORT")) && StringUtils.isNotEmpty(System.getenv(NaviDefine.PORT))) {
+                System.setProperty("PORT", System.getenv(NaviDefine.PORT));
+            }
+
             // 初始化Logback
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
             lc.reset();

@@ -31,8 +31,7 @@
             <directory>../bin</directory>
             <outputDirectory>/bin</outputDirectory>
             <includes>
-                <include>*.sh</include>
-                <include>*.bat</include>
+                <include>*</include>
             </includes>
         </fileSet>
     </fileSets>

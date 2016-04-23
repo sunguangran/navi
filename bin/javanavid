@@ -1,0 +1,357 @@
+#!/bin/sh
+
+function deploy_framework() {
+    TEMP_DIR=/opt/navi/deploytempdir
+    GROUPID=com.youku.java.navi
+    ARTIFACTID=JavaNavi
+    MODE=release
+
+    if [ $# -lt 2 ];then
+        echo "usage: deploy-framework [version] [service] <alias> <navi home> <test>"
+        exit 1
+    fi
+    
+    VERSION=$1
+    SERVICE=$2
+    
+    if [ $# -lt 3 ];then
+        ALIAS=${SERVICE}
+    else
+        ALIAS=$3
+    fi
+
+    if [ $# -lt 4 ];then
+        NAVI_HOME=/opt/navi/${ALIAS}
+    else
+        if [[ "$4" =~ ^/ ]]; then
+            NAVI_HOME=$4
+        else
+            echo "navi home path is invalid."
+        fi
+    fi
+
+    if [ $# -lt 5 ];then
+        SMODE=deploy
+    else
+        SMODE=test
+    fi
+
+    download
+    
+    tar -zxf ${TEMP_DIR}/JavaNavi-${VERSION}.tar.gz -C ${TEMP_DIR}
+
+    if [ -d "${NAVI_HOME}" ]; then
+        rm -rf ${NAVI_HOME}
+    fi
+        
+    mkdir -p ${NAVI_HOME}
+
+    mv ${TEMP_DIR}/JavaNavi-${VERSION}/* ${NAVI_HOME}
+
+    create_service
+    update_conf
+
+    rm -rf ${TEMP_DIR}
+    
+    echo "deploy framework ${SERVICE} successed! NAVI_HOME: ${NAVI_HOME}"
+
+    exit 0
+}
+
+function update_script() {
+    NAVI_HOME=`service $1 home`
+    BOOTPATH=`sed -n "/^BOOTPATH=/p" ${NAVI_HOME}/bin/start.sh`
+    SERVICE_PATH=/etc/rc.d/init.d/$1
+    cp /opt/navi/navi-scripts/javanavi.sh ${SERVICE_PATH}
+    sed "5c${BOOTPATH}" -i ${SERVICE_PATH}
+    sed "4cNAVI_HOME=${NAVI_HOME}" -i ${SERVICE_PATH}
+    chmod 755 ${SERVICE_PATH}
+}
+
+function update_conf() {
+    sed "/^server.name=navi-server/cserver.name=${SERVICE}" -i ${NAVI_HOME}/conf/server.conf
+    sed "/^mode=test/cmode=${SMODE}" -i ${NAVI_HOME}/conf/server.conf
+}
+
+function create_service() {    
+    BOOTPATH=`sed -n "/^BOOTPATH=/p" ${NAVI_HOME}/bin/start.sh`
+    SERVICE_PATH=/etc/rc.d/init.d/${ALIAS}
+    rm -f ${SERVICE_PATH}
+    cp /opt/navi/navi-scripts/javanavi.sh ${SERVICE_PATH}
+    sed "5c$BOOTPATH" -i ${SERVICE_PATH}
+    sed "4cNAVI_HOME=${NAVI_HOME}" -i ${SERVICE_PATH}
+    chmod 755 ${SERVICE_PATH}
+}
+
+function update_framework() {
+    TEMP_DIR=/opt/navi/deploytempdir
+    GROUPID=com.youku.java.navi
+    ARTIFACTID=JavaNavi
+    
+    if [ $# -lt 2 ];then
+        echo "Usage: update-framework [version] [navi alias] <test>"
+        exit 1
+    fi 
+
+    VERSION=$1
+    NAVI_HOME=`service $2 home`
+
+    if [ ! -d "${NAVI_HOME}" ];then
+        echo "Can't find the Navi Home!"
+        exit 1;
+    fi
+    
+    if [ $# -lt 3 ];then
+        MODE=release
+    else
+        MODE=test
+    fi
+
+    download
+    
+    tar -zxf ${TEMP_DIR}/JavaNavi-${VERSION}.tar.gz -C ${TEMP_DIR}
+    rm ${NAVI_HOME}/libs/*
+    mv ${TEMP_DIR}/javanavi-${VERSION}/libs/* ${NAVI_HOME}/libs
+    rm -rf ${TEMP_DIR}
+
+    echo "update framework successed! NAVI_HOME:${NAVI_HOME}"
+    
+    exit 0
+}
+
+function remove_framework() {
+    if [ $# -lt 1 ];then
+        echo "Usage: remove-framework [navi alias]"
+        exit 1
+    fi
+
+    NAVI_HOME=`service $1 home`
+
+    if [ ! -d "${NAVI_HOME}" ];then
+        echo "Can't find the Navi Home!"
+        exit 1;
+    fi
+
+    rm -rf ${NAVI_HOME}
+    rm -rf /etc/rc.d/init.d/$1
+    
+    echo "remove framework successed! NAVI_HOME:${NAVI_HOME}"
+
+    exit 0
+}
+
+
+function download() {
+    if [ -d "$TEMP_DIR" ];then
+        rm -rf ${TEMP_DIR}
+    fi
+
+    GROUP=${GROUPID//\./\/}
+    filename=${ARTIFACTID}-${VERSION}.tar.gz
+    url=http://10.100.16.87/artifactory/youku-java-private-$MODE/$GROUP/$ARTIFACTID/$VERSION/$filename
+
+    wget -P $TEMP_DIR -N $url -q
+
+    if [ $? -ne 0 ];then
+        echo "wget $url Failed!"
+        exit 1
+    fi
+}
+
+function deploy_module() {
+    if [ $# -lt 4 ];then
+        echo "Usage: deploy-module [navi alias] [groupId] [artifactId] [version] <test>"
+        exit 1
+    fi
+
+    NAVI_HOME=`service $1 home`
+    GROUPID=$2
+    ARTIFACTID=$3
+    VERSION=$4
+
+
+    TEMP_DIR=$NAVI_HOME/temp
+    
+    if [ -d "$TEMP_DIR" ];then
+        rm -rf $TEMP_DIR
+    fi
+
+    if [ $# -lt 5 ];then
+        MODE=release
+    else
+        MODE=test
+    fi
+
+    mkdir -p $TEMP_DIR
+
+    download
+
+    if [ -d "$NAVI_HOME/NaviModules/$ARTIFACTID" ];then
+        rm -rf $NAVI_HOME/NaviModules/$ARTIFACTID
+    fi
+
+    tar -zxf $TEMP_DIR/$ARTIFACTID-$VERSION.tar.gz -C $NAVI_HOME/NaviModules
+
+    if [ $? -ne 0 ];then
+        exit 1;
+    fi
+    
+    rm -rf $TEMP_DIR
+
+    echo "deploy module successed! NAVI_HOME:$NAVI_HOME"
+
+    exit 0
+}
+
+function remove_module() {
+    if [ $# -lt 2 ];then
+        echo "Usage: deploy-module [navi alias] [module]"
+        exit 1
+    fi
+
+    NAVI_HOME=`service $1 home`
+    Module=$2
+
+    if [ ! -d "$NAVI_HOME/NaviModules/$Module" ];then
+        echo "Can't find the NaviModule!"
+        exit 1;
+    fi
+    
+    rm -rf $NAVI_HOME/NaviModules/$Module
+    
+    echo "remove module successed! NAVI_HOME:$NAVI_HOME"
+
+    exit 0
+}
+
+function backup() {
+    
+    if [ $# -lt 3 ];then
+        echo "Usage: backup [navi alias] [module name] [time]"
+        exit 1
+    fi
+
+    NAVI_HOME=`service $1 home`
+    Module=$2
+    time=$3
+    
+    if [ ! -d "$NAVI_HOME/NaviModules/$Module" ];then
+        echo "Can't find the NaviModule!"
+        exit 1;
+    fi
+
+    if [ ! -d "$NAVI_HOME/backups" ];then
+        mkdir -p $NAVI_HOME/backups
+    fi
+    
+    cd $NAVI_HOME/NaviModules
+
+    tar -zcf $NAVI_HOME/backups/$Module-$time.tar.gz $Module
+
+    if [ $? -ne 0 ];then
+        exit 1;
+    fi
+    
+    echo "backup module successed! NAVI_HOME:$NAVI_HOME"
+    exit 0;
+}
+
+function rollback() {
+    
+    if [ $# -lt 3 ];then
+        echo "Usage: rollback [navi alias] [module name] [time]"
+        exit 1
+    fi
+
+    NAVI_HOME=`service $1 home`
+    Module=$2
+    time=$3
+
+    if [ ! -f "$NAVI_HOME/backups/$Module-$time.tar.gz" ];then
+        echo "Can't find the backup file!"
+        exit 1;
+    fi
+
+    if [ -d "$NAVI_HOME/NaviModules/$Module" ];then
+            rm -rf $NAVI_HOME/NaviModules/$Module
+    fi
+
+    tar -zxf $NAVI_HOME/backups/$Module-$time.tar.gz -C $NAVI_HOME/NaviModules
+
+    if [ $? -ne 0 ];then
+        exit 1; 
+    fi
+    
+    echo "rollback module successed! NAVI_HOME:$NAVI_HOME"
+    exit 0; 
+}
+
+function install_manager()
+{
+    echo "install navi-manager....."
+    
+    if [ $# -lt 1 ];then
+        service javanavid deploy-framework 2.0.5-release navi-manager
+    else
+        service javanavid deploy-framework 2.0.5-release navi-manager navi-manager /opt/navi/navi-manager test
+    fi
+
+    service javanavid deploy-module navi-manager com.youku.java.navi navi-manager 0.0.1-release
+    sed "/^listen.port=8090/clisten.port=18080" -i /opt/navi/navi-manager/conf/server.conf
+    echo "install navi-manager successed."
+}
+
+
+case $1 in
+    deploy-framework)
+        deploy_framework $2 $3 $4 $5 $6
+        ;;
+    update-framework)
+        update_framework $2 $3 $4
+        ;;
+    update-script)
+        update_script $2
+        ;;
+    remove-framework)
+        remove_framework $2
+        ;;
+    deploy-module)
+        deploy_module $2 $3 $4 $5 $6
+        ;;
+    remove-module)
+        remove_module $2 $3
+        ;;
+    backup)
+        backup $2 $3 $4
+        ;;
+    rollback)
+        rollback $2 $3 $4
+        ;;
+    install-manager)
+        install_manager $2
+        ;;
+    *)
+
+        echo "------------------------------------------------------------------------"
+        echo "Usage: $0 {deploy-framework|update-framework|remove-framework|deploy-module|remove-module|backup|rollback}"
+        echo "------------------------------------------------------------------------"
+        echo "where options include:"
+        echo "    deploy-framework [version] [service] <navi alias> <navi home> <test>"
+        echo "        --deploy the JavaNavi framework"
+        echo "    update-framework [version] [navi alias] <test>"
+        echo "        --update the JavaNavi framework"
+        echo "  update-script [navi alias]"
+        echo "          --update the service script"
+        echo "  remove-framework [navi alias]"
+        echo "       --remove the JavaNavi framework"
+        echo "    deploy-module [navi alias] [groupId] [artifactId] [version] <test>"
+        echo "        --deploy the JavaNavi Module"
+        echo "  remove-module [navi alias] [module name]"
+        echo "          --remove the JavaNavi Module"
+        echo "    backup [navi alias] [module name] [time]"
+        echo "        --backup the JavaNavi Module"
+        echo "  rollback [navi alias] [module name] [time]"
+        echo "        --rollback the JavaNavi Module"
+        echo "------------------------------------------------------------------------"
+        exit 2
+esac    

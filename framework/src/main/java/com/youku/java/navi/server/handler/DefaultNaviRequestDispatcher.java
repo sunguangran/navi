@@ -11,10 +11,12 @@ import com.youku.java.navi.server.api.NaviHttpRequest;
 import com.youku.java.navi.server.api.NaviHttpResponse;
 import com.youku.java.navi.server.module.INaviModuleContext;
 import com.youku.java.navi.server.module.NaviModuleContextFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 
 import java.util.*;
 
+@Slf4j
 public class DefaultNaviRequestDispatcher extends AbstractNaviRequestDispatcher {
     private List<String> redirectList;
     private Map<String, String> redirectMap;
