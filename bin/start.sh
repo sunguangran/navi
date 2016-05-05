@@ -18,7 +18,7 @@ then
   mkdir "${PIDSDIR}"
 fi
 
-MODULESDIR="${NAVI_HOME}/modules"
+MODULESDIR="${NAVI_HOME}/NaviModules"
 if [ ! -d "${MODULESDIR}" ]
 then
   mkdir "${MODULESDIR}"
@@ -39,7 +39,7 @@ JVMARGS="-DNAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8 "
 #JVMARGS="$JVMARGS -Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 
 MAINCLASS="com.youku.java.navi.boot.NaviMain"
-BOOTPATH="${NAVI_HOME}/libs/bootstrap-1.0.0-release.jar:${NAVI_HOME}/libs/logback-core-1.1.2.jar:${NAVI_HOME}/libs/logback-classic-1.1.2.jar:${NAVI_HOME}/libs/logback-access-1.1.2.jar:${NAVI_HOME}/libs/slf4j-api-1.7.5.jar:${NAVI_HOME}/libs/slf4j-log4j12-1.7.5.jar:${NAVI_HOME}/libs/commons-lang-2.6.jar"
+BOOTPATH="${NAVI_HOME}/NaviLibs/bootstrap-1.0.0-release.jar:${NAVI_HOME}/NaviLibs/logback-core-1.1.2.jar:${NAVI_HOME}/NaviLibs/logback-classic-1.1.2.jar:${NAVI_HOME}/NaviLibs/logback-access-1.1.2.jar:${NAVI_HOME}/NaviLibs/slf4j-api-1.7.5.jar:${NAVI_HOME}/NaviLibs/slf4j-log4j12-1.7.5.jar:${NAVI_HOME}/NaviLibs/commons-lang-2.6.jar"
 CONFIGPATH="${NAVI_HOME}/conf/server.conf"
 
 if [ $# -eq 0 ]; then

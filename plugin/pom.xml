@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.youku.java.navi</groupId>
-            <artifactId>framework</artifactId>
+            <artifactId>JavaNavi</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

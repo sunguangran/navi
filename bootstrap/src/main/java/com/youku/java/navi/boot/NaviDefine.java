@@ -3,8 +3,8 @@ package com.youku.java.navi.boot;
 public interface NaviDefine {
 
     String NAVI_HOME = System.getProperty("NAVI_HOME");
-    String NAVI_MODULES = NAVI_HOME + "/modules/";
-    String NAVI_LIBS = NAVI_HOME + "/libs/";
+    String NAVI_MODULES = NAVI_HOME + "/NaviModules/";
+    String NAVI_LIBS = NAVI_HOME + "/NaviLibs/";
     String NAVI_CONF_PATH = NAVI_HOME + "/conf/server.conf";
     String NAVI_LOGBACK_PATH = NAVI_HOME + "/conf/logback.xml";
 

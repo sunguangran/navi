@@ -17,7 +17,7 @@
         <!-- JAVA NAVI DEPENDENCY -->
         <dependency>
             <groupId>com.youku.java.navi</groupId>
-            <artifactId>framework</artifactId>
+            <artifactId>JavaNavi</artifactId>
             <version>3.0.0-release</version>
             <scope>provided</scope>
         </dependency>
