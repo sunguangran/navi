@@ -19,7 +19,7 @@ then
   mkdir "$PIDSDIR"
 fi
 
-MODULESDIR="${NAVI_HOME}/NaviModules"
+MODULESDIR="${NAVI_HOME}/modules"
 if [ ! -d "$MODULESDIR" ]
 then
   mkdir "$MODULESDIR"
@@ -34,7 +34,7 @@ fi
 
 
 JVMOPTS="-server -Xmx1024m -Xms1024m -XX:NewSize=384m -Xss512k -XX:+UseConcMarkSweepGC -XX:+UseParNewGC"
-JVMARGS="-DJAVA_NAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8 "
+JVMARGS="-DNAVI_HOME=${NAVI_HOME} -Dfile.encoding=UTF-8 "
 
 #JMX debug --  attach to eclipse,eclipse start first ---debug startup
 #JVMARGS="${JVMARGS} -agentlib:jdwp=transport=dt_socket,suspend=y,address=10.10.105.54:9000"
