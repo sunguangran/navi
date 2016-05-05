@@ -38,7 +38,7 @@
 
     <dependencySets>
         <dependencySet>
-            <outputDirectory>libs</outputDirectory>
+            <outputDirectory>NaviLibs</outputDirectory>
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>
