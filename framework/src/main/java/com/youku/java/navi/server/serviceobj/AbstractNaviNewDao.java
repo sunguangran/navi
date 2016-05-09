@@ -59,7 +59,7 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
 //	}
 
     public T findOne(T t) throws Exception {
-        T tmpt = get(buildKey(t.getOId()));
+        T tmpt = get(buildKey(t.getId()));
         if (tmpt != null) {
             return tmpt;
         }
@@ -71,7 +71,7 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
     }
 
     public boolean exists(T t) throws Exception {
-        if (exists(buildKey(t.getOId()))) {
+        if (exists(buildKey(t.getId()))) {
             return true;
         }
         return _findOne(t) != null;
@@ -99,7 +99,7 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
             return false;
         }
         if (dto != null && cacheService != null
-            && cacheService.exists(buildKey(dto.getOId()))) {
+            && cacheService.exists(buildKey(dto.getId()))) {
             set(dto);
         }
         return true;
@@ -124,7 +124,7 @@ public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements I
         if (cacheService == null) {
             return;
         }
-        cacheService.setex(buildKey(t.getOId()), t, getExpire());
+        cacheService.setex(buildKey(t.getId()), t, getExpire());
     }
 
     /**

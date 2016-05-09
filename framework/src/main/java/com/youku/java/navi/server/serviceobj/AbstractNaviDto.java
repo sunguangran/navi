@@ -110,9 +110,9 @@ public abstract class AbstractNaviDto implements Cloneable, Serializable {
     /**
      * 获取唯一标识对象的ID
      */
-    public abstract String getOId();
+    public abstract Long getId();
 
-    public abstract void setOId(Long id);
+    public abstract void setId(Long id);
 
     protected String getPrefix() {
         String prefix = null;

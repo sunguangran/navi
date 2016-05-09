@@ -8,7 +8,6 @@ import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
 import com.youku.java.navi.server.serviceobj.AbstractNaviNewDao;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -35,38 +34,38 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     }
 
     public T create(T dto) throws NaviSystemException {
-        if (StringUtils.isEmpty(dto.getOId()) || dto.getOId().equals("0")) {
+        if (dto.getId() == null || dto.getId().equals("0")) {
             // 获取当前序列唯一序列id
             long sid = autoIncrDao.getSid(SEQ_ID_NAME);
             if (sid == -1) {
                 throw new NaviSystemException("get seq id failed", NaviError.ERR_DBS);
             }
-            dto.setOId(sid);
+            dto.setId(sid);
         }
 
         dbService.insert(dto);
-        this.updateCache(buildKey(dto.getOId()), dto);
+        this.updateCache(buildKey(dto.getId()), dto);
 
         return dto;
     }
 
     public List<T> batchCreate(List<T> dtos) throws NaviSystemException {
         for (T dto : dtos) {
-            if (StringUtils.isEmpty(dto.getOId()) || dto.getOId().equals("0")) {
+            if (dto.getId() == null || dto.getId() == 0) {
                 // 获取当前序列唯一序列id
                 long sid = autoIncrDao.getSid(SEQ_ID_NAME);
                 if (sid == -1) {
                     throw new NaviSystemException("get seq id failed", NaviError.ERR_DBS);
                 }
 
-                dto.setOId(sid);
+                dto.setId(sid);
             }
         }
 
         dbService.insertAll(dtos);
 
         for (T dto : dtos) {
-            this.updateCache(buildKey(dto.getOId()), dto);
+            this.updateCache(buildKey(dto.getId()), dto);
         }
 
         return dtos;
@@ -85,7 +84,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             return null;
         }
 
-        String key = this.buildKey(dto.getOId());
+        String key = this.buildKey(dto.getId());
         if (CacheComponent.existsInCache(cacheService, key)) {
             this.updateCache(key, dto);
         }
@@ -164,7 +163,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
                 if (tmpls != null) {
                     for (T tmp : tmpls) {
                         if (tmp != null) {
-                            datas.put(Long.parseLong(tmp.getOId()), tmp);
+                            datas.put(tmp.getId(), tmp);
                             counter++;
                         }
                     }
@@ -196,8 +195,8 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         if (res != null && res.size() != 0) {
             for (T tmp : res) {
                 if (tmp != null) {
-                    datas.put(Long.parseLong(tmp.getOId()), tmp);
-                    this.updateCache(Long.parseLong(tmp.getOId()), tmp);
+                    datas.put(tmp.getId(), tmp);
+                    this.updateCache(tmp.getId(), tmp);
                     counter++;
                 }
             }

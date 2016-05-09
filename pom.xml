@@ -263,7 +263,7 @@
         <repository>
             <id>test</id>
             <name>test</name>
-            <url>http://java.navi.1verge.net/artifactory/youku-java-private-test</url>
+            <url>http://java.navi.1verge.net/artifactory/youku-java-private-release</url>
         </repository>
     </distributionManagement>
 

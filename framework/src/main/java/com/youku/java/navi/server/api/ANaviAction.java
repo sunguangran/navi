@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 public abstract class ANaviAction implements InitializingBean {
 
-    private List<INaviInterrupter> interrupters = null;
+    protected List<INaviInterrupter> interrupters = null;
     private List<NaviParamter> parameters;
 
     private INaviMonitorCollector collector;

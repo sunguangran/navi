@@ -11,7 +11,7 @@
     </formats>
 
     <includeBaseDirectory>true</includeBaseDirectory>
-    <baseDirectory>javanavi</baseDirectory>
+    <baseDirectory>JavaNavi-3.0.0-release</baseDirectory>
 
     <fileSets>
         <fileSet>
