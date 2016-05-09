@@ -44,7 +44,10 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         }
 
         dbService.insert(dto);
-        this.updateCache(buildKey(dto.getId()), dto);
+
+        if (cacheService != null) {
+            this.updateCache(buildKey(dto.getId()), dto);
+        }
 
         return dto;
     }
@@ -64,8 +67,10 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
 
         dbService.insertAll(dtos);
 
-        for (T dto : dtos) {
-            this.updateCache(buildKey(dto.getId()), dto);
+        if (cacheService != null) {
+            for (T dto : dtos) {
+                this.updateCache(buildKey(dto.getId()), dto);
+            }
         }
 
         return dtos;
@@ -84,9 +89,11 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
             return null;
         }
 
-        String key = this.buildKey(dto.getId());
-        if (CacheComponent.existsInCache(cacheService, key)) {
-            this.updateCache(key, dto);
+        if (cacheService != null) {
+            String key = this.buildKey(dto.getId());
+            if (CacheComponent.existsInCache(cacheService, key)) {
+                this.updateCache(key, dto);
+            }
         }
 
         return dto;
@@ -95,37 +102,47 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     public boolean exists(long id) throws NaviSystemException {
         // 先查缓存是否存在
         String key = this.buildKey(String.valueOf(id));
-        if (cacheService.exists(key)) {
-            return true;
+
+        if (cacheService != null) {
+            if (cacheService.exists(key)) {
+                return true;
+            }
         }
 
         T dto = dbService.findOne(new Query(where("_id").is(id)), classNm);
         if (dto == null) {
             return false;
         } else {
-            updateCache(key, dto);
+            if (cacheService != null) {
+                updateCache(key, dto);
+            }
             return true;
         }
     }
 
     public T get(long id) throws NaviSystemException {
         String key = this.buildKey(String.valueOf(id));
-        T dto = cacheService.get(key, classNm);
-        if (dto != null) {
-            if (dto.isNull()) {
-                return null;
-            } else {
-                return dto;
+        if (cacheService != null) {
+            T dto = cacheService.get(key, classNm);
+            if (dto != null) {
+                if (dto.isNull()) {
+                    return null;
+                } else {
+                    return dto;
+                }
             }
         }
 
         Query query = new Query(where("_id").is(id));
-        dto = dbService.findOne(query, classNm);
+        T dto = dbService.findOne(query, classNm);
         if (dto == null || dto.isNull()) {
             try {
                 T nullDto = classNm.newInstance();
                 nullDto.setNull();
-                this.updateCache(key, nullDto);
+
+                if (cacheService != null) {
+                    this.updateCache(key, nullDto);
+                }
             } catch (Exception e) {
                 log.error("{}", e.getMessage());
             }
@@ -257,10 +274,12 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     }
 
     public void updateCache(String key, T dto) {
-        try {
-            cacheService.setex(key, dto.toString(), CacheComponent.getExpire(classNm));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        if (cacheService != null) {
+            try {
+                cacheService.setex(key, dto.toString(), CacheComponent.getExpire(classNm));
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -273,40 +292,44 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     }
 
     public boolean deleteFromCache(long id, boolean setNull) {
-        try {
-            if (!setNull) {
-                cacheService.delete(this.buildKey(String.valueOf(id)));
-            } else {
-                cacheService.set(this.buildKey(String.valueOf(id)), T.createNullInstance(classNm));
-            }
+        if (cacheService != null) {
+            try {
+                if (!setNull) {
+                    cacheService.delete(this.buildKey(String.valueOf(id)));
+                } else {
+                    cacheService.set(this.buildKey(String.valueOf(id)), T.createNullInstance(classNm));
+                }
 
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+                return true;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
 
         return false;
     }
 
     public boolean deleteFromCache(List<Long> ids, boolean setNull) {
-        try {
-            String[] keys = new String[ids.size()];
-            for (int i = 0; i < keys.length; i++) {
-                keys[i] = this.buildKey(ids.get(i) + "");
-            }
-
-            if (!setNull) {
-                cacheService.delete(keys);
-            } else {
-                T nullInstance = T.createNullInstance(classNm);
-                if (nullInstance != null) {
-                    cacheService.set(keys, nullInstance);
+        if (cacheService != null) {
+            try {
+                String[] keys = new String[ids.size()];
+                for (int i = 0; i < keys.length; i++) {
+                    keys[i] = this.buildKey(ids.get(i) + "");
                 }
-            }
 
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+                if (!setNull) {
+                    cacheService.delete(keys);
+                } else {
+                    T nullInstance = T.createNullInstance(classNm);
+                    if (nullInstance != null) {
+                        cacheService.set(keys, nullInstance);
+                    }
+                }
+
+                return true;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
 
         return false;

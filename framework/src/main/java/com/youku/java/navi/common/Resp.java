@@ -1,9 +1,6 @@
 package com.youku.java.navi.common;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * dto类属性转换注解
@@ -11,6 +8,7 @@ import java.lang.annotation.Target;
  * @author sgran<sgran@msn.cn>
  * @since 2016/03/07
  */
+@Inherited
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Resp {
