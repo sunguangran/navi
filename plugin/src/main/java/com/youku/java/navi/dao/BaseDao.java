@@ -12,10 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -34,7 +31,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
     }
 
     public T create(T dto) throws NaviSystemException {
-        if (dto.getId() == null || dto.getId().equals("0")) {
+        if (dto.getId() == null || dto.getId() == 0) {
             // 获取当前序列唯一序列id
             long sid = autoIncrDao.getSid(SEQ_ID_NAME);
             if (sid == -1) {
@@ -99,6 +96,33 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         return dto;
     }
 
+    public T upsert(long id, Map<String, Object> paramMap) throws NaviSystemException {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        Update update = new Update();
+        for (String key : paramMap.keySet()) {
+            update.set(key, paramMap.get(key));
+        }
+
+        if (!dbService.upsert(query, update, classNm)) {
+            return null;
+        }
+
+        T dto = dbService.findOne(query, classNm);
+        if (cacheService != null) {
+            if (dto != null) {
+                String key = this.buildKey(dto.getId());
+                if (CacheComponent.existsInCache(cacheService, key)) {
+                    this.updateCache(key, dto);
+                }
+            } else {
+                this.deleteFromCache(id);
+            }
+        }
+
+        return dto;
+    }
+
     public boolean exists(long id) throws NaviSystemException {
         // 先查缓存是否存在
         String key = this.buildKey(String.valueOf(id));
@@ -154,7 +178,11 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         }
     }
 
-    public List<T> mget(List<Long> ids) throws NaviSystemException {
+    public T getFromDB(long id) throws NaviSystemException {
+        return dbService.findOne(new Query(where("_id").is(id)), classNm);
+    }
+
+    public List<T> mget(Collection<Long> ids) throws NaviSystemException {
         if (ids == null || ids.size() == 0) {
             return null;
         }
@@ -249,7 +277,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         return tmpl;
     }
 
-    public boolean mdelete(List<Long> ids) throws NaviSystemException {
+    public boolean mdelete(Collection<Long> ids) throws NaviSystemException {
         BaseResult<T> ret = new BaseResult<>();
 
         // 更新数据库
@@ -287,7 +315,7 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         return this.deleteFromCache(id, false);
     }
 
-    public boolean deleteFromCache(List<Long> ids) {
+    public boolean deleteFromCache(Collection<Long> ids) {
         return this.deleteFromCache(ids, false);
     }
 
@@ -309,12 +337,14 @@ public abstract class BaseDao<T extends AbstractNaviDto> extends AbstractNaviNew
         return false;
     }
 
-    public boolean deleteFromCache(List<Long> ids, boolean setNull) {
+    public boolean deleteFromCache(Collection<Long> ids, boolean setNull) {
         if (cacheService != null) {
             try {
                 String[] keys = new String[ids.size()];
-                for (int i = 0; i < keys.length; i++) {
-                    keys[i] = this.buildKey(ids.get(i) + "");
+
+                int i = 0;
+                for (Long id : ids) {
+                    keys[i++] = this.buildKey(id + "");
                 }
 
                 if (!setNull) {
