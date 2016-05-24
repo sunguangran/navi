@@ -8,7 +8,7 @@ import java.util.Properties;
 public class NaviAsyncMain extends ANaviMain {
 
     public static void main(String[] args) {
-        log.info("starting aync process!");
+        log.info("starting async process!");
         NaviAsyncMain mainClass = new NaviAsyncMain();
         try {
             mainClass.doMain(mainClass.parseServerConfig(args));

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- CONNECTION POOL -->
+    <bean id="httpPool" class="com.youku.java.navi.engine.datasource.pool.NaviHttpPoolConfig">
+        <property name="connectTimeout" value="500" />
+        <property name="socketTimeout" value="1000" />
+        <property name="maxActive" value="50" />
+        <property name="maxWait" value="5" />
+    </bean>
+
+    <bean id="mongoPool" class="com.youku.java.navi.engine.datasource.pool.NaviMongoPoolConfig">
+        <property name="connectTimeout" value="200" />
+        <property name="socketTimeout" value="1000" />
+        <property name="maxActive" value="50" />
+        <property name="maxWait" value="5" />
+        <property name="autoConnectRetry" value="true" />
+        <property name="maxAutoConnectRetryTime" value="3" />
+        <property name="slaveOk" value="true" />
+    </bean>
+
+    <bean id="redisPool" class="com.youku.java.navi.engine.datasource.pool.ShardJedisPoolConfig">
+        <property name="connectTimeout" value="200" />
+        <property name="maxActive" value="8" />
+        <property name="maxIdle" value="8" />
+        <property name="maxWait" value="100" />
+        <property name="testWhileIdle" value="true" />
+        <property name="minEvictableIdleTimeMillis" value="290000" />
+        <property name="timeBetweenEvictionRunsMillis" value="145000" />
+        <property name="jmxNamePrefix" value="cache" />
+    </bean>
+
+</beans>

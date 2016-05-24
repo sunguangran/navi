@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <import resource="pool.xml" />
+
+    <!-- CACHE DS -->
+    <bean id="redisReadCacheDs" class="com.youku.java.navi.engine.datasource.NaviLinearDataSource">
+        <property name="offlineConnectString" value="10.10.221.49:16380" />
+        <property name="deployConnectString" value="10.100.17.19:6384,10.100.17.20:6384" />
+        <property name="splitHosts" value="false" />
+        <property name="driverClass" value="com.youku.java.navi.engine.datasource.driver.NaviPoolShardedJedisDriver" />
+        <property name="poolConfig" ref="redisPool" />
+    </bean>
+
+    <!-- MONGO DS -->
+    <bean id="demoDs" class="com.youku.java.navi.engine.datasource.NaviLinearDataSource">
+        <property name="offlineConnectString" value="10.10.73.82:27019" />
+        <property name="deployConnectString" value="10.100.7.39:27018,10.100.7.38:27018,10.100.7.37:27018" />
+        <property name="splitHosts" value="true" />
+        <property name="driverClass" value="com.youku.java.navi.engine.datasource.driver.NaviMongoListDriver" />
+        <property name="poolConfig" ref="mongoPool" />
+    </bean>
+
+</beans>

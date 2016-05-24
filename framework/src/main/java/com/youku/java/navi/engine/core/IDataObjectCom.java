@@ -1,8 +1,8 @@
 package com.youku.java.navi.engine.core;
 
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 
-public interface IDataObjectCom<T extends AbstractNaviDto> {
+public interface IDataObjectCom<T extends AbstractNaviBaseDto> {
 
     T get();
 

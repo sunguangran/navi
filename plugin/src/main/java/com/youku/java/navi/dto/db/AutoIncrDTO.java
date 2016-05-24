@@ -1,6 +1,6 @@
 package com.youku.java.navi.dto.db;
 
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -13,11 +13,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Getter
 @Document(collection = "t_autoincr_id")
-public class AutoIncrDTO extends AbstractNaviDto {
+public class AutoIncrDTO extends AbstractNaviBaseDto<String> {
 
     private static final long serialVersionUID = -362648082764636851L;
+
     @Id
-    private String _id;
+    private String id;
     private long idv;
 
     public AutoIncrDTO() {
@@ -25,18 +26,8 @@ public class AutoIncrDTO extends AbstractNaviDto {
     }
 
     public AutoIncrDTO(String id, int idv) {
-        this._id = id;
+        this.id = id;
         this.idv = idv;
-    }
-
-    @Override
-    public Long getId() {
-        return null;
-    }
-
-    @Override
-    public void setId(Long id) {
-
     }
 
 }

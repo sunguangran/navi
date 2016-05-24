@@ -5,7 +5,10 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviSystemException;
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.ServerConfigure;
+import com.youku.java.navi.server.module.NaviModuleClassLoader;
+import com.youku.java.navi.server.module.NaviModuleContextFactory;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 import com.youku.java.navi.server.serviceobj.INaviColumnDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -22,6 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Slf4j
 public class NaviUtil {
@@ -39,13 +43,13 @@ public class NaviUtil {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
-    public static <T extends AbstractNaviDto> Criteria buildCriteria(T dto)
+    public static <T extends AbstractNaviBaseDto> Criteria buildCriteria(T dto)
         throws JSONException, InstantiationException,
         IllegalAccessException, ClassNotFoundException, SecurityException,
         IllegalArgumentException, NoSuchMethodException,
         InvocationTargetException {
         CompoundIndexes compIndexes = dto.getClass().getAnnotation(CompoundIndexes.class);
-        AbstractNaviDto initDto = (AbstractNaviDto) Class.forName(
+        AbstractNaviBaseDto initDto = (AbstractNaviBaseDto) Class.forName(
             dto.getClass().getName(), true, dto.getClass().getClassLoader()
         ).newInstance();
 
@@ -89,12 +93,12 @@ public class NaviUtil {
      * @throws ClassNotFoundException
      * @throws InstantiationException
      */
-    public static <T extends AbstractNaviDto> Update buildUpdate(T dto) throws SecurityException, IllegalArgumentException,
+    public static <T extends AbstractNaviBaseDto> Update buildUpdate(T dto) throws SecurityException, IllegalArgumentException,
         NoSuchMethodException, IllegalAccessException,
         InvocationTargetException, InstantiationException,
         ClassNotFoundException {
         Field[] fields = dto.getClass().getDeclaredFields();
-        AbstractNaviDto initDto = (AbstractNaviDto) Class.forName(
+        AbstractNaviBaseDto initDto = (AbstractNaviBaseDto) Class.forName(
             dto.getClass().getName(), true, dto.getClass().getClassLoader()
         ).newInstance();
         Update up = new Update();
@@ -116,7 +120,7 @@ public class NaviUtil {
         return up;
     }
 
-    public static <T extends AbstractNaviDto> JSONObject toJSONObject(T dto)
+    public static <T extends AbstractNaviBaseDto> JSONObject toJSONObject(T dto)
         throws SecurityException, IllegalArgumentException, JSONException,
         NoSuchMethodException, IllegalAccessException,
         InvocationTargetException {
@@ -128,7 +132,7 @@ public class NaviUtil {
         return json;
     }
 
-    public static <T extends AbstractNaviDto> void constructJsonObject(T dto, Field[] fields,
+    public static <T extends AbstractNaviBaseDto> void constructJsonObject(T dto, Field[] fields,
                                                                        JSONObject json) throws JSONException, NoSuchMethodException,
         IllegalAccessException, InvocationTargetException {
         for (Field field : fields) {
@@ -260,6 +264,33 @@ public class NaviUtil {
                 return Bytes.toBytes(val.toString());
             }
         }
+        return null;
+    }
+
+    /**
+     * 获取类当前module的moduleNm
+     *
+     * 获取失败返回null值
+     *
+     * @param clazz
+     *    指定module加载的class文件
+     *
+     */
+    public static String getContextModuleNm(Class clazz) {
+        if (clazz == null) {
+            return null;
+        }
+
+        if (ServerConfigure.isDaemonEnv()) {
+            List<String> moduleNms = NaviModuleContextFactory.getInstance().getNaviModuleNms();
+            return moduleNms.size() != 0 ? moduleNms.get(0) : null;
+        }
+
+        ClassLoader classLoader = clazz.getClassLoader();
+        if (classLoader instanceof NaviModuleClassLoader) {
+            return ((NaviModuleClassLoader)classLoader).getModuleNm();
+        }
+
         return null;
     }
 }

@@ -7,8 +7,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
-;
-
 /**
  * 支持热部署下延时资源回收策略
  */

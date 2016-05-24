@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 /**
  * 符合传统业务习惯的列式Dto类
  */
-public abstract class NaviBaseColumnDto extends AbstractNaviDto implements INaviColumnDto {
+public abstract class NaviBaseColumnDto extends AbstractNaviBaseDto implements INaviColumnDto {
 
     private static final long serialVersionUID = 9052289710527464858L;
 

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
 
-public abstract class AbstractNaviNewDao<T extends AbstractNaviDto> implements INaviDao<T>, IZookeeperEventHander, InitializingBean {
+public abstract class AbstractNaviNewDao<T extends AbstractNaviBaseDto> implements INaviDao<T>, IZookeeperEventHander, InitializingBean {
 
     protected INaviDB dbService;
     protected INaviCache cacheService;

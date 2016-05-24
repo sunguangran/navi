@@ -9,7 +9,7 @@ import com.youku.java.navi.engine.core.INaviZookeeper;
  *
  * @param <T>
  */
-public interface INaviDao<T extends AbstractNaviDto> {
+public interface INaviDao<T extends AbstractNaviBaseDto> {
 
     /**
      * 获得Dao对应的Dto Class对象

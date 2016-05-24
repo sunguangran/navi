@@ -2,7 +2,7 @@ package com.youku.java.navi.engine.component;
 
 import com.youku.java.navi.common.exception.NaviUnSupportedOperationException;
 import com.youku.java.navi.engine.core.*;
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,17 +18,17 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
     private INaviDB dbService;
     private int expireTime = 900;
 
-    public <T extends AbstractNaviDto> IDataObjectCom<T> getDataObjectCom(
+    public <T extends AbstractNaviBaseDto> IDataObjectCom<T> getDataObjectCom(
         Query query, String cacheKey, Class<T> dtoClass) {
         return new DataObjectCom<>(query, cacheKey, dtoClass);
     }
 
-    public <T extends AbstractNaviDto> IListDataObjectCom<T> getListDataObjectCom(
+    public <T extends AbstractNaviBaseDto> IListDataObjectCom<T> getListDataObjectCom(
         Query query, Class<T> dtoClass, String cacheKey) {
         return new ListDataObjectCom<>(query, dtoClass, cacheKey);
     }
 
-    protected class DataObjectCom<T extends AbstractNaviDto> implements IDataObjectCom<T> {
+    protected class DataObjectCom<T extends AbstractNaviBaseDto> implements IDataObjectCom<T> {
 
         protected Query query;
         protected Class<T> dtoClass;
@@ -88,7 +88,7 @@ public class MongoDataObjectCom implements IMongoDataObjectCom {
         }
     }
 
-    protected class ListDataObjectCom<T extends AbstractNaviDto> implements IListDataObjectCom<T> {
+    protected class ListDataObjectCom<T extends AbstractNaviBaseDto> implements IListDataObjectCom<T> {
         protected Query query;
         protected Class<T> dtoClass;
         protected String cacheKey;

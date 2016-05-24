@@ -1,7 +1,7 @@
 package com.youku.java.navi.common;
 
 import com.youku.java.navi.engine.core.INaviCache;
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 import com.youku.java.navi.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 @Slf4j
 public class CacheComponent {
 
-    public static <T extends AbstractNaviDto> String getCacheKey(Class<T> clazz, String... ids) {
+    public static <T extends AbstractNaviBaseDto> String getCacheKey(Class<T> clazz, String... ids) {
         String pre = null;
         if (clazz.isAnnotationPresent(CacheDocument.class)) {
             CacheDocument an = clazz.getAnnotation(CacheDocument.class);
@@ -24,7 +24,7 @@ public class CacheComponent {
         return pre + ":" + StringUtils.implode(ids, ":");
     }
 
-    public static <T extends AbstractNaviDto> String getMqKey(Class<T> clazz) {
+    public static <T extends AbstractNaviBaseDto> String getMqKey(Class<T> clazz) {
         String mq = null;
         int rate = 15 * 60000;
         if (clazz.isAnnotationPresent(CacheDocument.class)) {
@@ -37,7 +37,7 @@ public class CacheComponent {
         return mq + ":" + interval;
     }
 
-    public static int getExpire(Class<? extends AbstractNaviDto> clazz) {
+    public static int getExpire(Class<? extends AbstractNaviBaseDto> clazz) {
         int expire = 60 * 60 * 24;
         if (clazz.isAnnotationPresent(CacheDocument.class)) {
             CacheDocument an = clazz.getAnnotation(CacheDocument.class);

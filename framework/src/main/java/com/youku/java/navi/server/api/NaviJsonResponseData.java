@@ -7,7 +7,7 @@ import com.youku.java.navi.common.NaviError;
 import com.youku.java.navi.common.exception.NaviBusinessException;
 import com.youku.java.navi.common.exception.NaviSystemException;
 import com.youku.java.navi.server.ServerConfigure;
-import com.youku.java.navi.server.serviceobj.AbstractNaviDto;
+import com.youku.java.navi.server.serviceobj.AbstractNaviBaseDto;
 import com.youku.java.navi.utils.NaviUtil;
 import com.youku.java.navi.utils.StringUtils;
 
@@ -106,8 +106,8 @@ public class NaviJsonResponseData extends ANaviResponseData {
             }
 
             for (Object data : list) {
-                if (data instanceof AbstractNaviDto) {
-                    datas.add(NaviUtil.toJSONObject((AbstractNaviDto) data));
+                if (data instanceof AbstractNaviBaseDto) {
+                    datas.add(NaviUtil.toJSONObject((AbstractNaviBaseDto) data));
                 }
             }
 
@@ -119,14 +119,14 @@ public class NaviJsonResponseData extends ANaviResponseData {
 
     @Override
     public String toResponseForArray() throws NaviSystemException {
-        if (data == null || !(data instanceof AbstractNaviDto[])) {
+        if (data == null || !(data instanceof AbstractNaviBaseDto[])) {
             return toResponseNull();
         }
 
         try {
-            AbstractNaviDto[] dtos = (AbstractNaviDto[]) data;
+            AbstractNaviBaseDto[] dtos = (AbstractNaviBaseDto[]) data;
             JSONArray datas = new JSONArray();
-            for (AbstractNaviDto dto : dtos) {
+            for (AbstractNaviBaseDto dto : dtos) {
                 datas.add(NaviUtil.toJSONObject(dto));
             }
             return datas.toString();
@@ -139,7 +139,7 @@ public class NaviJsonResponseData extends ANaviResponseData {
     public String toResponseForObject() throws NaviSystemException {
         try {
             return toJsonData(
-                (data instanceof AbstractNaviDto) ? NaviUtil.toJSONObject((AbstractNaviDto) data) : data.toString(), "", "", 0);
+                (data instanceof AbstractNaviBaseDto) ? NaviUtil.toJSONObject((AbstractNaviBaseDto) data) : data.toString(), "", "", 0);
         } catch (SecurityException | IllegalArgumentException | NoSuchMethodException | IllegalAccessException | JSONException | InvocationTargetException e) {
             throw NaviUtil.transferToNaviSysException(e);
         }
